@@ -763,6 +763,7 @@
     </div>
   </nav>
 
+  <p id="js-uyari" style="margin:0;padding:12px 16px;color:#79520c;background:#fff7df;text-align:center;font-weight:600">Bölümler ve program görünmüyorsa bu sayfa bir önizleme ekranında (WhatsApp, Dosyalar, Drive) açılmıştır. Lütfen tarayıcıdan şu adresi açın: <a href="https://iybf-sinav.github.io/">iybf-sinav.github.io</a></p>
   <main>
     <section class="page" id="page-schedule" role="tabpanel" aria-labelledby="tab-schedule">
       <div class="page-heading">
@@ -840,6 +841,7 @@
   <noscript>Bu sayfadaki filtreleri kullanmak için JavaScript etkin olmalıdır.</noscript>
 
   <script>
+    (function () { var u = document.getElementById("js-uyari"); if (u) u.hidden = true; })();
     const ACCESS_PASSWORD = "";
     const ACCESS_SESSION_KEY = "iesu-exam-program-access";
     const accessForm = document.querySelector("#access-form");
