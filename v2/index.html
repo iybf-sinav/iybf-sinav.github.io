@@ -921,6 +921,16 @@
     .png-sheet { position: fixed; top: 0; left: -10000px; width: 1000px; padding: 24px; background: #fff; }
     .png-sheet h3 { margin: 0 0 14px; color: var(--navy); }
     .png-sheet .week-wrap { overflow: visible; }
+    /* Takvimde yakınlaştırma (Değişiklik 17) */
+    .zoom-bar { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; }
+    .zoom-bar button { min-width: 36px; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--navy); background: #fff; font: inherit; font-size: .9rem; font-weight: 800; cursor: pointer; }
+    .zoom-bar button:disabled { opacity: .4; cursor: default; }
+    .zoom-level { min-width: 44px; color: var(--muted); font-size: .8rem; font-weight: 700; text-align: center; }
+    .zoom-view { overflow: auto; max-width: 100%; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+    .zoom-sizer { position: relative; overflow: hidden; }
+    .zoom-content { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+    .zoom-content .week-wrap { overflow: visible; }
+    .zoom-content .week-table { min-width: 0; }
     .png-uyari {
       margin: 0 0 16px;
       padding: 12px 16px;
@@ -1342,6 +1352,7 @@
         <li><strong>Değişiklik 14 · İYBF Tüm Sınav Programı.</strong> Sınav Programları sayfasında bölüm kartlarının başında “TÜMÜ” rozetli, koyu lacivert “İYBF Tüm Sınav Programı” kartı. Açılan pencerede fakültenin bütün sınavları yer alır: liste görünümünde gün, saat, derslik, ders adı, öğretim elemanı ve programlar (telefonda tablo kendi kutusunda kaydırılır); takvim görünümünde haftalık tabloda aynı saatteki bütün sınavlar alt alta (ders adı, derslik, öğretim elemanı). “PNG indir” bütün takvimi güncellik uyarısıyla tek resim olarak indirir; bir sınava tıklayınca sınav kartı açılır.</li>
         <li><strong>Değişiklik 15 · Düzenle sekmesinde gözetmene haber ver / sor.</strong> Her dersliğin gözetmen alanının altında “Gözetmene haber ver” (görevlendirildiniz) ve “Gözetmene sor” (görev alabilir misiniz?) düğmeleri vardır. Düğme, alandaki gözetmen (birden çok ad varsa hepsi) için okul hesabıyla Outlook web'de (outlook.cloud.microsoft) hazır taslak açar; konu ve metne formdaki ders, gün, saat ve derslik yazılır. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez. Düğme kayıt yapmaz; gözetmen değişikliği için Kaydet’e basılır.</li>
         <li><strong>Değişiklik 16 · Yerleşik Panel (şifresiz).</strong> Panel sekmesi artık ayrı bir sayfayı çerçevede açmıyor; sitenin kendi verisiyle (veri.json, gözetmen izin günleri ve epostalar.json) çiziliyor, hiçbir şifre ya da gizli depo kullanılmıyor. Sekme, Düzenle gibi yalnız düzenleyici girişi yapılmışken görünür. Üç bölümü var: <em>Günlük sınavlar</em> (gün seçilir; o günün sınavları saatlere göre kartlarda, derslik, öğrenci ve gözetmenleriyle; arama kutusu; gözetmeni atanmamış çok derslikli sınavlar kırmızı), <em>Gözetmen durumu</em> (seçilen günde her gözetmen için saat saat görevli / kendi dersi / izinli / müsait / sınav yok tablosu, her saatte müsait gözetmen sayısı; saate tıklayınca o saatin müsait, görevli, kendi sınavı olan ve izinli gözetmen listesi) ve <em>Yük ve izinler</em> (gözetmen başına toplam görev, atanan, kendi dersi, İngilizce, gün gün görev sayısı ve izin günleri; satıra tıklayınca gözetmenin sınavları). Bir sınava tıklayınca açılan pencerede görevli gözetmenler, uygun gözetmenler (önce sorunsuzlar, sonra yükü az olanlar; öncesinde/sonrasında sınavı olanlar ve 3 saat ardışık olacaklar işaretli) ve uygun olmayanlar nedenleriyle listelenir. “Görev ver” sınavın Düzenle sekmesini açar ve adı seçilen dersliğe yazar; kayıt, çakışma ve izin denetimiyle Düzenle'deki “Kaydet” ile yapılır. “Görev sor” ve “Bilgilendir” hazır e-posta taslağı açar.</li>
+        <li><strong>Değişiklik 17 · Takvimde yakınlaştırma.</strong> Bölüm, öğretim üyesi, gözetmen ve Tüm Sınav Programı pencerelerindeki takvim görünümü açılışta ekrana sığar; telefonda bütün hafta bir bakışta görünür. İki parmakla sıkıştırarak yakınlaştırılıp uzaklaştırılır, yakınken tek parmakla kaydırılır. Takvimin üstündeki “−”, “+” ve “Sığdır” düğmeleri masaüstünde de çalışır (en çok %160). Bir sınava dokununca kartı açılır; sıkıştırma hareketi tıklama sayılmaz. Liste görünümü ve PNG indirme değişmedi (PNG her zaman tam boyut).</li>
       </ol>
     </section>
   </main>
@@ -1746,7 +1757,89 @@
       });
       const entries = personExams(currentPerson.type, currentPerson.name);
       const showTeacher = currentPerson.type !== "teacher";   // öğretim üyesinin kendi kartında tekrar yazılmaz
-      $("#person-modal-content").innerHTML = personView === "list" ? courseListHtml(entries, showTeacher, currentPerson.type === "all") : weekHtml(entries, showTeacher);
+      $("#person-modal-content").innerHTML = personView === "list" ? courseListHtml(entries, showTeacher, currentPerson.type === "all") : zoomHtml(weekHtml(entries, showTeacher));
+      if (personView !== "list") zoomFit();
+    }
+
+    // ---- Takvimde yakınlaştırma (Değişiklik 17) ----
+    // Haftalık tablo doğal genişliğinde (en az 640px) çizilir ve transform: scale ile küçültülür/büyütülür; dış kutu ölçeğe göre
+    // boyutlanır, böylece yakınken kaydırma doğru çalışır. Açılışta ekrana sığar (telefonda bütün hafta görünür).
+    // İki parmakla sıkıştırma ve −/+/Sığdır düğmeleri; sayfanın kendi yakınlaştırması bu kutuda kapalı (touch-action). PNG etkilenmez.
+    const ZOOM_MAX = 1.6;
+    const ZOOM_BASE = 640;
+    const zoom = { scale: 1, fit: 1, width: ZOOM_BASE, pinch: null, blockClickUntil: 0 };
+
+    function zoomHtml(inner) {
+      return '<div class="zoom-bar" role="group" aria-label="Takvim yakınlaştırma">' +
+          '<button type="button" data-zoom="out" aria-label="Uzaklaştır">−</button>' +
+          '<span class="zoom-level" data-zoom-level>100%</span>' +
+          '<button type="button" data-zoom="in" aria-label="Yakınlaştır">+</button>' +
+          '<button type="button" data-zoom="fit">Sığdır</button>' +
+        '</div>' +
+        '<div class="zoom-view" data-zoom-view><div class="zoom-sizer" data-zoom-sizer><div class="zoom-content" data-zoom-content>' + inner + '</div></div></div>';
+    }
+
+    // Ölçeği uygular; (x, y) görünür alandaki sabit kalacak nokta (yoksa orta)
+    function zoomApply(scale, x, y) {
+      const view = $("#person-modal [data-zoom-view]");
+      if (!view) return;
+      const content = $("[data-zoom-content]", view), sizer = $("[data-zoom-sizer]", view);
+      const old = zoom.scale;
+      scale = Math.min(ZOOM_MAX, Math.max(zoom.fit, scale));
+      if (x == null) { x = view.clientWidth / 2; y = view.clientHeight / 2; }
+      const px = (view.scrollLeft + x) / old, py = (view.scrollTop + y) / old;
+      zoom.scale = scale;
+      content.style.width = zoom.width + "px";
+      content.style.transform = "scale(" + scale + ")";
+      sizer.style.width = Math.ceil(zoom.width * scale) + "px";
+      sizer.style.height = Math.ceil(content.offsetHeight * scale) + "px";
+      view.scrollLeft = px * scale - x;
+      view.scrollTop = py * scale - y;
+      const level = $("#person-modal [data-zoom-level]");
+      if (level) level.textContent = Math.round(scale * 100) + "%";
+      $$("#person-modal [data-zoom]").forEach(function (button) {
+        button.disabled = button.dataset.zoom === "in" ? scale >= ZOOM_MAX - 0.001 : button.dataset.zoom === "out" ? scale <= zoom.fit + 0.001 : false;
+      });
+    }
+
+    // Takvim kutunun genişliğine sığdırılır (masaüstünde kutu genişse ölçek 1, tablo kutuyu doldurur)
+    function zoomFit() {
+      const view = $("#person-modal [data-zoom-view]");
+      if (!view || !view.clientWidth) return;
+      zoom.width = Math.max(ZOOM_BASE, view.clientWidth);
+      zoom.fit = Math.min(1, view.clientWidth / zoom.width);
+      zoom.scale = zoom.fit;
+      zoomApply(zoom.fit, 0, 0);
+      view.scrollLeft = 0;
+      view.scrollTop = 0;
+    }
+
+    function initZoom() {
+      const modal = $("#person-modal");
+      const distance = function (touches) { return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY); };
+      modal.addEventListener("touchstart", function (event) {
+        const view = event.target.closest("[data-zoom-view]");
+        if (!view || event.touches.length !== 2) return;
+        const box = view.getBoundingClientRect();
+        zoom.pinch = { distance: distance(event.touches) || 1, scale: zoom.scale,
+          x: (event.touches[0].clientX + event.touches[1].clientX) / 2 - box.left, y: (event.touches[0].clientY + event.touches[1].clientY) / 2 - box.top };
+        zoom.blockClickUntil = Date.now() + 600;
+        event.preventDefault();
+      }, { passive: false });
+      modal.addEventListener("touchmove", function (event) {
+        if (!zoom.pinch || event.touches.length !== 2) return;
+        event.preventDefault();
+        zoom.blockClickUntil = Date.now() + 600;
+        zoomApply(zoom.pinch.scale * distance(event.touches) / zoom.pinch.distance, zoom.pinch.x, zoom.pinch.y);
+      }, { passive: false });
+      const end = function (event) {
+        if (zoom.pinch && event.touches.length < 2) { zoom.pinch = null; zoom.blockClickUntil = Date.now() + 400; }
+      };
+      modal.addEventListener("touchend", end);
+      modal.addEventListener("touchcancel", end);
+      window.addEventListener("resize", function () {
+        if (modal.open && personView !== "list" && zoom.scale <= zoom.fit + 0.001) zoomFit();
+      });
     }
 
     function openPerson(type, name) {
@@ -1756,6 +1849,7 @@
       $("#person-modal-title").textContent = type === "all" ? "İYBF Tüm Sınav Programı" : type === "department" ? department.name : name;
       renderPersonModal();
       openModal($("#person-modal"));
+      if (personView !== "list") zoomFit();   // ölçüm için pencere açık olmalı
     }
 
     // Son değişiklikler kutusu (8_site_uret.py'deki gibi): en son tarihin maddeleri açık, öncekiler "Önceki değişiklikler" altında
@@ -1924,7 +2018,14 @@
           renderPersonModal();
           return;
         }
+        const zoomButton = event.target.closest("[data-zoom]");
+        if (zoomButton) {   // Değişiklik 17
+          if (zoomButton.dataset.zoom === "fit") zoomFit();
+          else zoomApply(zoom.scale * (zoomButton.dataset.zoom === "in" ? 1.25 : 0.8));
+          return;
+        }
         const examButton = event.target.closest("[data-exam-id]");
+        if (examButton && Date.now() < zoom.blockClickUntil) return;   // sıkıştırma hareketi tıklama sayılmaz
         if (examButton) openExam(examButton.dataset.examId);
       });
       $("#person-modal").addEventListener("keydown", function (event) {
@@ -3438,6 +3539,7 @@
       renderSummaries();
       initDepartments();
       initModals();
+      initZoom();
       enrichChanges();
       $("#page-home").addEventListener("click", function (event) {
         const detail = event.target.closest(".dg-ders");
