@@ -3,8 +3,8 @@
   "institution": "İstanbul Esenyurt Üniversitesi",
   "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
   "period": "2–6 Kasım 2026",
-  "examCount": 120,
-  "assignmentCount": 90,
+  "examCount": 121,
+  "assignmentCount": 91,
   "teacherCount": 45,
   "proctorCount": 14
  },
@@ -3621,6 +3621,33 @@
      "departments": "LOJ 43, ETİC 16"
     }
    ]
+  },
+  {
+   "id": "exam-126",
+   "date": "2026-11-06",
+   "dateLabel": "06.11.2026",
+   "day": "Cuma",
+   "start": "19:00",
+   "end": "20:50",
+   "courseCode": "19071907",
+   "course": "Fenerbahçe Tarihi",
+   "programs": [
+    "SBUİ-5"
+   ],
+   "teacher": "Mehmet Cihan TOKER",
+   "totalStudents": "25",
+   "notes": [
+    "Bu bir deneme sınavıdır. Silinecek."
+   ],
+   "rooms": [
+    {
+     "room": "6d5",
+     "capacity": "25",
+     "students": "25",
+     "proctor": "Ozan Atalay",
+     "departments": "SBUİ 11"
+    }
+   ]
   }
  ],
  "assignments": [
@@ -5581,6 +5608,26 @@
    "roomStudents": "",
    "proctor": "Melih Mert Oskay",
    "note": ""
+  },
+  {
+   "id": "exam-126",
+   "date": "2026-11-06",
+   "dateLabel": "06.11.2026",
+   "day": "Cuma",
+   "start": "19:00",
+   "end": "20:50",
+   "courseCode": "19071907",
+   "course": "Fenerbahçe Tarihi",
+   "programs": [
+    "SBUİ-5"
+   ],
+   "teacher": "Mehmet Cihan TOKER",
+   "totalStudents": "25",
+   "examId": "exam-126",
+   "room": "6d5",
+   "roomStudents": "25",
+   "proctor": "Ozan Atalay",
+   "note": ""
   }
  ],
  "teachers": [
@@ -5647,6 +5694,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "2 Kasım",
+   "tur": "Sınav",
+   "metin": "Fenerbahçe Tarihi sınavı (Cuma 19:00, 6d5) programa eklendi (gözetmen: Ozan Atalay).",
+   "examId": "exam-126"
+  },
   {
    "tarih": "2 Kasım",
    "tur": "Gözetmen",
