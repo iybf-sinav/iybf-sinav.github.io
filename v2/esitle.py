@@ -1,53 +1,51 @@
-"""v2'yi ana sitenin güncel verisiyle eşitler: python3 v2/esitle.py (depo kökünden)
-Site verisi v2/veri.json'a yazılır (biçim: v2/VERI-BICIMI.md); v2/index.html'de yalnız panel sürüm eki güncellenir.
-Kaynak: kökte veri.json varsa o; yoksa ana sitedeki gömülü sınav verisi (const DATA)
-+ kod/Yöntem/degisiklikler.json (Son değişiklikler).
-Gözetmen izin günleri (proctorAvailability) kaynakta yoksa mevcut v2/veri.json'dakiler korunur."""
-import html
-import json
-import os
-import re
+"""v2'yi canlı siteyle eşitler (depo kökünden çalıştırın).
+  python3 v2/esitle.py               v2'yi canlı sitenin tam kopyasına döndürür (v2'deki tasarım değişiklikleri silinir)
+  python3 v2/esitle.py --sadece-veri yalnız sınav verisini (veri.json) ve e-postaları canlıdan kopyalar
+Kopyada: deneme şeridi, sekme başlığında "[v2 Deneme]", düzenlemeler v2/veri.json'a yazılır, panel ../panel/ adresinden açılır,
+boş bir "Yeni Özellikler" sekmesi eklenir."""
+import shutil
+import sys
 
-ana = open("index.html", encoding="utf-8").read().replace("\r\n", "\n")
-v2 = open("v2/index.html", encoding="utf-8").read()
+shutil.copyfile("veri.json", "v2/veri.json")
+shutil.copyfile("epostalar.json", "v2/epostalar.json")
+if "--sadece-veri" in sys.argv:
+    print("v2 verisi canlıyla eşitlendi")
+    sys.exit()
 
-
-def parca(metin, desen):
-    bulunan = re.findall(desen, metin, re.S)
-    assert len(bulunan) == 1, desen
-    return bulunan[0]
+h = open("index.html", encoding="utf-8").read().replace("\r\n", "\n")
 
 
-def son_degisiklikler():
-    """degisiklikler.json; yoksa ana sitedeki Son değişiklikler kutusundan okunur (en yeni üstte)."""
-    yol = os.path.join("kod", "Yöntem", "degisiklikler.json")
-    if os.path.exists(yol):
-        return [{"tarih": g["tarih"], "tur": g["tur"], "metin": g["metin"]} for g in json.load(open(yol, encoding="utf-8"))]
-    kutu = re.search(r'<section class="degisiklik".*?</section>', ana, re.S)
-    liste, tarih = [], ""
-    for h4, tur, metin in re.findall(r'<h4>(.*?)</h4>|<p><span class="dg-tur[^"]*">(.*?)</span> (.*?)</p>', kutu.group(0) if kutu else ""):
-        if h4:
-            tarih = html.unescape(h4)
-        else:
-            liste.append({"tarih": tarih, "tur": html.unescape(tur), "metin": html.unescape(metin)})
-    return liste
+def degistir(eski, yeni):
+    global h
+    assert h.count(eski) == 1, eski[:60]
+    h = h.replace(eski, yeni)
 
 
-if os.path.exists("veri.json"):
-    veri = json.load(open("veri.json", encoding="utf-8"))
-else:
-    veri = json.loads(parca(ana, r"\n    const DATA = (.*?);\n"))
-if "updates" not in veri:
-    veri["updates"] = son_degisiklikler()
-# Gözetmen izin günleri (proctorAvailability) ana sitede yoksa v2'deki korunur
-if "proctorAvailability" not in veri and os.path.exists("v2/veri.json"):
-    eski = json.load(open("v2/veri.json", encoding="utf-8"))
-    if "proctorAvailability" in eski:
-        veri["proctorAvailability"] = eski["proctorAvailability"]
-
-open("v2/veri.json", "w", encoding="utf-8", newline="\n").write(json.dumps(veri, ensure_ascii=False, indent=1) + "\n")
-
-desen = r'panel/\?v=\d+"'
-v2 = v2.replace(parca(v2, desen), parca(ana, desen))
-open("v2/index.html", "w", encoding="utf-8", newline="\n").write(v2)
-print("v2 eşitlendi:", len(veri["exams"]), "sınav,", len(veri["updates"]), "değişiklik notu")
+degistir("<title>", "<title>[v2 Deneme] ")
+degistir('<nav class="top-nav"',
+         '<div style="padding:8px 16px;color:#fff;background:#b45309;text-align:center;font-weight:700;font-size:.9rem">'
+         'DENEME SÜRÜMÜ (v2) · Asıl site: <a href="../" style="color:#fff">iybf-sinav.github.io</a></div>\n  <nav class="top-nav"')
+degistir('const EDIT_FILE = "veri.json";', 'const EDIT_FILE = "v2/veri.json";')
+degistir('const PANEL_URL = "panel/?v=', 'const PANEL_URL = "../panel/?v=')
+degistir('data-page="panel">Panel</button>',
+         'data-page="panel">Panel</button>\n      <button class="tab-button" id="tab-features" role="tab" '
+         'aria-controls="page-features" aria-selected="false" data-page="features">Yeni Özellikler</button>')
+degistir("  </main>", '''    <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
+      <div class="page-heading">
+        <div>
+          <h2>Yeni Özellikler</h2>
+          <p>Bu deneme sürümünde (v2) asıl siteden farklı olarak eklenenler. Beğenilenler asıl siteye taşınır.</p>
+        </div>
+      </div>
+      <ol class="feature-list">
+        <li>Henüz yeni özellik yok; v2 şu an canlı sitenin kopyası.</li>
+      </ol>
+    </section>
+  </main>''')
+degistir('panel: "panel" };', 'panel: "panel", features: "yeni-ozellikler" };')
+degistir('''      "ana-sayfa": "home"
+    };''', '''      "ana-sayfa": "home",
+      "yeni-ozellikler": "features"
+    };''')
+open("v2/index.html", "w", encoding="utf-8").write(h)
+print("v2 canlı sitenin kopyasına döndürüldü")
