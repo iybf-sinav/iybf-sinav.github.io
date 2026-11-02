@@ -686,6 +686,10 @@
       box-shadow: var(--shadow);
     }
     .name-card:hover, .name-card:focus-visible { border-color: var(--accent, var(--blue)); color: var(--accent, var(--blue)); }
+    /* Gözetmen kartında görev sayısı: ad solda, sayı kartın en sağında (Değişiklik 13) */
+    .name-card.has-count { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .name-card .card-name { min-width: 0; overflow-wrap: anywhere; }
+    .name-card .card-count { flex: none; color: var(--muted); font-size: .78rem; font-weight: 600; white-space: nowrap; }
     .name-grid .empty-list { grid-column: 1 / -1; }
     #department-detail .exam-card { cursor: pointer; }
     #department-detail .exam-card:hover { box-shadow: 0 10px 30px rgba(19, 47, 76, .16); }
@@ -1213,6 +1217,7 @@
         <li><strong>Değişiklik 10 · Panel yalnız düzenleyicilere, şifresiz.</strong> “Panel” sekmesi yalnız düzenleyici girişi yapılmışken görünür; girişsiz açılan #panel adresi Ana Sayfa'ya döner. Girişliyken panel şifre sormadan açılır: panel şifresi, düzenleyicinin GitHub anahtarıyla özel <em>iybf-sinav/iybf-gizli</em> deposundaki <em>gizli.json</em> dosyasından okunur. Şifre bu herkese açık depoda, sitenin kodunda ya da veri.json'da yer almaz; yalnız tarayıcının belleğinde ve bu sekmenin oturumunda tutulur, “Çıkış” ile silinir. gizli.json okunamazsa panel kendi şifre ekranıyla açılır.</li>
         <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
         <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme e-posta programında hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
+        <li><strong>Değişiklik 13 · Gözetmen kartlarında görev sayısı.</strong> Gözetmenler sayfasındaki her isim kartının sağ kenarında gözetmenin toplam görev sayısı küçük ve soluk yazılır (ör. “17 görev”). Sayım gözetmen seçme penceresindekiyle aynıdır (komisyon kuralı: 60 dakikadan uzun sınav 2 görev, kendi dersindeki gözetmenlik dahil). Herkese görünür; bir sınav düzenlenip kaydedilince sayı hemen güncellenir. Öğretim Üyeleri kartları değişmedi.</li>
       </ol>
     </section>
   </main>
@@ -1840,7 +1845,12 @@
         const filtered = config.names().filter(function (name) {
           return trLower(name).indexOf(query) !== -1 && (!dept.value || departmentsOf[name].indexOf(dept.value) !== -1);
         });
+        const counts = config.counts ? config.counts() : null;   // gözetmenlerde görev sayısı (Değişiklik 13)
         grid.innerHTML = filtered.length ? filtered.map(function (name) {
+          if (counts) {
+            return '<button class="name-card has-count" type="button" data-name="' + esc(name) + '"><span class="card-name">' + esc(name) + '</span>' +
+              '<span class="card-count">' + (counts[name] || 0) + ' görev</span></button>';
+          }
           return '<button class="name-card" type="button" data-name="' + esc(name) + '">' + esc(name) + '</button>';
         }).join("") : '<div class="empty-list">Filtreyle eşleşen isim bulunamadı.</div>';
       }
@@ -2882,7 +2892,7 @@
         if (detail) openExam(detail.dataset.examId);
       });
       initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept" });
-      initPeople({ type: "proctor", names: function () { return DATA.proctors; }, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept" });
+      initPeople({ type: "proctor", names: function () { return DATA.proctors; }, counts: proctorTaskCounts, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept" });
       initEditor();
     }
 
