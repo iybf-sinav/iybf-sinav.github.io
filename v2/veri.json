@@ -4,7 +4,7 @@
   "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
   "period": "2–6 Kasım 2026",
   "examCount": 120,
-  "assignmentCount": 90,
+  "assignmentCount": 89,
   "teacherCount": 45,
   "proctorCount": 14
  },
@@ -522,7 +522,7 @@
      "room": "6D4",
      "capacity": "25",
      "students": "5",
-     "proctor": "Melih Mert Oskay",
+     "proctor": "Gerekmiyor",
      "departments": "PSIR 5"
     }
    ]
@@ -3860,26 +3860,6 @@
    "room": "6D3",
    "roomStudents": "10",
    "proctor": "Ozan Atalay",
-   "note": ""
-  },
-  {
-   "id": "exam-17",
-   "date": "2026-11-02",
-   "dateLabel": "02.11.2026",
-   "day": "Pazartesi",
-   "start": "13:00",
-   "end": "13:50",
-   "courseCode": "2017G3005",
-   "course": "Political Structure and Life in Turkey- I",
-   "programs": [
-    "PSIR-5"
-   ],
-   "teacher": "Mehmet Cihan TOKER",
-   "totalStudents": "5",
-   "examId": "exam-17",
-   "room": "6D4",
-   "roomStudents": "5",
-   "proctor": "Melih Mert Oskay",
    "note": ""
   },
   {
