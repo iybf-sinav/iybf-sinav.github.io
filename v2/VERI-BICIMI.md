@@ -191,23 +191,9 @@ Kaydetmeden önce (ve gözetmen, tarih, saat alanı değiştikçe) girilen her g
 
 Aynı sınavın kendisi çakışma sayılmaz. Sınavda zaten kayıtlı olan bir gözetmen, sınavın gün/saati değişmedikçe yeniden denetlenmez (komisyonun bilerek yaptığı atamalar düzenlemeyi kilitlemesin); gün/saat değişirse bütün gözetmenler yeni zamana göre denetlenir. Denetim GitHub'daki güncel veri.json'la kayıt anında bir kez daha yapılır.
 
-## Gizli bilgiler: `gizli.json` (özel depo)
-
-Panel şifresi **bu herkese açık depoya, sitenin koduna ya da `veri.json`'a yazılmaz.** Düzenleyici girişi yapılmışken site şifreyi, düzenleyicinin GitHub anahtarıyla, **özel** `iybf-sinav/iybf-gizli` deposundaki `gizli.json` dosyasından okur (`GET https://api.github.com/repos/iybf-sinav/iybf-gizli/contents/gizli.json`). Okunan şifre yalnız tarayıcının belleğinde ve, panelin kendisi gibi, o sekmenin oturumunda (`sessionStorage` `panel_sifre`) tutulur; localStorage'a yazılmaz, “Çıkış”ta silinir.
-
-Biçim (değer örnektir, uydurmadır):
-
-```json
-{"panelSifresi": "örnek-şifre"}
-```
-
-- `panelSifresi`: Panel sekmesi açılınca panele verilir, panel şifre sormadan açılır (Değişiklik 10). Yoksa ya da dosya okunamazsa panel kendi şifre ekranıyla açılır. Ayrıca “Değişikliği bildir”de `epostalar.json`'da adresi boş olan gözetmenler için yedek kaynaktır: gözetmen e-postası panel verisinden bu şifreyle çözülerek alınır.
-
-**Kim, nasıl oluşturur:** depo sahibi (iybf-sinav hesabı) GitHub'da **Private** (özel) bir `iybf-gizli` deposu açar, içine yukarıdaki biçimde `gizli.json` dosyasını ekler ve düzenleyicileri bu depoya da ortak (collaborator) yapar. Düzenleyicinin klasik anahtarındaki `repo` kapsamı özel depoyu okumaya yeter. Panel şifresi `kod/Yöntem/panel_sifre.txt`'deki şifredir (o dosya da GitHub'a yüklenmez).
-
 ## E-posta adresleri: `v2/epostalar.json`
 
-“Değişikliği bildir” (Değişiklik 12) e-posta taslağının alıcıları bu dosyadan alınır. Kurumsal adresler zaten herkese açık olduğu için dosya bu depoda açık durur; ama site adresleri **sayfada hiçbir yerde göstermez**, yalnız taslağın alıcı satırına koyar. Dosya yalnız “Değişikliği bildir” sırasında okunur.
+“Değişikliği bildir” (Değişiklik 12) e-posta taslağının alıcıları bu dosyadan alınır. Kurumsal adresler zaten herkese açık olduğu için dosya bu depoda açık durur; ama site adresleri **sayfada hiçbir yerde göstermez**, yalnız taslağın alıcı satırına koyar. Dosya yalnız “Değişikliği bildir” ve Panel'deki sınav penceresi açılırken okunur.
 
 ```json
 {
@@ -218,7 +204,7 @@ Biçim (değer örnektir, uydurmadır):
 
 - `hocalar`: öğretim elemanı adı (sınavlardaki `teacher` yazımıyla, `"Ad SOYAD"`) → e-posta. `gozetmenler`: gözetmen adı (`proctor` yazımıyla) → e-posta.
 - Ad eşleştirmesi büyük/küçük harf ve Türkçe karakter farkına dayanıklıdır. Adresi bilinmeyen kişide değer `""` kalır; pencerede “e-postası girilmemiş: Ad” yazar.
-- Gözetmenin adresi boşsa ve düzenleyici girişliyken `gizli.json`'dan panel şifresi okunabildiyse adres panel verisinden alınır.
+- Adresin tek kaynağı bu dosyadır. Panel sekmesindeki (Değişiklik 16) “Görev sor” ve “Bilgilendir” e-posta taslakları da adresleri buradan alır.
 
 **Nasıl doldurulur:** GitHub'da depoda `v2/epostalar.json` dosyasını açın, sağ üstteki kalem simgesine (Edit this file) basın, her adın karşısındaki `""` içine adresi yazın (ör. `"Taha Gümüş": "taha.gumus@ornek.edu.tr"`), virgül ve tırnakları bozmadan **Commit changes** ile kaydedin. Yeni bir hoca ya da gözetmen eklemek için aynı biçimde yeni bir satır ekleyin.
 
