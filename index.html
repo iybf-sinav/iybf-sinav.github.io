@@ -922,7 +922,7 @@
         </div>
         <span class="summary-pill" id="schedule-summary"></span>
       </div>
-      <section class="degisiklik" aria-label="Son değişiklikler"><h3>Son değişiklikler</h3><h4>2 Kasım</h4><p><span class="dg-tur dg-goz">Gözetmen</span> Economics of Development sınavına (Pazartesi 13:00, 6D1) gözetmen eklendi.</p><p><span class="dg-tur dg-goz">Gözetmen</span> Political Structure and Life in Turkey-I sınavına (Pazartesi 13:00, 6D4) gözetmen eklendi.</p></section>
+      <section class="degisiklik" aria-label="Son değişiklikler"><h3>Son değişiklikler</h3><h4>2 Kasım</h4><p><span class="dg-tur dg-goz">Gözetmen</span> Economics of Development sınavına (Pazartesi 13:00, 6D1) gözetmen olarak Merve Sevinç Sakar eklendi.</p><p><span class="dg-tur dg-goz">Gözetmen</span> Political Structure and Life in Turkey-I sınavına (Pazartesi 13:00, 6D4) gözetmen olarak Melih Mert Oskay eklendi.</p></section>
       <div class="department-grid" id="department-grid"></div>
     </section>
 
@@ -1141,7 +1141,7 @@
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
-      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "panel/?v=20261102122757"); }
+      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "panel/?v=20261102124210"); }
       if (updateHash) {
         const hashes = { schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
