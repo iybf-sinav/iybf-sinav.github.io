@@ -640,7 +640,7 @@
       .header-inner { padding: 20px 0; }
       .header-meta { font-size: .84rem; }
       main { padding-top: 23px; }
-      .nav-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+      .nav-inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
       .tab-button { padding: 10px 6px; font-size: .78rem; white-space: normal; }
       .department-grid { grid-template-columns: 1fr; gap: 9px; }
       .department-button { min-height: 76px; }
@@ -880,7 +880,7 @@
     .unit-table .strong { font-weight: 800; color: var(--accent); }
   }
   </style>
-</head>
+<style>#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
     <form class="access-card" id="access-form">
@@ -908,6 +908,7 @@
       <button class="tab-button" id="tab-schedule" role="tab" aria-controls="page-schedule" aria-selected="true" data-page="schedule">Sınav Programları</button>
       <button class="tab-button" id="tab-teachers" role="tab" aria-controls="page-teachers" aria-selected="false" data-page="teachers">Öğretim Üyeleri</button>
       <button class="tab-button" id="tab-proctors" role="tab" aria-controls="page-proctors" aria-selected="false" data-page="proctors">Gözetmenler</button>
+      <button class="tab-button" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel">Panel</button>
     </div>
   </nav>
 
@@ -956,6 +957,10 @@
         <select class="filter-select" id="proctor-dept"></select>
       </div>
       <div class="name-grid" id="proctor-grid"></div>
+    </section>
+
+    <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
     </section>
   </main>
 
@@ -1135,8 +1140,9 @@
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
+      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "panel/"); }
       if (updateHash) {
-        const hashes = { schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler" };
+        const hashes = { schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1367,7 +1373,8 @@
     const pageByHash = {
       "sinav-programi": "schedule",
       "ogretim-uyeleri": "teachers",
-      "gozetmenler": "proctors"
+      "gozetmenler": "proctors",
+      "panel": "panel"
     };
     activatePage(pageByHash[initialHash] || "schedule", false);
   </script>
