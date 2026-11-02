@@ -32,6 +32,7 @@ GOZETMENSIZ = {"Turkish Language I"}   # bilerek gözetmen atanmayan çok dersli
 KISA = ["Pzt", "Sal", "Çar", "Per", "Cum"]
 ITER = 300_000
 SIFRE_DOSYASI = os.path.join(KOK, "Yöntem", "panel_sifre.txt")
+EPOSTA_DOSYASI = os.path.join(KOK, "Yöntem", "gozetmen_epostalari.csv")   # GitHub'a yüklenmez; yalnızca şifreli panele girer
 
 
 def sifre_al():
@@ -41,6 +42,13 @@ def sifre_al():
     s = "".join(secrets.choice(alfabe) for _ in range(10))
     open(SIFRE_DOSYASI, "w", encoding="utf-8").write(s + "\n")
     return s
+
+
+def epostalar():
+    if not os.path.exists(EPOSTA_DOSYASI):
+        return {}
+    satirlar = open(EPOSTA_DOSYASI, encoding="utf-8").read().splitlines()[1:]
+    return {a.strip(): b.strip() for a, _, b in (x.partition(";") for x in satirlar) if a.strip() and b.strip()}
 
 
 def etiket(ders):
@@ -76,6 +84,7 @@ def veri_olustur(liste_no):
     # --- gözetmenler ---
     ws = openpyxl.load_workbook(yol)["Gözetmen Yükü"]
     kisiler = {}
+    posta = epostalar()
     for r in ws.iter_rows(min_row=2, values_only=True):
         if not r[0]:
             continue
@@ -84,7 +93,7 @@ def veri_olustur(liste_no):
         if m:
             izin = [KISA.index(x.strip()) for x in m.group(1).split(",") if x.strip() in KISA]
         kisiler[r[0]] = {"ad": r[0], "toplam": r[1], "atanan": r[2], "kendi": r[3], "ing": r[4], "gunluk": list(r[5:10]),
-                         "izin": izin, "not": r[10] or "", "mesgul": []}
+                         "izin": izin, "not": r[10] or "", "mail": posta.get(r[0], ""), "mesgul": []}
     for (ders, g, h), gor in atama.items():
         dk = sure.get((ders, g, h), 60)
         n = math.ceil(dk / 60)
@@ -120,5 +129,6 @@ if __name__ == "__main__":
     open(yol, "w", encoding="utf-8").write(html)
     uyari = [s for s in data["sinavlar"] if s["uyari"]]
     print("->", yol)
+    print("e-postası olmayan gözetmen:", [k["ad"] for k in data["kisiler"] if not k["mail"]])
     print(len(data["sinavlar"]), "sınav,", len(data["kisiler"]), "gözetmen | gözetmensiz çok derslikli:", [(s["ders"], s["bas"]) for s in uyari])
     print("Şifre dosyası:", SIFRE_DOSYASI)

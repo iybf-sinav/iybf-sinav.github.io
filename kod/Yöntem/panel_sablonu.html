@@ -102,6 +102,9 @@ tfoot td.kisi{text-align:left;cursor:default}
 .pencere li .sag{text-align:right;white-space:nowrap;color:var(--muted);font-size:12.5px}
 .pencere li.uyar .sag{color:#b7791f}
 .pencere li.hayir{opacity:.75}
+.pencere a.mail{display:inline-block;margin-left:8px;padding:2px 8px;border:1px solid var(--line,#cbd5e1);border-radius:6px;color:inherit;text-decoration:none;font-size:12px;white-space:nowrap}
+.pencere a.mail:hover{background:rgba(100,116,139,.15)}
+.pencere a.mail.toplu{margin:6px 0 0 0;padding:4px 10px;font-size:13px}
 .bos-mesaj{padding:30px;text-align:center;color:var(--muted)}
 @media (max-width:640px){.ozet input{margin-left:0;width:100%}.kartlar{grid-template-columns:1fr}}
 @media print{header.ust .sekmeler,header.ust .gunler,.ozet input{display:none}.kart{break-inside:avoid}}
@@ -246,10 +249,20 @@ function uygunPenceresi(e) {
   const gun = D.gunler[g], sure = (eh - sh) > 1 ? ` (${eh - sh} saat)` : "";
   const odaMetni = e.odalar.map(o => o.oda + (o.gozetmen.length ? " → " + o.gozetmen.join(", ") : "")).join(" · ");
   const ul = (a, f) => a.length ? a.map(f).join("") : `<li><span>—</span></li>`;
+  const ozet = `${gun.ad} ${gun.tarih}, ${e.bas}–${e.bit}`;
+  const konu = `Vize sınavı gözetmenliği – ${e.ders} (${ozet})`;
+  const mailAdr = ad => { const k = D.kisiler.find(x => x.ad === ad); return k ? k.mail : ""; };
+  const mailBag = (adres, metin, yazi, sinif) => adres ? `<a class="mail ${sinif || ""}" href="mailto:${adres}?subject=${encodeURIComponent(konu)}&body=${encodeURIComponent(metin)}">✉ ${yazi}</a>` : "";
+  const gorevli = e.odalar.flatMap(o => o.gozetmen.filter(a => mailAdr(a)).map(a => [a, o.oda]));
+  const gorevMetni = (ad, oda) => `Merhaba ${ad},\n\n${ozet} saatlerinde ${e.ders} sınavında ${oda} dersliğinde gözetmen olarak görevlendirildiniz.\n\nBilgilerinize sunarım. İyi çalışmalar.`;
+  const talepMetni = ad => `Merhaba ${ad},\n\n${ozet} saatlerinde ${e.ders} sınavı için gözetmen olarak görev alabilir misiniz? Uygunsanız lütfen dönüş yapınız.\n\nİyi çalışmalar.`;
+  const gorevHtml = gorevli.length ? `<h4>Görevli gözetmenler (${gorevli.length})</h4>
+    <ul>${gorevli.map(([a, oda]) => `<li><div>${esc(a)}</div><div class="sag">${esc(oda)}${mailBag(mailAdr(a), gorevMetni(a, oda), "Bilgilendir")}</div></li>`).join("")}</ul>` : "";
   return `<div class="pencere" role="dialog" aria-modal="true">
     <div class="baslik"><div><h2>${esc(e.ders)}</h2><div class="alt">${gun.ad} ${gun.tarih} · ${e.bas}–${e.bit}${sure}${e.hoca ? " · " + esc(e.hoca) : ""}<br>${esc(odaMetni)}</div></div><button class="kapat" aria-label="Kapat">×</button></div>
+    ${gorevHtml}
     <h4>Uygun gözetmenler (${uygun.length})</h4>
-    <ul>${ul(uygun, ([k, n, uy]) => `<li class="${uy ? "uyar" : ""}"><div>${esc(k.ad)}<small>Toplam ${k.toplam} → ${k.toplam + (eh - sh)} · bu gün ${k.gunluk[g]}${k.not ? " · " + esc(k.not) : ""}</small></div><div class="sag">${n.length ? esc(n.join(", ")) : "sorunsuz"}</div></li>`)}</ul>
+    <ul>${ul(uygun, ([k, n, uy]) => `<li class="${uy ? "uyar" : ""}"><div>${esc(k.ad)}<small>Toplam ${k.toplam} → ${k.toplam + (eh - sh)} · bu gün ${k.gunluk[g]}${k.not ? " · " + esc(k.not) : ""}</small></div><div class="sag">${n.length ? esc(n.join(", ")) : "sorunsuz"}${mailBag(k.mail, talepMetni(k.ad), "Görev sor")}</div></li>`)}</ul>
     <h4>Uygun değil (${degil.length})</h4>
     <ul>${ul(degil, ([k, s]) => `<li class="hayir"><div>${esc(k.ad)}</div><div class="sag">${esc(s)}</div></li>`)}</ul>
     <div class="not-yazi">Uygun: o saatlerde başka sınavı olmayan ve izinli olmayan gözetmenler. Sıralama: önce sorunsuzlar, sonra yükü az olanlar. Bu sınavda zaten görevli olanlar listelenmez.</div></div>`;

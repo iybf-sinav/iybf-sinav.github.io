@@ -1,4 +1,5 @@
 # --- Kişi bilgisi, şifre ve dönem verisi: GitHub'a YÜKLENMEZ ---
+Belgeler/
 Çıktılar/
 Yöntem/kod/yedek/
 Yöntem/kod/donem_ayarlari.py
@@ -19,3 +20,4 @@ __pycache__/
 .claude/
 
 Yöntem/panel_sifre.txt
+Yöntem/gozetmen_epostalari.csv
