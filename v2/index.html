@@ -957,6 +957,7 @@
     .editor-panel p, .editor-panel ol { margin: 0 0 12px; font-size: .92rem; }
     .editor-panel ol { padding-left: 20px; }
     .editor-panel li + li { margin-top: 4px; }
+    .editor-panel li { overflow-wrap: anywhere; }
     .editor-panel a { color: var(--blue); font-weight: 700; }
     .editor-small { color: var(--muted); font-size: .82rem !important; }
     .editor-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1772,6 +1773,7 @@
     const GITHUB_REPO = "iybf-sinav/iybf-sinav.github.io";
     const EDIT_FILE = "v2/veri.json";
     const EDITOR_KEY = "iybf-v2-duzenleyici-anahtar";
+    const TOKEN_URL = "https://github.com/settings/tokens/new?scopes=repo&description=iybf-sinav%20v2";   // klasik anahtar; "repo" kutusu önceden işaretli
     const SAVED_TEXT = "Kaydedildi; sitede 1–2 dakika içinde görünür.";
     const V2_NOTE = "v2'deki düzenlemeler deneme amaçlıdır: v2 ana siteyle eşitlendiğinde (esitle.py) v2/veri.json ana sitenin verisiyle değişir ve burada yapılan düzenlemeler silinir.";
     const EXTERNAL_COURSE = / \((Sağlık Bilimleri Fakültesi|Üniversite ortak seçmeli ders)\)$/;   // başka birimlere verilen gözetmenlikler
@@ -1793,7 +1795,7 @@
       const texts = {
         0: "GitHub'a bağlanılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.",
         401: "Anahtar geçersiz ya da süresi dolmuş. Yeni bir anahtar oluşturup tekrar giriş yapın.",
-        403: "GitHub bu işleme izin vermedi: anahtarda Contents → Read and write izni olmayabilir ya da istek sınırı aşılmış olabilir.",
+        403: "GitHub bu işleme izin vermedi: anahtar oluşturulurken “repo” kapsamı işaretlenmemiş olabilir ya da istek sınırı aşılmış olabilir. Tokens (classic) sayfasından “repo” kutusu işaretli yeni bir anahtar oluşturun.",
         404: "Depo ya da dosya bulunamadı: anahtar bu depoya erişemiyor olabilir.",
         409: "Dosya bu sırada başka biri tarafından değiştirildi. Lütfen tekrar deneyin.",
         422: "GitHub kaydı kabul etmedi. Lütfen tekrar deneyin."
@@ -1820,7 +1822,7 @@
     function verifyToken(token) {
       return Promise.all([githubRequest(token, "GET", "/repos/" + GITHUB_REPO), githubRequest(token, "GET", "/user")]).then(function (results) {
         if (!results[0].permissions || results[0].permissions.push !== true) {
-          const error = new Error("Bu GitHub hesabının " + GITHUB_REPO + " deposuna yazma yetkisi yok.");
+          const error = new Error("Bu anahtarla " + GITHUB_REPO + " deposuna yazılamıyor: anahtarda “repo” kapsamı işaretli olmalı ve GitHub hesabınızın bu depoda yazma yetkisi bulunmalı.");
           error.status = 403;
           throw error;
         }
@@ -2087,19 +2089,22 @@
         return;
       }
       content.innerHTML = '<p>GitHub\'da <strong>' + esc(GITHUB_REPO) + '</strong> deposuna yazma yetkisi olanlar sitede sınavları düzenleyebilir. Bunun için bir GitHub kişisel erişim anahtarı (token) gerekir:</p>' +
-        '<ol>' +
-          '<li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub\'da yeni anahtar sayfasını</a> açın (Fine-grained token).</li>' +
-          '<li>Resource owner: <strong>iybf-sinav</strong>; Repository access: <strong>Only select repositories</strong> → <strong>' + esc(GITHUB_REPO) + '</strong>.</li>' +
-          '<li>Permissions → Repository permissions → <strong>Contents: Read and write</strong>.</li>' +
-          '<li>“Generate token” ile oluşan anahtarı (github_pat_… ile başlar) kopyalayıp aşağıya yapıştırın.</li>' +
+        '<ol class="token-steps">' +
+          '<li>GitHub\'da <a href="' + TOKEN_URL + '" target="_blank" rel="noopener">Settings → Developer settings → Personal access tokens → Tokens (classic)</a> sayfasını açın.</li>' +
+          '<li><strong>Generate new token</strong> → <strong>Generate new token (classic)</strong>.</li>' +
+          '<li>Note: <strong>iybf-sinav v2</strong>.</li>' +
+          '<li>Expiration: istediğiniz süre (ör. 30 gün).</li>' +
+          '<li>Select scopes: yalnız en üstteki <strong>repo</strong> kutusu.</li>' +
+          '<li>En alttaki <strong>Generate token</strong>; <strong>ghp_</strong> ile başlayan anahtarı kopyalayın (yalnız bir kez gösterilir).</li>' +
+          '<li>Anahtarı aşağıdaki kutuya yapıştırıp <strong>Giriş yap</strong>.</li>' +
         '</ol>' +
         '<form class="editor-row" id="editor-form">' +
           '<label class="sr-only" for="editor-token">GitHub anahtarı</label>' +
-          '<input id="editor-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…">' +
+          '<input id="editor-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ghp_…">' +
           '<button class="edit-save" type="submit">Giriş yap</button>' +
         '</form>' +
         '<p class="edit-status" id="editor-status" role="alert" aria-live="polite"></p>' +
-        '<p class="editor-small">Anahtar yalnız bu tarayıcıda saklanır ve “Çıkış” ile silinir. Ortak kullanılan bir bilgisayarda işiniz bitince çıkış yapın.</p>';
+        '<p class="editor-small">Anahtar şifre gibidir: kimseyle paylaşmayın. Yalnız bu cihazda (bu tarayıcıda) saklanır ve “Çıkış” ile silinir. Ortak kullanılan bir bilgisayarda işiniz bitince çıkış yapın.</p>';
     }
 
     function setEditor(value) {
