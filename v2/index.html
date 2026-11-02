@@ -1043,6 +1043,9 @@
     .picker-list button, .picker-list .pick-row { display: flex; width: 100%; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; text-align: left; font: inherit; }
     .editor-panel .picker-list button { padding: 9px 12px; }
     .picker-list button:hover { border-color: var(--blue); background: var(--blue-soft, #eef4fb); }
+    .picker-list li.pick-li { display: flex; gap: 6px; align-items: stretch; }
+    .picker-list li.pick-li > button:first-child { flex: 1 1 auto; width: auto; min-width: 0; }
+    .picker-list li.pick-li button.pick-mail { flex: none; width: auto; padding: 6px 10px; font-size: .8rem; font-weight: 700; white-space: nowrap; }
     .pick-name { flex: 1 1 auto; min-width: 0; color: var(--navy); font-weight: 700; overflow-wrap: anywhere; }
     .pick-name small { display: block; color: var(--muted); font-weight: 500; font-size: .78rem; }
     .pick-count { flex: none; color: var(--muted); font-size: .82rem; font-weight: 700; }
@@ -1224,7 +1227,7 @@
         <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
         <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme okul hesabıyla Outlook web’de (outlook.cloud.microsoft) hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
         <li><strong>Değişiklik 13 · Gözetmen kartlarında görev sayısı.</strong> Gözetmenler sayfasındaki her isim kartının sağ kenarında gözetmenin toplam görev sayısı küçük ve soluk yazılır (ör. “17 görev”). Sayım gözetmen seçme penceresindekiyle aynıdır (komisyon kuralı: 60 dakikadan uzun sınav 2 görev, kendi dersindeki gözetmenlik dahil). Herkese görünür; bir sınav düzenlenip kaydedilince sayı hemen güncellenir. Öğretim Üyeleri kartları değişmedi.</li>
-        <li><strong>Değişiklik 15 · Düzenle sekmesinde gözetmene haber ver / sor.</strong> Her dersliğin gözetmen alanının altında “Gözetmene haber ver” (görevlendirildiniz) ve “Gözetmene sor” (görev alabilir misiniz?) düğmeleri vardır. Düğme, alandaki gözetmen (birden çok ad varsa hepsi) için okul hesabıyla Outlook web'de (outlook.cloud.microsoft) hazır taslak açar; konu ve metne formdaki ders, gün, saat ve derslik yazılır. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez. Düğme kayıt yapmaz; gözetmen değişikliği için Kaydet’e basılır.</li>
+        <li><strong>Değişiklik 15 · Düzenle sekmesinde gözetmene haber ver / sor.</strong> Her dersliğin gözetmen alanının altında “Gözetmene haber ver” (görevlendirildiniz) ve “Gözetmene sor” (görev alabilir misiniz?) düğmeleri vardır. Düğme, alandaki gözetmen (birden çok ad varsa hepsi) için okul hesabıyla Outlook web'de (outlook.cloud.microsoft) hazır taslak açar; konu ve metne formdaki ders, gün, saat ve derslik yazılır. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez. Düğme kayıt yapmaz; gözetmen değişikliği için Kaydet’e basılır. Aynı iki düğme “Seç” penceresindeki her müsait gözetmenin yanında da vardır; pencere kapanmadan arka arkaya birkaç kişiye taslak açılabilir.</li>
         <li><strong>Değişiklik 14 · İYBF Tüm Sınav Programı.</strong> Sınav Programları sayfasında bölüm kartlarının başında “TÜMÜ” rozetli, koyu lacivert “İYBF Tüm Sınav Programı” kartı. Açılan pencerede fakültenin bütün sınavları yer alır: liste görünümünde gün, saat, derslik, ders adı, öğretim elemanı ve programlar (telefonda tablo kendi kutusunda kaydırılır); takvim görünümünde haftalık tabloda aynı saatteki bütün sınavlar alt alta (ders adı, derslik, öğretim elemanı). “PNG indir” bütün takvimi güncellik uyarısıyla tek resim olarak indirir; bir sınava tıklayınca sınav kartı açılır.</li>
       </ol>
     </section>
@@ -1839,6 +1842,13 @@
         }
       });
       $("#picker-modal").addEventListener("click", function (event) {
+        const mail = event.target.closest("[data-pick-mail]");
+        if (mail && picker) {
+          const room = picker.exam.rooms[picker.roomIndex] || {};
+          mailDraft([mail.dataset.name], mail.dataset.pickMail, picker.exam, picker.exam.course, room.room || "",
+            function (text, isError) { const box = $("#picker-status"); box.textContent = text; box.style.color = isError ? "#b42318" : ""; }, "");
+          return;
+        }
         const choice = event.target.closest("[data-pick]");
         if (choice && picker) applyPick(choice.dataset.pick);
       });
@@ -2398,15 +2408,18 @@
         (picker.oldName ? '<p class="editor-small">Yerine seçilecek: <strong>' + esc(picker.oldName) + '</strong></p>' : '<p class="editor-small">Seçilen gözetmen bu dersliğe eklenir.</p>') +
         '<h4 class="picker-heading">Müsait gözetmenler (' + free.length + ') · en az görevliden çoğa</h4>' +
         (free.length ? '<ul class="picker-list">' + free.map(function (item) {
-          return '<li><button type="button" data-pick="' + esc(item.name) + '"><span class="pick-name">' + esc(item.name) + '</span>' +
+          return '<li class="pick-li"><button type="button" data-pick="' + esc(item.name) + '"><span class="pick-name">' + esc(item.name) + '</span>' +
             (item.count === least ? '<span class="pick-badge">önerilen</span>' : '') +
-            '<span class="pick-count">' + item.count + ' görev</span></button></li>';
+            '<span class="pick-count">' + item.count + ' görev</span></button>' +
+            '<button type="button" class="pick-mail" data-pick-mail="sor" data-name="' + esc(item.name) + '" title="Görev alıp alamayacağını soran e-posta taslağı açar">✉ Görev sor</button>' +
+            '<button type="button" class="pick-mail" data-pick-mail="bildir" data-name="' + esc(item.name) + '" title="Görevlendirildiğini bildiren e-posta taslağı açar">✉ Görev ver</button></li>';
         }).join("") + '</ul>' : '<p class="editor-small">Bu saatte müsait gözetmen yok.</p>') +
         (busy.length ? '<h4 class="picker-heading">Müsait değil (' + busy.length + ')</h4><ul class="picker-list is-off">' + busy.map(function (item) {
           return '<li><span class="pick-row"><span class="pick-name">' + esc(item.name) + '<small>' + esc(item.reasons.join("; ")) + '</small></span>' +
             '<span class="pick-count">' + item.count + ' görev</span></span></li>';
         }).join("") + '</ul>' : '') +
-        '<p class="editor-small">Seçim forma yazılır; kaydetmek için Düzenle sekmesinde “Kaydet”e basın.</p>';
+        '<p class="editor-small" id="picker-status" aria-live="polite"></p>' +
+        '<p class="editor-small">Seçim forma yazılır; kaydetmek için Düzenle sekmesinde “Kaydet”e basın. “Görev sor” ve “Görev ver” pencereyi kapatmadan okul hesabıyla e-posta taslağı açar; arka arkaya birkaç kişiye yazabilirsiniz.</p>';
     }
 
     function openPicker(state) {
@@ -2636,7 +2649,44 @@
         "&subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
     }
 
-    // Düzenle sekmesinde dersliğin gözetmenine "haber ver" / "sor" e-posta taslağı (Değişiklik 15); kayıt yapmaz
+    // Düzenle sekmesinde ve gözetmen seçme penceresinde "haber ver" / "sor" e-posta taslağı (Değişiklik 15); kayıt yapmaz
+    function emailsFor(names) {
+      return loadEmails().then(function (book) {
+        const emails = {};
+        names.forEach(function (name) { emails[name] = lookupEmail(book.gozetmenler, name) || lookupEmail(book.hocalar, name); });
+        return (editor && names.some(function (name) { return !emails[name]; }) ? panelPeople() : Promise.resolve([])).then(function (list) {
+          const panelMap = {};
+          list.forEach(function (person) { if (person && person.ad) panelMap[person.ad] = person.mail || ""; });
+          names.forEach(function (name) { if (!emails[name]) emails[name] = lookupEmail(panelMap, name); });
+          return emails;
+        });
+      });
+    }
+
+    function mailDraft(names, tur, exam, course, room, setStatus, hint) {
+      const slot = exam.day + " " + exam.dateLabel + " " + exam.start + "–" + exam.end;
+      const subject = "Vize sınavı gözetmenliği – " + course + " (" + slot + ")";
+      const what = tur === "bildir"
+        ? slot + " saatlerinde " + course + " sınavında" + (room ? " " + room + " dersliğinde" : "") + " gözetmen olarak görevlendirildiniz."
+        : slot + " saatlerinde " + course + " sınavı" + (room ? " (" + room + ")" : "") + " için gözetmen olarak görev alabilir misiniz? Uygunsanız lütfen dönüş yapınız.";
+      const NL = String.fromCharCode(10) + String.fromCharCode(10);
+      const body = (names.length === 1 ? "Merhaba " + names[0] + "," : "Sayın gözetmenler,") + NL + what +
+        (tur === "bildir" ? NL + "Güncel program: " + SITE_URL : "") + NL + "İYBF Sınav Komisyonu";
+      setStatus("E-posta adresleri hazırlanıyor…", false);
+      emailsFor(names).then(function (emails) {
+        const to = [];
+        names.forEach(function (name) { if (emails[name] && to.indexOf(emails[name]) === -1) to.push(emails[name]); });
+        const missing = names.filter(function (name) { return !emails[name]; });
+        if (!to.length) { setStatus("e-postası girilmemiş: " + missing.join(", "), true); return; }
+        const link = document.createElement("a");
+        link.href = mailtoUrl(to, subject, body);   // adresler yalnız bağlantıda; sayfada yazılmaz
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.click();
+        setStatus("E-posta taslağı açıldı" + (missing.length ? " (e-postası girilmemiş: " + missing.join(", ") + ")" : "") + "." + (hint || ""), false);
+      });
+    }
+
     function mailEdit(form, row, tur) {
       const exam = draftExam(form, currentExam);
       const names = proctorNames($('[name="proctor"]', row).value);
@@ -2646,38 +2696,8 @@
         return;
       }
       const course = (form.elements.course && form.elements.course.value.trim()) || currentExam.course;
-      const room = $('[name="room"]', row).value.trim();
-      const slot = exam.day + " " + exam.dateLabel + " " + exam.start + "–" + exam.end;
-      const subject = "Vize sınavı gözetmenliği – " + course + " (" + slot + ")";
-      const what = tur === "bildir"
-        ? slot + " saatlerinde " + course + " sınavında" + (room ? " " + room + " dersliğinde" : "") + " gözetmen olarak görevlendirildiniz."
-        : slot + " saatlerinde " + course + " sınavı" + (room ? " (" + room + ")" : "") + " için gözetmen olarak görev alabilir misiniz? Uygunsanız lütfen dönüş yapınız.";
-      const NL = String.fromCharCode(10) + String.fromCharCode(10);
-      const body = (names.length === 1 ? "Merhaba " + names[0] + "," : "Sayın gözetmenler,") + NL + what +
-        (tur === "bildir" ? NL + "Güncel program: " + SITE_URL : "") + NL + "İYBF Sınav Komisyonu";
-      setEditStatus(form, "E-posta adresleri hazırlanıyor…");
-      loadEmails().then(function (book) {
-        const emails = {};
-        names.forEach(function (name) { emails[name] = lookupEmail(book.gozetmenler, name) || lookupEmail(book.hocalar, name); });
-        return (editor && names.some(function (name) { return !emails[name]; }) ? panelPeople() : Promise.resolve([])).then(function (list) {
-          const panelMap = {};
-          list.forEach(function (person) { if (person && person.ad) panelMap[person.ad] = person.mail || ""; });
-          names.forEach(function (name) { if (!emails[name]) emails[name] = lookupEmail(panelMap, name); });
-          return emails;
-        });
-      }).then(function (emails) {
-        const to = [];
-        names.forEach(function (name) { if (emails[name] && to.indexOf(emails[name]) === -1) to.push(emails[name]); });
-        const missing = names.filter(function (name) { return !emails[name]; });
-        if (!to.length) { setEditStatus(form, "e-postası girilmemiş: " + missing.join(", "), true); return; }
-        const link = document.createElement("a");
-        link.href = mailtoUrl(to, subject, body);   // adresler yalnız bağlantıda; sayfada yazılmaz
-        link.target = "_blank";
-        link.rel = "noopener";
-        link.click();
-        setEditStatus(form, "E-posta taslağı açıldı" + (missing.length ? " (e-postası girilmemiş: " + missing.join(", ") + ")" : "") +
-          ". Gözetmen değişikliği için Kaydet’e basmayı unutmayın.");
-      });
+      mailDraft(names, tur, exam, course, $('[name="room"]', row).value.trim(),
+        function (text, isError) { setEditStatus(form, text, isError); }, " Gözetmen değişikliği için Kaydet’e basmayı unutmayın.");
     }
 
     function openNotify(result, type) {
