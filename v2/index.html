@@ -1355,7 +1355,7 @@
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
-      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "../panel/?v=20261102124210"); }
+      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "../panel/?v=20261102142031"); }
       if (updateHash) {
         const hashes = { home: "ana-sayfa", features: "yeni-ozellikler", schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
