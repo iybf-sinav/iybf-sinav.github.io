@@ -888,7 +888,6 @@
   </style>
   <style>
     #tab-home, #page-home { --accent: #102a43; }
-    #tab-features, #page-features { --accent: #b45309; }
     .feature-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
     .feature-list li { padding: 14px 16px; border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 12px; background: #fff; }
     .feature-list strong { color: var(--accent); }
@@ -1132,7 +1131,6 @@
       <button class="tab-button" id="tab-teachers" role="tab" aria-controls="page-teachers" aria-selected="false" data-page="teachers">Öğretim Üyeleri</button>
       <button class="tab-button" id="tab-proctors" role="tab" aria-controls="page-proctors" aria-selected="false" data-page="proctors">Gözetmenler</button>
       <button class="tab-button" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel">Panel</button>
-      <button class="tab-button" id="tab-features" role="tab" aria-controls="page-features" aria-selected="false" data-page="features">Yeni Özellikler</button>
     </div>
   </nav>
 
@@ -1211,31 +1209,6 @@
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
-    </section>
-    <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
-      <div class="page-heading">
-        <div>
-          <h2>Yeni Özellikler</h2>
-          <p>Sitede son eklenen özellikler.</p>
-        </div>
-      </div>
-      <ol class="feature-list">
-        <li><strong>Değişiklik 1 · Ana Sayfa sekmesi.</strong> Sitede ilk açılan sekme. Sınav programındaki güncellemeler (Son değişiklikler) Sınav Programları sayfasının başından buraya taşındı.</li>
-        <li><strong>Değişiklik 2 · Takvimi PNG olarak indirme.</strong> Bölüm, öğretim üyesi ve gözetmen kartlarında, Liste/Takvim görünümü düğmelerinin yanında "PNG indir" düğmesi. Haftalık takvimi resim olarak indirir.</li>
-        <li><strong>Değişiklik 3 · Daha açık güncelleme notları.</strong> Ana Sayfa'daki Son değişiklikler maddeleri sınav programıyla eşleştirilir: eklenen gözetmenin adı maddede yazılır ve maddedeki ders adı bağlantı olur; ders adına tıklayınca (ya da klavyeyle seçip Enter'a basınca) o sınavın kartı açılır ve güncel gün, saat, derslik, gözetmen ve öğretim elemanı orada görülür. Eşleşmeyen madde düz metin kalır.</li>
-        <li><strong>Değişiklik 4 · PNG'de güncellik uyarısı.</strong> İndirilen takvim resminin en üstünde kırmızı bir uyarı yer alır: listenin hangi tarih ve saatte alındığı ve güncel takvim için iybf-sinav.github.io adresine bakılması gerektiği. Uyarı yalnız resimde görünür.</li>
-        <li><strong>Değişiklik 5 · GitHub yetkisiyle sınav düzenleme.</strong> Başlıktaki “Düzenleyici girişi” düğmesiyle, GitHub'da bu depoya yazma yetkisi olanlar kişisel erişim anahtarlarıyla giriş yapar. Girişliyken sınav kartında “Düzenle” sekmesi açılır: tarih, saat, ders kodu ve adı, öğretim elemanı, programlar, öğrenci sayısı, notlar ve derslikler (gözetmenler dahil) değiştirilebilir, sınav silinebilir; Sınav Programları sayfasından yeni sınav eklenebilir. Kaydedilen değişiklik GitHub'a commit edilir ve 1–2 dakika içinde sitede görünür. <em>Not: düzenlemeler veri.json dosyasına kaydedilir. Komisyon, Excel dosyasını bu değişikliklere göre günceller.</em></li>
-        <li><strong>Değişiklik 6 · Veri ile tasarım ayrıldı.</strong> Site, sınav verisini (sınavlar, derslikler, gözetmenler, Son değişiklikler) sayfanın içinden değil veri.json dosyasından okur. Komisyonun programı yalnız bu dosyayı üretir; sitenin tasarımında yapılan değişiklikler veri güncellemelerinde silinmez. Dosyanın biçimi: <a href="https://github.com/iybf-sinav/iybf-sinav.github.io/blob/main/VERI-BICIMI.md" target="_blank" rel="noopener">VERI-BICIMI.md</a>.</li>
-        <li><strong>Değişiklik 7 · Gözetmen çakışma ve izin kontrolü.</strong> Düzenle sekmesinde gözetmen yazılırken ve kaydetmeden önce her gözetmen denetlenir: aynı gün, örtüşen saatte başka bir sınavda gözetmen mi, o saatte kendi dersinin sınavı var mı, o gün izinli mi. Sorun varsa açık bir mesaj gösterilir (ör. “Şeyma Sertçelik bu saatte müsait değil: Pazartesi 10:00–10:50 Yönetim Bilişim Sistemlerine Giriş (6A1) sınavında gözetmen.”) ve kayıt yapılmaz. Sınavın günü ya da saati değişince bütün gözetmenler yeni zamana göre denetlenir. Gözetmen önerilerinde o saatte müsait olmayanlar “(müsait değil)” diye işaretlenir. İzin günleri gözetmen atama dosyasındaki (Gözetmen Yükü) bilgiden alındı; veri.json'da <em>proctorAvailability</em> alanında durur.</li>
-        <li><strong>Değişiklik 8 · Gözetmen seçme penceresi.</strong> Düzenleyici girişliyken Düzenle sekmesinde her dersliğin gözetmen alanının yanında “Seç” düğmesi vardır (Sınav sekmesi yalnız görüntüleme içindir). Açılan pencerede o sınavın gün ve saatinde müsait gözetmenler, toplam kaç sınavda görevli oldukları yazılarak en az görevliden en çoğa sıralanır; en az görevliler “önerilen” diye işaretlenir. Müsait olmayanlar altta, nedeniyle (izinli, aynı saatte başka sınavda vb.) soluk gösterilir. Seçilen ad alandaki gözetmenin yerine geçer (alan boşsa ya da birden çok ad varsa eklenir); kayıt otomatik yapılmaz, “Kaydet”e basılınca yapılır.</li>
-        <li><strong>Değişiklik 9 · Uygulama hakkında bölümü.</strong> Ana Sayfa'nın en altında, Son değişiklikler kutusunun altında kapalı başlayan “Uygulama hakkında” bölümü (+ ile açılır, − ile kapanır): uygulamanın amacı, sitenin yaptıkları ve teşekkür metni. Teşekkür metni yalnız bu bölümde yer alır; sayfanın altında yalnız “İESU İYBF Sınav Planlama Komisyonu” yazar.</li>
-        <li><strong>Değişiklik 10 · Panel yalnız düzenleyicilere, şifresiz.</strong> “Panel” sekmesi yalnız düzenleyici girişi yapılmışken görünür; girişsiz açılan #panel adresi Ana Sayfa'ya döner. Girişliyken panel şifre sormadan açılır: panel şifresi, düzenleyicinin GitHub anahtarıyla özel <em>iybf-sinav/iybf-gizli</em> deposundaki <em>gizli.json</em> dosyasından okunur. Şifre bu herkese açık depoda, sitenin kodunda ya da veri.json'da yer almaz; yalnız tarayıcının belleğinde ve bu sekmenin oturumunda tutulur, “Çıkış” ile silinir. gizli.json okunamazsa panel kendi şifre ekranıyla açılır.</li>
-        <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
-        <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme okul hesabıyla Outlook web’de (outlook.cloud.microsoft) hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
-        <li><strong>Değişiklik 14 · İYBF Tüm Sınav Programı.</strong> Sınav Programları sayfasında bölüm kartlarının başında “TÜMÜ” rozetli, koyu lacivert “İYBF Tüm Sınav Programı” kartı. Açılan pencerede fakültenin bütün sınavları yer alır: liste görünümünde gün, saat, derslik, ders adı, öğretim elemanı ve programlar (telefonda tablo kendi kutusunda kaydırılır); takvim görünümünde haftalık tabloda aynı saatteki bütün sınavlar alt alta (ders adı, derslik, öğretim elemanı). “PNG indir” bütün takvimi güncellik uyarısıyla tek resim olarak indirir; bir sınava tıklayınca sınav kartı açılır.</li>
-        <li><strong>Değişiklik 15 · Düzenle sekmesinde gözetmene haber ver / sor.</strong> Her dersliğin gözetmen alanının altında “Gözetmene haber ver” (görevlendirildiniz) ve “Gözetmene sor” (görev alabilir misiniz?) düğmeleri vardır. Düğme, alandaki gözetmen (birden çok ad varsa hepsi) için okul hesabıyla Outlook web'de (outlook.cloud.microsoft) hazır taslak açar; konu ve metne formdaki ders, gün, saat ve derslik yazılır. Adresler epostalar.json dosyasından alınır ve sayfada gösterilmez. Düğme kayıt yapmaz; gözetmen değişikliği için Kaydet’e basılır. Aynı iki düğme “Seç” penceresindeki her müsait gözetmenin yanında da vardır; pencere kapanmadan arka arkaya birkaç kişiye taslak açılabilir.</li>
-        <li><strong>Değişiklik 17 · Takvimde yakınlaştırma.</strong> Bölüm, öğretim üyesi, gözetmen ve Tüm Sınav Programı pencerelerindeki takvim görünümü açılışta ekrana sığar; telefonda bütün hafta bir bakışta görünür. İki parmakla sıkıştırarak yakınlaştırılıp uzaklaştırılır, yakınken tek parmakla kaydırılır. Takvimin üstündeki “−”, “+” ve “Sığdır” düğmeleri masaüstünde de çalışır (en çok %160). Bir sınava dokununca kartı açılır; sıkıştırma hareketi tıklama sayılmaz. Liste görünümü ve PNG indirme değişmedi (PNG her zaman tam boyut).</li>
-      </ol>
     </section>
   </main>
 
@@ -1454,7 +1427,7 @@
       });
       if (pageName === "panel") openPanel();
       if (updateHash) {
-        const hashes = { home: "ana-sayfa", features: "yeni-ozellikler", schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
+        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -3033,8 +3006,7 @@
       "ogretim-uyeleri": "teachers",
       "gozetmenler": "proctors",
       "panel": "panel",
-      "ana-sayfa": "home",
-      "yeni-ozellikler": "features"
+      "ana-sayfa": "home"
     };
     activatePage(pageByHash[initialHash] || "home", false);
   </script>
