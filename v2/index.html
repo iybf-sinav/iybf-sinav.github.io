@@ -852,6 +852,11 @@
     .department-button[data-code="YBS"], .program-tag[data-dept="YBS"] { --c: #1f3b73; }
     .department-button[data-code="ECF"], .program-tag[data-dept="ECF"] { --c: #548235; }
     .department-button[data-code="ETİC"], .program-tag[data-dept="ETİC"] { --c: #0089b8; }
+    /* İYBF Tüm Sınav Programı kartı (Değişiklik 14) */
+    .department-button.is-all { --c: #102a43; border-color: color-mix(in srgb, var(--c) 35%, white); border-left-color: var(--c); background: color-mix(in srgb, var(--c) 6%, white); }
+    .department-button.is-all .department-name { color: var(--c); }
+    .course-table td.programs-cell { color: var(--muted); font-size: .78rem; min-width: 110px; }
+    .png-sheet.is-wide { width: 1400px; }
     .department-grid .department-button:hover { border-color: var(--c); background: color-mix(in srgb, var(--c) 7%, white); }
     .department-grid .department-button[aria-pressed="true"] { border-color: var(--c); background: color-mix(in srgb, var(--c) 15%, white);
       box-shadow: 0 6px 18px color-mix(in srgb, var(--c) 25%, transparent); }
@@ -1218,6 +1223,7 @@
         <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
         <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme e-posta programında hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
         <li><strong>Değişiklik 13 · Gözetmen kartlarında görev sayısı.</strong> Gözetmenler sayfasındaki her isim kartının sağ kenarında gözetmenin toplam görev sayısı küçük ve soluk yazılır (ör. “17 görev”). Sayım gözetmen seçme penceresindekiyle aynıdır (komisyon kuralı: 60 dakikadan uzun sınav 2 görev, kendi dersindeki gözetmenlik dahil). Herkese görünür; bir sınav düzenlenip kaydedilince sayı hemen güncellenir. Öğretim Üyeleri kartları değişmedi.</li>
+        <li><strong>Değişiklik 14 · İYBF Tüm Sınav Programı.</strong> Sınav Programları sayfasında bölüm kartlarının başında “TÜMÜ” rozetli, koyu lacivert “İYBF Tüm Sınav Programı” kartı. Açılan pencerede fakültenin bütün sınavları yer alır: liste görünümünde gün, saat, derslik, ders adı, öğretim elemanı ve programlar (telefonda tablo kendi kutusunda kaydırılır); takvim görünümünde haftalık tabloda aynı saatteki bütün sınavlar alt alta (ders adı, derslik, öğretim elemanı). “PNG indir” bütün takvimi güncellik uyarısıyla tek resim olarak indirir; bir sınava tıklayınca sınav kartı açılır.</li>
       </ol>
     </section>
   </main>
@@ -1450,9 +1456,21 @@
       });
     });
 
+    const ALL_CODE = "__TUMU__";   // İYBF Tüm Sınav Programı kartı (Değişiklik 14)
+
+    // "120 sınav + 5 başka birim gözetmenliği" (pencerede hepsi listelenir)
+    function allExamCountText() {
+      const external = DATA.exams.filter(function (exam) { return EXTERNAL_COURSE.test(exam.course); }).length;
+      return (DATA.exams.length - external) + " sınav" + (external ? " + " + external + " başka birim gözetmenliği" : "");
+    }
+
     function initDepartments() {
       const grid = $("#department-grid");
-      grid.innerHTML = DATA.departments.map(function (department) {
+      grid.innerHTML = '<button class="department-button is-all" type="button" data-code="' + ALL_CODE + '" aria-pressed="false">' +
+          '<span class="department-code">TÜMÜ</span>' +
+          '<span class="department-name">İYBF Tüm Sınav Programı</span>' +
+          '<span class="department-language" id="all-exam-count">' + esc(allExamCountText()) + '</span>' +
+        '</button>' + DATA.departments.map(function (department) {
         return '<button class="department-button" type="button" data-code="' + esc(department.code) + '" aria-pressed="false">' +
           '<span class="department-code">' + esc(department.code) + '</span>' +
           '<span class="department-name">' + esc(department.name) + '</span>' +
@@ -1462,7 +1480,7 @@
 
       grid.addEventListener("click", function (event) {
         const button = event.target.closest(".department-button");
-        if (button) openPerson("department", button.dataset.code);
+        if (button) openPerson(button.dataset.code === ALL_CODE ? "all" : "department", button.dataset.code);
       });
     }
 
@@ -1480,6 +1498,11 @@
 
     // Kişinin sınavları; derslik: öğretim üyesinde sınavın bütün derslikleri, gözetmende görevli olduğu derslik(ler)
     function personExams(type, name) {
+      if (type === "all") {
+        return DATA.exams.map(function (exam) {
+          return { exam: exam, rooms: exam.rooms.map(function (room) { return room.room; }).filter(Boolean) };
+        }).sort(function (a, b) { return examOrder(a.exam, b.exam); });
+      }
       if (type === "department") {
         return DATA.exams.filter(function (exam) { return inDepartment(exam, name); }).map(function (exam) {
           return { exam: exam, rooms: exam.rooms.map(function (room) { return room.room; }).filter(Boolean) };
@@ -1500,17 +1523,19 @@
       }).sort(function (a, b) { return examOrder(a.exam, b.exam); });
     }
 
-    function courseListHtml(entries, showTeacher) {
+    function courseListHtml(entries, showTeacher, showPrograms) {
       if (!entries.length) return '<div class="empty-list">Programda sınav bulunmuyor.</div>';
       return '<div class="week-wrap"><table class="course-table"><thead><tr>' +
-        '<th>Gün</th><th>Saat</th><th>Derslik</th><th>Ders adı</th>' + (showTeacher ? '<th>Öğretim elemanı</th>' : '') + '</tr></thead><tbody>' + entries.map(function (entry) {
+        '<th>Gün</th><th>Saat</th><th>Derslik</th><th>Ders adı</th>' + (showTeacher ? '<th>Öğretim elemanı</th>' : '') +
+        (showPrograms ? '<th>Programlar</th>' : '') + '</tr></thead><tbody>' + entries.map(function (entry) {
         const exam = entry.exam;
         return '<tr data-exam-id="' + esc(exam.id) + '" tabindex="0">' +
           '<td>' + esc(exam.day) + ' <small>' + esc(exam.dateLabel.slice(0, 5)) + '</small></td>' +
           '<td>' + esc(exam.start) + '–' + esc(exam.end) + '</td>' +
           '<td>' + esc(entry.rooms.join(", ")) + '</td>' +
           '<td><strong>' + esc(exam.course) + '</strong></td>' +
-          (showTeacher ? '<td>' + esc(exam.teacher) + '</td>' : '') + '</tr>';
+          (showTeacher ? '<td>' + esc(exam.teacher) + '</td>' : '') +
+          (showPrograms ? '<td class="programs-cell">' + esc(exam.programs.join(", ")) + '</td>' : '') + '</tr>';
       }).join("") + '</tbody></table></div>';
     }
 
@@ -1592,14 +1617,14 @@
       });
       const entries = personExams(currentPerson.type, currentPerson.name);
       const showTeacher = currentPerson.type !== "teacher";   // öğretim üyesinin kendi kartında tekrar yazılmaz
-      $("#person-modal-content").innerHTML = personView === "list" ? courseListHtml(entries, showTeacher) : weekHtml(entries, showTeacher);
+      $("#person-modal-content").innerHTML = personView === "list" ? courseListHtml(entries, showTeacher, currentPerson.type === "all") : weekHtml(entries, showTeacher);
     }
 
     function openPerson(type, name) {
       currentPerson = { type: type, name: name };
       const department = DATA.departments.find(function (item) { return item.code === name; });
-      $("#person-modal-kind").textContent = { teacher: "Öğretim üyesi", proctor: "Gözetmen", department: "Bölüm sınav programı" }[type];
-      $("#person-modal-title").textContent = type === "department" ? department.name : name;
+      $("#person-modal-kind").textContent = { teacher: "Öğretim üyesi", proctor: "Gözetmen", department: "Bölüm sınav programı", all: "Tüm sınav programı" }[type];
+      $("#person-modal-title").textContent = type === "all" ? "İYBF Tüm Sınav Programı" : type === "department" ? department.name : name;
       renderPersonModal();
       openModal($("#person-modal"));
     }
@@ -1716,7 +1741,7 @@
       const title = $("#person-modal-title").textContent;
       const kind = $("#person-modal-kind").textContent;
       const sheet = document.createElement("div");
-      sheet.className = "png-sheet";
+      sheet.className = "png-sheet" + (currentPerson.type === "all" ? " is-wide" : "");   // tüm program: geniş sayfa
       // en üstte güncellik uyarısı: yalnız PNG'de görünür (sayfa dışındaki bu geçici kutuda çizilir)
       sheet.innerHTML = '<div class="png-uyari">Bu sınav listesi ' + esc(turkeyNow()) + ' tarihinde alınmıştır. ' +
         'Güncel sınav takvimi için mutlaka <span style="white-space:nowrap">https://iybf-sinav.github.io</span> adresine bakın.</div>' +
@@ -1726,7 +1751,9 @@
       button.disabled = true;
       button.textContent = "Hazırlanıyor…";
       loadHtml2canvas().then(function () {
-        return html2canvas(sheet, { scale: 2, backgroundColor: "#ffffff" });
+        // sayfanın tamamı çizilsin: çok sınavlı hücreler ekran yüksekliğinde kesilmesin
+        const height = Math.ceil(sheet.scrollHeight);
+        return html2canvas(sheet, { scale: 2, backgroundColor: "#ffffff", height: height, windowHeight: Math.max(window.innerHeight, height + 50) });
       }).then(function (canvas) {
         return new Promise(function (resolve) { canvas.toBlob(resolve, "image/png"); });
       }).then(function (blob) {
@@ -2870,6 +2897,7 @@
       $("#schedule-summary").textContent = DATA.meta.examCount + " sınav · " + DATA.meta.period;
       $("#teacher-summary").textContent = DATA.meta.teacherCount + " öğretim elemanı";
       $("#proctor-summary").textContent = DATA.meta.proctorCount + " gözetmen";
+      if ($("#all-exam-count")) $("#all-exam-count").textContent = allExamCountText();
     }
 
     // Veri değişince (düzenleme) sayfadaki her şey yeniden çizilir
