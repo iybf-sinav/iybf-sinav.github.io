@@ -1202,6 +1202,7 @@
         <li><strong>Değişiklik 7 · Gözetmen çakışma ve izin kontrolü.</strong> Düzenle sekmesinde gözetmen yazılırken ve kaydetmeden önce her gözetmen denetlenir: aynı gün, örtüşen saatte başka bir sınavda gözetmen mi, o saatte kendi dersinin sınavı var mı, o gün izinli mi. Sorun varsa açık bir mesaj gösterilir (ör. “Şeyma Sertçelik bu saatte müsait değil: Pazartesi 10:00–10:50 Yönetim Bilişim Sistemlerine Giriş (6A1) sınavında gözetmen.”) ve kayıt yapılmaz. Sınavın günü ya da saati değişince bütün gözetmenler yeni zamana göre denetlenir. Gözetmen önerilerinde o saatte müsait olmayanlar “(müsait değil)” diye işaretlenir. İzin günleri gözetmen atama dosyasındaki (Gözetmen Yükü) bilgiden alındı; v2/veri.json'da <em>proctorAvailability</em> alanında durur.</li>
         <li><strong>Değişiklik 8 · Gözetmen seçme penceresi.</strong> Düzenleyici girişliyken Düzenle sekmesinde her dersliğin gözetmen alanının yanında “Seç” düğmesi vardır (Sınav sekmesi yalnız görüntüleme içindir). Açılan pencerede o sınavın gün ve saatinde müsait gözetmenler, toplam kaç sınavda görevli oldukları yazılarak en az görevliden en çoğa sıralanır; en az görevliler “önerilen” diye işaretlenir. Müsait olmayanlar altta, nedeniyle (izinli, aynı saatte başka sınavda vb.) soluk gösterilir. Seçilen ad alandaki gözetmenin yerine geçer (alan boşsa ya da birden çok ad varsa eklenir); kayıt otomatik yapılmaz, “Kaydet”e basılınca yapılır.</li>
         <li><strong>Değişiklik 9 · Uygulama hakkında bölümü.</strong> Ana Sayfa'nın en altında, Son değişiklikler kutusunun altında kapalı başlayan “Uygulama hakkında” bölümü (+ ile açılır, − ile kapanır): uygulamanın amacı, sitenin yaptıkları ve teşekkür metni. Teşekkür metni yalnız bu bölümde yer alır; sayfanın altında yalnız “İESU İYBF Sınav Planlama Komisyonu” yazar.</li>
+        <li><strong>Değişiklik 10 · Görev sayısı sınav süresine göre.</strong> Gözetmen seçme penceresindeki sayı artık “N görev”: her gözetmenlik sınavın süresine göre sayılır; 50–60 dakikalık sınav 1, 90 dakikalık ve 2 saatlik sınav (ör. İstatistik 12:00–14:00) 2 görevdir. Sayım komisyonun Gözetmen Yükü tablosuyla aynıdır (kendi dersindeki gözetmenlik dahil). Çakışma denetimi sınavın bütün süresine bakar; 2 saatlik sınavın ikinci saatindeki çakışma da yakalanır.</li>
       </ol>
     </section>
   </main>
@@ -2125,14 +2126,26 @@
     // ---- Gözetmen seçme penceresi (Değişiklik 8) ----
     let picker = null;   // { exam, roomIndex, oldName }: Düzenle sekmesindeki "Seç" düğmesinden
 
-    // Gözetmenlik sayısı: kişinin görevli olduğu farklı sınav sayısı (Gözetmenler sayfasıyla aynı sayım)
-    function proctorExamCounts() {
+    // Sınavın görev değeri (oturum sayısı): 50 dk oturum + 10 dk ara düzeninde her başlayan saat bir oturum.
+    // 50–60 dk = 1, 90 dk ve 2 saat (ör. 12:00–14:00) = 2. Komisyonun sayımıyla aynı (7_gozetmenlik_formati.py, Gözetmen Yükü).
+    function examSessions(exam) {
+      const minutes = function (time) { const part = String(time).split(":"); return Number(part[0]) * 60 + Number(part[1]); };
+      return Math.max(1, Math.ceil((minutes(exam.end) - minutes(exam.start)) / 60) || 1);
+    }
+
+    // Gözetmen görev sayısı: görevli olduğu her sınav, süresine göre (kendi dersindeki gözetmenlik dahil)
+    function proctorTaskCounts() {
       const sets = {};
       DATA.assignments.forEach(function (item) {
         (sets[item.proctor] = sets[item.proctor] || {})[item.examId] = true;
       });
       const counts = {};
-      Object.keys(sets).forEach(function (name) { counts[name] = Object.keys(sets[name]).length; });
+      Object.keys(sets).forEach(function (name) {
+        counts[name] = Object.keys(sets[name]).reduce(function (sum, id) {
+          const exam = examById(id);
+          return sum + (exam ? examSessions(exam) : 1);
+        }, 0);
+      });
       return counts;
     }
 
@@ -2142,7 +2155,7 @@
 
     // Bu sınavın gün/saatinde her gözetmen: müsaitse sayısıyla, değilse kısa nedeniyle
     function pickerCandidates(exam, roomIndex, oldName) {
-      const counts = proctorExamCounts();
+      const counts = proctorTaskCounts();
       const oldKey = oldName ? nameKey(proctorNames(oldName)[0] || oldName) : "";
       return DATA.proctors.map(function (name) {
         const key = nameKey(name);
@@ -2175,11 +2188,11 @@
         (free.length ? '<ul class="picker-list">' + free.map(function (item) {
           return '<li><button type="button" data-pick="' + esc(item.name) + '"><span class="pick-name">' + esc(item.name) + '</span>' +
             (item.count === least ? '<span class="pick-badge">önerilen</span>' : '') +
-            '<span class="pick-count">' + item.count + ' sınav</span></button></li>';
+            '<span class="pick-count">' + item.count + ' görev</span></button></li>';
         }).join("") + '</ul>' : '<p class="editor-small">Bu saatte müsait gözetmen yok.</p>') +
         (busy.length ? '<h4 class="picker-heading">Müsait değil (' + busy.length + ')</h4><ul class="picker-list is-off">' + busy.map(function (item) {
           return '<li><span class="pick-row"><span class="pick-name">' + esc(item.name) + '<small>' + esc(item.reasons.join("; ")) + '</small></span>' +
-            '<span class="pick-count">' + item.count + ' sınav</span></span></li>';
+            '<span class="pick-count">' + item.count + ' görev</span></span></li>';
         }).join("") + '</ul>' : '') +
         '<p class="editor-small">Seçim forma yazılır; kaydetmek için Düzenle sekmesinde “Kaydet”e basın.</p>';
     }
