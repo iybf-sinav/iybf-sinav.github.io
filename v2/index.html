@@ -1040,6 +1040,13 @@
     .picker-list.is-off .pick-row { opacity: .55; background: #f6f8fa; cursor: not-allowed; }
     .edit-form input[aria-invalid] { border-color: #d92d20; background: #fff5f4; }
     .edit-status.is-error { color: #b42318; }
+    .notify-summary { margin: 0 0 12px; padding: 10px 14px; border-left: 4px solid var(--blue); border-radius: 8px; background: var(--blue-soft); }
+    .notify-summary p { margin: 4px 0 !important; overflow-wrap: anywhere; }
+    .notify-people { padding-left: 20px; }
+    .notify-missing { color: #8a4b00; }
+    .editor-panel a.notify-send { display: inline-block; padding: 8px 14px; border: 1px solid var(--navy); border-radius: 10px; color: #fff; background: var(--navy);
+      font-size: .88rem; font-weight: 700; text-decoration: none; }
+    .editor-panel a.notify-send[aria-disabled="true"] { opacity: .6; cursor: progress; }
     .edit-notice { margin: 0 0 12px; padding: 10px 14px; border-radius: 10px; color: #1d6b43; background: #e8f6ee; font-weight: 700; }
     .add-exam-button {
       padding: 8px 14px;
@@ -1205,6 +1212,7 @@
         <li><strong>Değişiklik 9 · Uygulama hakkında bölümü.</strong> Ana Sayfa'nın en altında, Son değişiklikler kutusunun altında kapalı başlayan “Uygulama hakkında” bölümü (+ ile açılır, − ile kapanır): uygulamanın amacı, sitenin yaptıkları ve teşekkür metni. Teşekkür metni yalnız bu bölümde yer alır; sayfanın altında yalnız “İESU İYBF Sınav Planlama Komisyonu” yazar.</li>
         <li><strong>Değişiklik 10 · Panel yalnız düzenleyicilere, şifresiz.</strong> “Panel” sekmesi yalnız düzenleyici girişi yapılmışken görünür; girişsiz açılan #panel adresi Ana Sayfa'ya döner. Girişliyken panel şifre sormadan açılır: panel şifresi, düzenleyicinin GitHub anahtarıyla özel <em>iybf-sinav/iybf-gizli</em> deposundaki <em>gizli.json</em> dosyasından okunur. Şifre bu herkese açık depoda, sitenin kodunda ya da veri.json'da yer almaz; yalnız tarayıcının belleğinde ve bu sekmenin oturumunda tutulur, “Çıkış” ile silinir. gizli.json okunamazsa panel kendi şifre ekranıyla açılır.</li>
         <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
+        <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme e-posta programında hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
       </ol>
     </section>
   </main>
@@ -1265,6 +1273,17 @@
       <button class="modal-close" type="button" data-close aria-label="Kapat">×</button>
     </div>
     <div class="modal-body editor-panel" id="picker-modal-content"></div>
+  </dialog>
+
+  <dialog class="modal modal-narrow" id="notify-modal" aria-labelledby="notify-modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="modal-kicker">Kaydedildi</p>
+        <h3 id="notify-modal-title">Değişiklik yapıldı</h3>
+      </div>
+      <button class="modal-close" type="button" data-close aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body editor-panel" id="notify-modal-content"></div>
   </dialog>
 
   <div class="editor-toast" id="editor-toast" role="status" hidden></div>
@@ -2049,14 +2068,19 @@
     function describeChange(type, before, after) {
       const tarih = todayLabel();
       const out = [];
-      function add(tur, metin, extra) { out.push(Object.assign({ tarih: tarih, tur: tur, metin: metin }, extra || {})); }
+      function add(tur, metin, cumle, extra) { out.push(Object.assign({ tarih: tarih, tur: tur, metin: metin, cumle: cumle }, extra || {})); }
+      // e-posta cümleleri (Değişiklik 12): "Pazartesi 02.11.2026 10:00–10:50"
+      function slotLong(exam) { return exam.day + " " + exam.dateLabel + " " + exam.start + "–" + exam.end; }
+      function where(exam) { const names = roomNames(exam); return "(" + slotLong(exam) + (names.length ? ", " + names.join(", ") : "") + ")"; }
       if (type === "add") {
         const proctors = after.rooms.map(function (room) { return room.proctor; }).filter(function (value) { return value && value !== "Gerekmiyor"; });
-        add("Sınav", after.course + " sınavı " + slotHead(after) + " programa eklendi" + (proctors.length ? " (gözetmen: " + proctors.join(", ") + ")" : "") + ".", { kind: "add" });
+        add("Sınav", after.course + " sınavı " + slotHead(after) + " programa eklendi" + (proctors.length ? " (gözetmen: " + proctors.join(", ") + ")" : "") + ".",
+          after.course + " sınavı programa eklenmiştir: " + slotLong(after) + (roomNames(after).length ? ", derslik " + roomNames(after).join(", ") : "") +
+          (proctors.length ? ", gözetmen " + proctors.join(", ") : "") + ".", { kind: "add" });
         return out;
       }
       if (type === "delete") {
-        add("Sınav", before.course + " sınavı " + slotHead(before) + " programdan çıkarıldı.", { kind: "delete" });
+        add("Sınav", before.course + " sınavı " + slotHead(before) + " programdan çıkarıldı.", before.course + " sınavı " + where(before) + " programdan çıkarılmıştır.", { kind: "delete" });
         return out;
       }
       const matched = pairRooms(before, after);
@@ -2066,25 +2090,46 @@
         const longer = (before.end !== after.end) && (examSessions(before) !== examSessions(after) || before.end.slice(3) !== after.end.slice(3) ||
           Number(after.end.slice(0, 2)) - Number(after.start.slice(0, 2)) !== Number(before.end.slice(0, 2)) - Number(before.start.slice(0, 2)));
         add("Saat", after.course + " sınavı " + slotHead(before, roomNames(before)) + " " + after.day + " " + timeTo(after.start) + " alındı" +
-          (longer ? " (bitiş " + after.end + ")" : "") + ".", { kind: "time" });
+          (longer ? " (bitiş " + after.end + ")" : "") + ".",
+          after.course + " sınavının tarihi ve saati " + slotLong(before) + " yerine " + slotLong(after) + " olarak değiştirilmiştir" +
+          (roomNames(after).length ? " (derslik: " + roomNames(after).join(", ") + ")" : "") + ".", { kind: "time" });
       } else if (before.end !== after.end) {
-        add("Saat", after.course + " sınavının " + slotHead(after) + " bitiş saati " + before.end + " → " + after.end + " olarak değiştirildi.", { kind: "time" });
+        add("Saat", after.course + " sınavının " + slotHead(after) + " bitiş saati " + before.end + " → " + after.end + " olarak değiştirildi.",
+          after.course + " sınavının " + where(after) + " bitiş saati " + before.end + " yerine " + after.end + " olmuştur.", { kind: "time" });
       }
       // Derslik
       const renamed = matched.pairs.filter(function (pair) { return pair[0].room !== pair[1].room; });
       if (renamed.length || matched.added.length || matched.removed.length) {
         const clauses = [];
-        if (renamed.length) clauses.push("derslik " + renamed.map(function (pair) { return shown(pair[0].room) + " → " + shown(pair[1].room); }).join(", ") + " olarak değiştirildi");
-        matched.added.forEach(function (room) { clauses.push(shown(room.room) + " dersliği eklendi" + proctorNote(room)); });
-        matched.removed.forEach(function (room) { clauses.push(shown(room.room) + " dersliği çıkarıldı" + proctorNote(room)); });
-        add("Derslik", after.course + " sınavında " + slotHead(after) + " " + clauses.join(", ") + ".", { kind: "room" });
+        const formal = [];
+        if (renamed.length) {
+          clauses.push("derslik " + renamed.map(function (pair) { return shown(pair[0].room) + " → " + shown(pair[1].room); }).join(", ") + " olarak değiştirildi");
+          renamed.forEach(function (pair) { formal.push("derslik " + shown(pair[0].room) + " yerine " + shown(pair[1].room) + " olmuştur"); });
+        }
+        matched.added.forEach(function (room) {
+          clauses.push(shown(room.room) + " dersliği eklendi" + proctorNote(room));
+          formal.push(shown(room.room) + " dersliği eklenmiştir" + proctorNote(room));
+        });
+        matched.removed.forEach(function (room) {
+          clauses.push(shown(room.room) + " dersliği çıkarıldı" + proctorNote(room));
+          formal.push(shown(room.room) + " dersliği kaldırılmıştır" + proctorNote(room));
+        });
+        add("Derslik", after.course + " sınavında " + slotHead(after) + " " + clauses.join(", ") + ".",
+          after.course + " sınavında (" + slotLong(after) + ") " + formal.join(", ") + ".", { kind: "room" });
       }
       // Gözetmen
       const swaps = matched.pairs.filter(function (pair) { return proctorKey(pair[0].proctor) !== proctorKey(pair[1].proctor); });
       if (swaps.length) {
         add("Gözetmen", after.course + " sınavında " + slotHead(after) + " " + swaps.map(function (pair) {
           return (multi ? shown(pair[1].room) + " gözetmeni " : "gözetmen ") + (pair[0].proctor || "Gerekmiyor") + " → " + (pair[1].proctor || "Gerekmiyor");
-        }).join(", ") + " olarak değiştirildi.", { kind: "proctor", swaps: swaps });
+        }).join(", ") + " olarak değiştirildi.", swaps.map(function (pair) {
+          const head = after.course + " sınavında (" + slotLong(after) + (pair[1].room ? ", " + pair[1].room : "") + ")";
+          const old = pair[0].proctor || "Gerekmiyor";
+          const now = pair[1].proctor || "Gerekmiyor";
+          if (old === "Gerekmiyor") return head + " gözetmen olarak " + now + " görevlendirilmiştir.";
+          if (now === "Gerekmiyor") return head + " " + old + " gözetmenlik görevinden alınmıştır; bu derslikte gözetmen gerekmemektedir.";
+          return head + " gözetmen " + old + " yerine " + now + " olmuştur.";
+        }).join("\n\n"), { kind: "proctor" });
       }
       // Diğer bilgiler
       const fields = [];
@@ -2097,7 +2142,8 @@
       if (matched.pairs.some(function (pair) {
         return pair[0].capacity !== pair[1].capacity || pair[0].students !== pair[1].students || pair[0].departments !== pair[1].departments;
       })) fields.push("derslik bilgileri (kapasite, öğrenci, bölümler)");
-      if (fields.length) add("Sınav", after.course + " sınavının " + slotHead(after) + " bilgileri güncellendi: " + fields.join(", ") + ".", { kind: "info" });
+      if (fields.length) add("Sınav", after.course + " sınavının " + slotHead(after) + " bilgileri güncellendi: " + fields.join(", ") + ".",
+        after.course + " sınavının " + where(after) + " bilgileri güncellenmiştir: " + fields.join(", ").replace(/ → /g, " yerine ") + ".", { kind: "info" });
       return out;
     }
 
@@ -2462,6 +2508,136 @@
       showToast.timer = setTimeout(function () { toast.hidden = true; }, 6000);
     }
 
+    // ---- Değişikliği bildir (Değişiklik 12) ----
+    // Alıcı adresleri herkese açık v2/epostalar.json'dan (yalnız bu pencerede okunur, sayfada gösterilmez);
+    // gözetmen adresi boşsa ve gizli.json'dan panel şifresi okunabildiyse panel verisinden.
+    const EMAIL_FILE = "epostalar.json";
+    const SITE_URL = "https://iybf-sinav.github.io";
+
+    // panel/index.html'deki coz() ile aynı: boşluksuz, küçük harf şifre; PBKDF2-SHA256 → AES-GCM
+    function decryptPanel(P, password) {
+      const b64 = function (value) { return Uint8Array.from(atob(value), function (ch) { return ch.charCodeAt(0); }); };
+      const secret = password.replace(/\s+/g, "").toLocaleLowerCase("tr");
+      return crypto.subtle.importKey("raw", new TextEncoder().encode(secret), "PBKDF2", false, ["deriveKey"]).then(function (material) {
+        return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(P.s), iterations: P.i, hash: "SHA-256" }, material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      }).then(function (key) {
+        return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(P.v) }, key, b64(P.c));
+      }).then(function (plain) {
+        return JSON.parse(new TextDecoder().decode(plain));
+      });
+    }
+
+    function panelPeople() {
+      if (panelPeoplePromise) return panelPeoplePromise;
+      panelPeoplePromise = loadSecrets().then(function (result) {
+        const password = result.data && result.data.panelSifresi;
+        if (!password || !window.crypto || !crypto.subtle) return [];
+        return fetch("../panel/?t=" + Date.now(), { cache: "no-store" }).then(function (response) {
+          if (!response.ok) throw new Error("panel okunamadı");
+          return response.text();
+        }).then(function (html) {
+          const match = html.match(/^const P = (\{.*\});\s*$/m);
+          if (!match) throw new Error("panel verisi bulunamadı");
+          return decryptPanel(JSON.parse(match[1]), password);
+        }).then(function (data) {
+          return (data && data.kisiler) || [];
+        });
+      }).catch(function () {
+        panelPeoplePromise = null;
+        return [];
+      });
+      return panelPeoplePromise;
+    }
+
+    function loadEmails() {
+      return fetch(EMAIL_FILE + "?t=" + Date.now(), { cache: "no-store" }).then(function (response) {
+        if (!response.ok) throw new Error(String(response.status));
+        return response.json();
+      }).catch(function () { return {}; });
+    }
+
+    function lookupEmail(map, name) {
+      const key = nameKey(name);
+      const found = Object.keys(map || {}).find(function (item) { return nameKey(item) === key; });
+      const value = found ? String(map[found] || "").trim() : "";
+      return /^[^\s@,;<>]+@[^\s@,;<>]+$/.test(value) ? value : "";
+    }
+
+    function splitTeachers(value) {
+      return String(value || "").split(",").map(function (item) { return item.trim(); }).filter(Boolean);
+    }
+
+    // Değişiklikten etkilenenler: eklenen/çıkarılan gözetmenler (saat ya da derslik değiştiyse bütün gözetmenler) ve öğretim elemanı
+    function affectedPeople(type, before, after, notices) {
+      const proctors = [];
+      const teachers = [];
+      function push(list, name) { if (name && !list.some(function (item) { return nameKey(item) === nameKey(name); })) list.push(name); }
+      function all(exam) { const names = []; exam.rooms.forEach(function (room) { proctorNames(room.proctor).forEach(function (name) { names.push(name); }); }); return names; }
+      if (type === "add") all(after).forEach(function (name) { push(proctors, name); });
+      else if (type === "delete") all(before).forEach(function (name) { push(proctors, name); });
+      else {
+        const moved = notices.some(function (item) { return item.kind === "time" || item.kind === "room"; });
+        const oldNames = all(before), newNames = all(after);
+        const has = function (list, name) { return list.some(function (item) { return nameKey(item) === nameKey(name); }); };
+        oldNames.concat(newNames).forEach(function (name) {
+          if (moved || has(oldNames, name) !== has(newNames, name)) push(proctors, name);
+        });
+      }
+      [after, before].forEach(function (exam) { if (exam) splitTeachers(exam.teacher).forEach(function (name) { push(teachers, name); }); });
+      return { proctors: proctors, teachers: teachers };
+    }
+
+    function mailtoUrl(emails, subject, body) {
+      return "mailto:" + emails.join(",") + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    }
+
+    function openNotify(result, type) {
+      const notices = result.notices || [];
+      const exam = result.after || result.before;
+      if (!notices.length || !exam) return;
+      const people = affectedPeople(type, result.before, result.after, notices);
+      const subject = "Sınav değişikliği: " + exam.course;
+      const body = "Sayın ilgililer,\n\n" + notices.map(function (item) { return item.cumle; }).join("\n\n") +
+        "\n\nGüncel program: " + SITE_URL + "\n\nİYBF Sınav Komisyonu";
+      const content = $("#notify-modal-content");
+      const roleText = function (name, role) { return '<li>' + esc(name) + ' <span class="editor-small">(' + role + ')</span></li>'; };
+      content.innerHTML = '<div class="notify-summary">' + notices.map(function (item) { return '<p>' + esc(item.metin) + '</p>'; }).join("") + '</div>' +
+        ((people.proctors.length || people.teachers.length)
+          ? '<p>Bildirilecek kişiler:</p><ul class="notify-people">' + people.proctors.map(function (name) { return roleText(name, "gözetmen"); }).join("") +
+            people.teachers.map(function (name) { return roleText(name, "öğretim elemanı"); }).join("") + '</ul>'
+          : '<p class="editor-small">Bu değişiklikten etkilenen gözetmen ya da öğretim elemanı yok.</p>') +
+        '<p class="notify-missing" data-missing></p>' +
+        '<div class="editor-row"><a class="notify-send" id="notify-send" aria-disabled="true" role="button">Alıcılar hazırlanıyor…</a>' +
+        '<button type="button" data-close>Kapat</button></div>';
+      openModal($("#notify-modal"));
+      const token = openNotify.token = {};
+      loadEmails().then(function (book) {
+        const hocalar = book.hocalar || {}, gozetmenler = book.gozetmenler || {};
+        const emails = {};
+        people.teachers.forEach(function (name) { emails[name] = lookupEmail(hocalar, name); });
+        people.proctors.forEach(function (name) { emails[name] = lookupEmail(gozetmenler, name) || lookupEmail(hocalar, name); });
+        const needPanel = editor && people.proctors.some(function (name) { return !emails[name]; });
+        return (needPanel ? panelPeople() : Promise.resolve([])).then(function (list) {
+          const panelMap = {};
+          list.forEach(function (person) { if (person && person.ad) panelMap[person.ad] = person.mail || ""; });
+          people.proctors.forEach(function (name) { if (!emails[name]) emails[name] = lookupEmail(panelMap, name); });
+          return emails;
+        });
+      }).then(function (emails) {
+        if (openNotify.token !== token) return;
+        const names = people.proctors.concat(people.teachers);
+        const to = [];
+        names.forEach(function (name) { if (emails[name] && to.indexOf(emails[name]) === -1) to.push(emails[name]); });
+        const missing = names.filter(function (name) { return !emails[name]; });
+        $("[data-missing]", content).innerHTML = missing.map(function (name) { return "e-postası girilmemiş: " + esc(name); }).join("<br>");
+        const link = $("#notify-send");
+        link.href = mailtoUrl(to, subject, body);   // adresler yalnız bağlantıda; sayfada yazılmaz
+        link.removeAttribute("aria-disabled");
+        link.removeAttribute("role");
+        link.textContent = "Değişikliği bildir";
+      });
+    }
+
     function runSave(form, change) {
       const buttons = $$("button", form);
       buttons.forEach(function (button) { button.disabled = true; });
@@ -2469,6 +2645,7 @@
       commitChange(change).then(function (result) {
         Object.keys(result.data).forEach(function (key) { DATA[key] = result.data[key]; });
         refreshAll();
+        if (!result.unchanged) openNotify(result, change.type);   // Değişiklik 12
         if (change.type === "delete") {
           $("#exam-modal").close();
           showToast("Sınav silindi; sitede 1–2 dakika içinde görünür.");

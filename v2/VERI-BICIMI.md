@@ -201,9 +201,26 @@ Biçim (değer örnektir, uydurmadır):
 {"panelSifresi": "örnek-şifre"}
 ```
 
-- `panelSifresi`: Panel sekmesi açılınca panele verilir, panel şifre sormadan açılır (Değişiklik 10). Yoksa ya da dosya okunamazsa panel kendi şifre ekranıyla açılır.
+- `panelSifresi`: Panel sekmesi açılınca panele verilir, panel şifre sormadan açılır (Değişiklik 10). Yoksa ya da dosya okunamazsa panel kendi şifre ekranıyla açılır. Ayrıca “Değişikliği bildir”de `epostalar.json`'da adresi boş olan gözetmenler için yedek kaynaktır: gözetmen e-postası panel verisinden bu şifreyle çözülerek alınır.
 
 **Kim, nasıl oluşturur:** depo sahibi (iybf-sinav hesabı) GitHub'da **Private** (özel) bir `iybf-gizli` deposu açar, içine yukarıdaki biçimde `gizli.json` dosyasını ekler ve düzenleyicileri bu depoya da ortak (collaborator) yapar. Düzenleyicinin klasik anahtarındaki `repo` kapsamı özel depoyu okumaya yeter. Panel şifresi `kod/Yöntem/panel_sifre.txt`'deki şifredir (o dosya da GitHub'a yüklenmez).
+
+## E-posta adresleri: `v2/epostalar.json`
+
+“Değişikliği bildir” (Değişiklik 12) e-posta taslağının alıcıları bu dosyadan alınır. Kurumsal adresler zaten herkese açık olduğu için dosya bu depoda açık durur; ama site adresleri **sayfada hiçbir yerde göstermez**, yalnız taslağın alıcı satırına koyar. Dosya yalnız “Değişikliği bildir” sırasında okunur.
+
+```json
+{
+ "hocalar": {"Ad SOYAD": "ad.soyad@ornek.edu.tr"},
+ "gozetmenler": {"Ad Soyad": "ad.soyad@ornek.edu.tr"}
+}
+```
+
+- `hocalar`: öğretim elemanı adı (sınavlardaki `teacher` yazımıyla, `"Ad SOYAD"`) → e-posta. `gozetmenler`: gözetmen adı (`proctor` yazımıyla) → e-posta.
+- Ad eşleştirmesi büyük/küçük harf ve Türkçe karakter farkına dayanıklıdır. Adresi bilinmeyen kişide değer `""` kalır; pencerede “e-postası girilmemiş: Ad” yazar.
+- Gözetmenin adresi boşsa ve düzenleyici girişliyken `gizli.json`'dan panel şifresi okunabildiyse adres panel verisinden alınır.
+
+**Nasıl doldurulur:** GitHub'da depoda `v2/epostalar.json` dosyasını açın, sağ üstteki kalem simgesine (Edit this file) basın, her adın karşısındaki `""` içine adresi yazın (ör. `"Taha Gümüş": "taha.gumus@ornek.edu.tr"`), virgül ve tırnakları bozmadan **Commit changes** ile kaydedin. Yeni bir hoca ya da gözetmen eklemek için aynı biçimde yeni bir satır ekleyin.
 
 ## Siteye nasıl gelir
 
