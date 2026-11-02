@@ -1013,7 +1013,8 @@
     .edit-form .edit-save, .editor-panel .edit-save { border-color: var(--navy); color: #fff; background: var(--navy); }
     .edit-form .edit-delete { margin-left: auto; border-color: #f4c7c3; color: #b42318; }
     .edit-form [data-add-room] { margin-top: 10px; }
-    .edit-status { min-height: 1.2em; margin: 12px 0 0; font-size: .88rem; font-weight: 700; }
+    .edit-status { min-height: 1.2em; margin: 12px 0 0; font-size: .88rem; font-weight: 700; white-space: pre-line; overflow-wrap: anywhere; }
+    .edit-form input[aria-invalid] { border-color: #d92d20; background: #fff5f4; }
     .edit-status.is-error { color: #b42318; }
     .edit-notice { margin: 0 0 12px; padding: 10px 14px; border-radius: 10px; color: #1d6b43; background: #e8f6ee; font-weight: 700; }
     .add-exam-button {
@@ -1161,6 +1162,7 @@
         <li><strong>Değişiklik 4 · PNG'de güncellik uyarısı.</strong> İndirilen takvim resminin en üstünde kırmızı bir uyarı yer alır: listenin hangi tarih ve saatte alındığı ve güncel takvim için iybf-sinav.github.io adresine bakılması gerektiği. Uyarı yalnız resimde görünür.</li>
         <li><strong>Değişiklik 5 · GitHub yetkisiyle sınav düzenleme.</strong> Başlıktaki “Düzenleyici girişi” düğmesiyle, GitHub'da bu depoya yazma yetkisi olanlar kişisel erişim anahtarlarıyla giriş yapar. Girişliyken sınav kartında “Düzenle” sekmesi açılır: tarih, saat, ders kodu ve adı, öğretim elemanı, programlar, öğrenci sayısı, notlar ve derslikler (gözetmenler dahil) değiştirilebilir, sınav silinebilir; Sınav Programları sayfasından yeni sınav eklenebilir. Kaydedilen değişiklik GitHub'a commit edilir ve 1–2 dakika içinde sitede görünür. <em>Not: düzenlemeler v2/veri.json dosyasına kaydedilir. v2'deki düzenlemeler deneme amaçlıdır; v2 ana siteyle eşitlendiğinde (esitle.py çalışınca) veri.json ana sitenin verisiyle değişir ve v2'de yapılan düzenlemeler silinir.</em></li>
         <li><strong>Değişiklik 6 · Veri ile tasarım ayrıldı.</strong> Site, sınav verisini (sınavlar, derslikler, gözetmenler, Son değişiklikler) sayfanın içinden değil v2/veri.json dosyasından okur. Komisyonun programı yalnız bu dosyayı üretir; sitenin tasarımında yapılan değişiklikler veri güncellemelerinde silinmez. Dosyanın biçimi: <a href="https://github.com/iybf-sinav/iybf-sinav.github.io/blob/main/v2/VERI-BICIMI.md" target="_blank" rel="noopener">VERI-BICIMI.md</a>.</li>
+        <li><strong>Değişiklik 7 · Gözetmen çakışma ve izin kontrolü.</strong> Düzenle sekmesinde gözetmen yazılırken ve kaydetmeden önce her gözetmen denetlenir: aynı gün, örtüşen saatte başka bir sınavda gözetmen mi, o saatte kendi dersinin sınavı var mı, o gün izinli mi. Sorun varsa açık bir mesaj gösterilir (ör. “Şeyma Sertçelik bu saatte müsait değil: Pazartesi 10:00–10:50 Yönetim Bilişim Sistemlerine Giriş (6A1) sınavında gözetmen.”) ve kayıt yapılmaz. Sınavın günü ya da saati değişince bütün gözetmenler yeni zamana göre denetlenir. Gözetmen önerilerinde o saatte müsait olmayanlar “(müsait değil)” diye işaretlenir. İzin günleri gözetmen atama dosyasındaki (Gözetmen Yükü) bilgiden alındı; v2/veri.json'da <em>proctorAvailability</em> alanında durur.</li>
       </ol>
     </section>
   </main>
@@ -1714,11 +1716,16 @@
           $("[data-rooms]", form).insertAdjacentHTML("beforeend", roomEditHtml({ room: "", capacity: "", students: "", proctor: "Gerekmiyor", departments: "" }));
         } else if (event.target.closest("[data-remove-room]")) {
           event.target.closest(".edit-room").remove();
+          liveCheck(form);
         } else if (event.target.closest("[data-edit-reset]")) {
           renderExamModal();
         } else if (event.target.closest("[data-edit-delete]")) {
           deleteExam(form);
         }
+      });
+      $("#exam-modal").addEventListener("input", function (event) {
+        const form = event.target.closest(".edit-form");
+        if (form && /^(proctor|date|start|end)$/.test(event.target.name)) liveCheck(form);
       });
       $("#exam-modal").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -1888,13 +1895,19 @@
       if (!data || !Array.isArray(data.exams)) throw new Error("veri.json'da sınav listesi bulunamadı; kaydedilmedi.");
       let id = change.id;
       if (change.type === "add") {
+        const conflicts = proctorConflicts(data, change.exam, null);
+        if (conflicts.length) throw conflictError(conflicts);
         id = "exam-" + (data.exams.reduce(function (max, exam) { return Math.max(max, examNumber(exam)); }, 0) + 1);
         data.exams.push(Object.assign({}, change.exam, { id: id }));
       } else {
         const index = data.exams.findIndex(function (exam) { return exam.id === change.id; });
         if (index === -1) throw new Error("Bu sınav sitede artık yok (başka biri silmiş olabilir). Sayfayı yenileyip tekrar bakın.");
         if (change.type === "delete") data.exams.splice(index, 1);
-        else data.exams[index] = change.exam;
+        else {
+          const conflicts = proctorConflicts(data, change.exam, data.exams[index]);   // GitHub'daki güncel veriyle yeniden denetlenir
+          if (conflicts.length) throw conflictError(conflicts);
+          data.exams[index] = change.exam;
+        }
       }
       deriveData(data);
       return { text: JSON.stringify(data, null, 1) + (/\n$/.test(text) ? "\n" : ""), data: data, id: id };
@@ -1924,6 +1937,100 @@
       return attempt(true);
     }
 
+    // ---- Gözetmen çakışma ve izin kontrolü (Değişiklik 7) ----
+    // Ad karşılaştırması büyük/küçük harf, Türkçe karakter ve boşluk farkına dayanıklıdır.
+    function nameKey(value) {
+      return trLower(value).normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .replace(/ı/g, "i").replace(/[^a-z0-9]+/g, " ").trim();
+    }
+
+    function overlaps(a, b) {
+      return a.date === b.date && a.start < b.end && b.start < a.end;
+    }
+
+    function examRoomsOf(exam, test) {
+      return exam.rooms.filter(test).map(function (room) { return room.room; }).filter(Boolean);
+    }
+
+    function slotText(exam) {
+      return exam.day + " " + exam.start + "–" + exam.end;
+    }
+
+    // Gözetmen adı -> izinli/müsait olmadığı gün-saat kayıtları (veri.json "proctorAvailability")
+    function unavailableFor(data, name, exam) {
+      const key = nameKey(name);
+      const person = (data.proctorAvailability || []).find(function (item) { return nameKey(item.name) === key; });
+      if (!person) return null;
+      return (person.unavailable || []).find(function (item) {
+        if (item.date ? item.date !== exam.date : nameKey(item.day) !== nameKey(exam.day)) return false;
+        if (!item.start && !item.end) return true;
+        return exam.start < (item.end || "24:00") && (item.start || "00:00") < exam.end;
+      }) || null;
+    }
+
+    // Bir gözetmenin bu sınavın zamanında müsait olmamasının nedenleri (aynı sınav sayılmaz)
+    function proctorProblems(data, exam, name) {
+      const key = nameKey(name);
+      const problems = [];
+      const off = unavailableFor(data, name, exam);
+      if (off) {
+        const when = off.start || off.end ? exam.day + " " + (off.start || "00:00") + "–" + (off.end || "24:00") : exam.day;
+        const reason = off.reason || "izin";
+        problems.push(reason === "izin"
+          ? name + (off.start || off.end ? " bu saatte izinli (" : " o gün izinli (") + when + ")."
+          : name + (off.start || off.end ? " bu saatte müsait değil (" : " o gün müsait değil (") + when + (reason ? ": " + reason : "") + ").");
+      }
+      data.exams.forEach(function (other) {
+        if ((exam.id && other.id === exam.id) || !overlaps(exam, other)) return;
+        const rooms = examRoomsOf(other, function (room) {
+          return proctorNames(room.proctor).some(function (item) { return nameKey(item) === key; });
+        });
+        if (rooms.length) {
+          problems.push(name + " bu saatte müsait değil: " + slotText(other) + " " + other.course + " (" + rooms.join(", ") + ") sınavında gözetmen.");
+        }
+        const teaches = String(other.teacher || "").split(",").some(function (item) { return nameKey(item) === key; });
+        if (teaches) {
+          const all = examRoomsOf(other, function () { return true; });
+          problems.push(name + " bu saatte müsait değil: " + slotText(other) + " kendi dersi " + other.course + (all.length ? " (" + all.join(", ") + ")" : "") + " sınavı var.");
+        }
+      });
+      return problems;
+    }
+
+    // Kayıttan önce: girilen her gözetmen için saat çakışması ve izin günü. base = sınavın kayıtlı hali (yeni sınavda yok).
+    // Sınavda zaten olan gözetmen, sınavın gün/saati değişmediyse yeniden denetlenmez (komisyonun onayladığı atamalar).
+    function proctorConflicts(data, exam, base) {
+      const sameTime = base && base.id && base.date === exam.date && base.start === exam.start && base.end === exam.end;
+      const before = {};
+      if (sameTime) base.rooms.forEach(function (room) {
+        proctorNames(room.proctor).forEach(function (name) { before[nameKey(name)] = (before[nameKey(name)] || 0) + 1; });
+      });
+      const messages = [];
+      const seen = {};
+      exam.rooms.forEach(function (room) {
+        proctorNames(room.proctor).forEach(function (name) {
+          const key = nameKey(name);
+          seen[key] = (seen[key] || []).concat(room.room || "derslik");
+        });
+      });
+      Object.keys(seen).forEach(function (key) {
+        const rooms = seen[key];
+        const name = exam.rooms.reduce(function (found, room) {
+          return found || proctorNames(room.proctor).find(function (item) { return nameKey(item) === key; });
+        }, "");
+        if (rooms.length > 1 && (before[key] || 0) < rooms.length) messages.push(name + " bu sınavda aynı anda iki derslikte yazılı (" + rooms.join(", ") + ").");
+        if (before[key]) return;
+        proctorProblems(data, exam, name).forEach(function (text) { if (messages.indexOf(text) === -1) messages.push(text); });
+      });
+      return messages;
+    }
+
+    function conflictError(messages) {
+      const error = new Error(messages.join("\n") + "\nKaydedilmedi: başka bir gözetmen seçin ya da sınavın zamanını değiştirin.");
+      error.conflict = true;
+      return error;
+    }
+
     function examDays() {
       const days = [];
       DATA.exams.slice().sort(examOrder).forEach(function (exam) {
@@ -1946,6 +2053,46 @@
         inputHtml("Bölümler", "departments", room.departments, "", "wide") +
         '<button type="button" data-remove-room aria-label="Dersliği sil">Sil</button>' +
       '</div>';
+    }
+
+    // Gözetmen önerileri: bu sınavın saatinde müsait olmayanlar "(müsait değil)" diye işaretlenir
+    function proctorOptions(exam) {
+      return '<option value="Gerekmiyor"></option>' + DATA.proctors.map(function (name) {
+        const busy = proctorConflicts(DATA, Object.assign({}, exam, { rooms: [{ room: "", proctor: name }] }), null).length > 0;
+        return '<option value="' + esc(name) + '"' + (busy ? ' label="(müsait değil)"' : '') + '></option>';
+      }).join("");
+    }
+
+    // Form değiştikçe (gözetmen, tarih, saat) kayıttan önceki denetim anında gösterilir
+    function draftExam(form, base) {
+      const day = examDays().concat([{ date: base.date, dateLabel: base.dateLabel, day: base.day }]).find(function (item) {
+        return item.date === form.elements.date.value;
+      });
+      return Object.assign({}, base, { date: day.date, dateLabel: day.dateLabel, day: day.day,
+        start: form.elements.start.value.trim(), end: form.elements.end.value.trim(),
+        rooms: $$(".edit-room", form).map(function (row) {
+          return { room: $('[name="room"]', row).value.trim(), proctor: $('[name="proctor"]', row).value.split(",").map(function (item) { return item.trim(); }).filter(Boolean).join(", ") };
+        }) });
+    }
+
+    function liveCheck(form) {
+      if (!currentExam) return [];
+      const exam = draftExam(form, currentExam);
+      const valid = /^\d{2}:\d{2}$/.test(exam.start) && /^\d{2}:\d{2}$/.test(exam.end) && exam.start < exam.end;
+      const messages = valid ? proctorConflicts(DATA, exam, currentExam.id ? currentExam : null) : [];
+      $$(".edit-room", form).forEach(function (row) {
+        const input = $('[name="proctor"]', row);
+        const bad = valid && proctorNames(input.value.split(",").map(function (item) { return item.trim(); }).filter(Boolean).join(", ")).some(function (name) {
+          return messages.some(function (text) { return text.indexOf(name + " ") === 0; });
+        });
+        input.toggleAttribute("aria-invalid", bad);
+      });
+      if (valid) $("#edit-proctors", form).innerHTML = proctorOptions(exam);
+      const status = $(".edit-status", form);
+      if (messages.length) setEditStatus(form, messages.join("\n"), true);
+      else if (status.dataset.conflict) setEditStatus(form, "", false);
+      status.dataset.conflict = messages.length ? "1" : "";
+      return messages;
     }
 
     function editFormHtml(exam) {
@@ -1974,7 +2121,7 @@
           '<button type="button" data-add-room>+ Derslik ekle</button>' +
         '</fieldset>' +
         '<datalist id="edit-teachers">' + options(DATA.teachers) + '</datalist>' +
-        '<datalist id="edit-proctors">' + options(["Gerekmiyor"].concat(DATA.proctors)) + '</datalist>' +
+        '<datalist id="edit-proctors">' + proctorOptions(exam) + '</datalist>' +
         '<p class="edit-status" role="alert" aria-live="polite"></p>' +
         '<div class="edit-actions">' +
           '<button class="edit-save" type="submit">' + (exam.id ? "Kaydet" : "Sınavı ekle") + '</button>' +
@@ -2058,6 +2205,13 @@
         exam = examFromForm(form, currentExam);
       } catch (error) {
         setEditStatus(form, error.message, true);
+        return;
+      }
+      const conflicts = proctorConflicts(DATA, exam, currentExam.id ? currentExam : null);
+      if (conflicts.length) {
+        liveCheck(form);
+        setEditStatus(form, conflictError(conflicts).message, true);
+        $(".edit-status", form).scrollIntoView({ block: "nearest" });
         return;
       }
       runSave(form, { type: currentExam.id ? "update" : "add", id: currentExam.id, exam: exam, course: exam.course });

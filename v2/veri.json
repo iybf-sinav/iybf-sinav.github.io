@@ -5657,5 +5657,141 @@
    "tur": "Gözetmen",
    "metin": "Political Structure and Life in Turkey-I sınavına (Pazartesi 13:00, 6D4) gözetmen olarak Melih Mert Oskay eklendi."
   }
+ ],
+ "proctorAvailability": [
+  {
+   "name": "Seda Emir",
+   "unavailable": [
+    {
+     "day": "Pazartesi",
+     "reason": "izin"
+    },
+    {
+     "day": "Cuma",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Melih Mert Oskay",
+   "unavailable": [
+    {
+     "day": "Salı",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Mehmet Deniz Nalbantoğlu",
+   "unavailable": [
+    {
+     "day": "Perşembe",
+     "reason": "izin"
+    },
+    {
+     "day": "Cuma",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Ozan Atalay",
+   "unavailable": [
+    {
+     "day": "Çarşamba",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Taha Gümüş",
+   "unavailable": [
+    {
+     "day": "Çarşamba",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Kadriye Giray",
+   "unavailable": [
+    {
+     "day": "Pazartesi",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Hilal Önge",
+   "unavailable": [
+    {
+     "day": "Pazartesi",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Şeyma Sertçelik",
+   "unavailable": [
+    {
+     "day": "Çarşamba",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Duygu Yayla Eldem",
+   "unavailable": [
+    {
+     "day": "Cuma",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Begüm İnanç",
+   "unavailable": [
+    {
+     "day": "Pazartesi",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Tahsin Mert Saygın",
+   "unavailable": [
+    {
+     "day": "Pazartesi",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Elif Nur Eken",
+   "unavailable": [
+    {
+     "day": "Çarşamba",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Tunahan Başoğlu",
+   "unavailable": [
+    {
+     "day": "Çarşamba",
+     "reason": "izin"
+    }
+   ]
+  },
+  {
+   "name": "Merve Sevinç Sakar",
+   "unavailable": [
+    {
+     "day": "Çarşamba",
+     "reason": "izin"
+    }
+   ]
+  }
  ]
 }

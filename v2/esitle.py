@@ -1,7 +1,8 @@
 """v2'yi ana sitenin güncel verisiyle eşitler: python3 v2/esitle.py (depo kökünden)
 Site verisi v2/veri.json'a yazılır (biçim: v2/VERI-BICIMI.md); v2/index.html'de yalnız panel sürüm eki güncellenir.
 Kaynak: kökte veri.json varsa o; yoksa ana sitedeki gömülü sınav verisi (const DATA)
-+ kod/Yöntem/degisiklikler.json (Son değişiklikler)."""
++ kod/Yöntem/degisiklikler.json (Son değişiklikler).
+Gözetmen izin günleri (proctorAvailability) kaynakta yoksa mevcut v2/veri.json'dakiler korunur."""
 import html
 import json
 import os
@@ -38,6 +39,11 @@ else:
     veri = json.loads(parca(ana, r"\n    const DATA = (.*?);\n"))
 if "updates" not in veri:
     veri["updates"] = son_degisiklikler()
+# Gözetmen izin günleri (proctorAvailability) ana sitede yoksa v2'deki korunur
+if "proctorAvailability" not in veri and os.path.exists("v2/veri.json"):
+    eski = json.load(open("v2/veri.json", encoding="utf-8"))
+    if "proctorAvailability" in eski:
+        veri["proctorAvailability"] = eski["proctorAvailability"]
 
 open("v2/veri.json", "w", encoding="utf-8", newline="\n").write(json.dumps(veri, ensure_ascii=False, indent=1) + "\n")
 

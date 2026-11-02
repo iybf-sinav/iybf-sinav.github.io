@@ -16,7 +16,8 @@ Deneme sürümü (v2, https://iybf-sinav.github.io/v2/) sınav programını sayf
  "assignments": [ ... ],
  "teachers": [ ... ],
  "proctors": [ ... ],
- "updates": [ ... ]
+ "updates": [ ... ],
+ "proctorAvailability": [ ... ]
 }
 ```
 
@@ -29,6 +30,7 @@ Deneme sürümü (v2, https://iybf-sinav.github.io/v2/) sınav programını sayf
 | `teachers` | Zorunlu (türetilir) | Öğretim Üyeleri sayfasındaki isimler; `exams`'ten hesaplanır. |
 | `proctors` | Zorunlu (türetilir) | Gözetmenler sayfasındaki isimler; `assignments`'tan hesaplanır. |
 | `updates` | İsteğe bağlı | Ana Sayfa'daki “Son değişiklikler” kutusu. Yoksa ya da boşsa kutu görünmez. |
+| `proctorAvailability` | İsteğe bağlı | Gözetmenlerin izinli / müsait olmadığı gün ve saatler. “Düzenle” bu günlere gözetmen atanmasını engeller. Yoksa ya da boşsa yalnız saat çakışması denetlenir. |
 
 “Türetilir” denen alanlar elle yazılmaz; `8_site_uret.py` (`veri_kur`) ve sitedeki “Düzenle” özelliği bunları sınavlardan aynı kuralla yeniden hesaplar.
 
@@ -140,6 +142,37 @@ Sağlık Bilimleri Fakültesi ve üniversite ortak seçmeli derslerine İYBF'den
 - `tarih`: duyuru günü, `"G Ay"` (ör. `"2 Kasım"`). İlk maddenin tarihindeki maddeler açık görünür; daha eskiler “Önceki değişiklikler (N)” altında kapalı durur.
 - `tur`: `"Sınav"` ya da `"Gözetmen"` (rozet rengi buna göre).
 - `metin`: düz metin. Site maddeyi sınavla eşleştirip altına güncel gün, saat, derslik, gözetmen ve öğretim elemanını ekler. Bunun için metin şöyle başlamalı: **`<Ders adı> sınavına (<Gün> <SS:DD>, <derslik>[, <derslik>])`**, ör. `Economics of Development sınavına (Pazartesi 13:00, 6D1) ...`. Eşleşmeyen madde olduğu gibi gösterilir.
+
+## `proctorAvailability` (gözetmen izin günleri)
+
+Her gözetmen için bir kayıt; yalnız ad ve izinli gün/saat yazılır (başka kişisel bilgi yazılmaz):
+
+```json
+"proctorAvailability": [
+ {"name": "Melih Mert Oskay", "unavailable": [{"day": "Salı", "reason": "izin"}]},
+ {"name": "Seda Emir", "unavailable": [{"day": "Pazartesi", "reason": "izin"}, {"day": "Cuma", "reason": "izin"}]}
+]
+```
+
+| Alan | Biçim / kural |
+|---|---|
+| `name` | Gözetmen adı, sınavlardaki `proctor` yazımıyla aynı (büyük/küçük harf ve Türkçe karakter farkı tolere edilir). |
+| `unavailable[].day` | Türkçe gün adı (`"Salı"`); her hafta o gün. `date` yazılırsa yerine yalnız o tarih (`"2026-11-03"`) geçer. |
+| `unavailable[].start`, `end` | İsteğe bağlı, `SS:DD`. Yazılmazsa bütün gün; yazılırsa yalnız o saat aralığı. |
+| `unavailable[].reason` | `"izin"` → “X o gün izinli (Salı).”; başka bir metin → “X o gün müsait değil (Salı: metin).” |
+
+Kaynak (Kasım 2026 vizesi): `kod/Sınav Çıktıları/Gözetmen Atamaları - Liste 2 (herkes, 14 kişi).xlsx` → “Gözetmen Yükü” sayfası, “İzin günü / kısıt” sütunu (aynı bilgi `kod/Belgeler/Devir Notu.md`'de). `esitle.py` ana sitede bu alan yoksa v2'deki listeyi korur.
+
+### “Düzenle”deki gözetmen denetimi
+
+Kaydetmeden önce (ve gözetmen, tarih, saat alanı değiştikçe) girilen her gözetmen için şunlar denetlenir; biri bile varsa kayıt yapılmaz:
+
+- Aynı gün, saat aralığı örtüşen başka bir sınavda gözetmen mi?
+- O saatte kendi dersinin sınavı var mı (`teacher` alanında adı geçiyor mu)?
+- `proctorAvailability`'ye göre o gün/saat izinli mi?
+- Aynı sınavda iki derslikte birden yazılmış mı?
+
+Aynı sınavın kendisi çakışma sayılmaz. Sınavda zaten kayıtlı olan bir gözetmen, sınavın gün/saati değişmedikçe yeniden denetlenmez (komisyonun bilerek yaptığı atamalar düzenlemeyi kilitlemesin); gün/saat değişirse bütün gözetmenler yeni zamana göre denetlenir. Denetim GitHub'daki güncel veri.json'la kayıt anında bir kez daha yapılır.
 
 ## Siteye nasıl gelir
 
