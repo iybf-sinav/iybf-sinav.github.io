@@ -141,7 +141,24 @@ Sağlık Bilimleri Fakültesi ve üniversite ortak seçmeli derslerine İYBF'den
 
 - `tarih`: duyuru günü, `"G Ay"` (ör. `"2 Kasım"`). İlk maddenin tarihindeki maddeler açık görünür; daha eskiler “Önceki değişiklikler (N)” altında kapalı durur.
 - `tur`: `"Sınav"` ya da `"Gözetmen"` (rozet rengi buna göre).
-- `metin`: düz metin. Site maddeyi sınavla eşleştirip altına güncel gün, saat, derslik, gözetmen ve öğretim elemanını ekler. Bunun için metin şöyle başlamalı: **`<Ders adı> sınavına (<Gün> <SS:DD>, <derslik>[, <derslik>])`**, ör. `Economics of Development sınavına (Pazartesi 13:00, 6D1) ...`. Eşleşmeyen madde olduğu gibi gösterilir.
+- `metin`: düz metin. Site maddeyi sınavla eşleştirir ve metindeki ders adını bağlantı yapar: tıklanınca o sınavın kartı (güncel gün, saat, derslik, gözetmen, öğretim elemanı) açılır. Bunun için metin şöyle başlamalı: **`<Ders adı> sınavına|sınavında|sınavının|sınavı (<Gün> <SS:DD>, <derslik>[, <derslik>])`**, ör. `Economics of Development sınavına (Pazartesi 13:00, 6D1) ...`. Eşleşmeyen madde düz metin olarak gösterilir.
+- `examId`: isteğe bağlı; sınavın `id`'si (`"exam-2"`). Varsa eşleştirme metne bakmadan bu sınavla yapılır (sınavın saati sonradan değişse de bağlantı doğru kalır). Sitedeki “Düzenle” yazdığı maddelere koyar; elle yazılan maddelerde gerekmez.
+- `tur` için “Düzenle”nin kullandığı değerler: `"Saat"`, `"Derslik"`, `"Gözetmen"`, `"Sınav"` (`Saat` ve `Derslik` rozetleri ayrı renktedir).
+
+### “Düzenle”nin otomatik yazdığı maddeler (Değişiklik 11)
+
+Düzenleyici bir sınavı kaydedince (değiştirme, ekleme, silme) aynı commit'te `updates` listesinin **en üstüne** madde eklenir; `tarih` o günün Türkiye saatine göre tarihidir (`"2 Kasım"`). Değişen her tür için bir madde:
+
+| Tür | Ne zaman | Örnek metin |
+|---|---|---|
+| `Saat` | gün ya da başlangıç saati değişti (parantezde önceki zaman) | `Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.` |
+| `Saat` | yalnız bitiş saati değişti | `... sınavının (Pazartesi 10:00, 6D1) bitiş saati 10:50 → 11:30 olarak değiştirildi.` |
+| `Derslik` | derslik adı değişti, eklendi ya da çıkarıldı | `... sınavında (Pazartesi 10:00, 6D2) derslik 6D1 → 6D2 olarak değiştirildi.` |
+| `Gözetmen` | bir dersliğin gözetmeni değişti | `... sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.` (çok derslikli sınavda `6D4 gözetmeni A → B`) |
+| `Sınav` | ders adı/kodu, öğretim elemanı, öğrenci sayısı, programlar, notlar ya da derslik bilgileri değişti | `... sınavının (Pazartesi 10:00, 6D1) bilgileri güncellendi: öğretim elemanı A → B, notlar.` |
+| `Sınav` | yeni sınav / silinen sınav | `... sınavı (Salı 12:00, 6D1) programa eklendi (gözetmen: X).` / `... sınavı (Pazartesi 10:00, 6D1) programdan çıkarıldı.` |
+
+Hiçbir şey değişmediyse madde eklenmez. Silinen sınavın maddesinde `examId` yoktur.
 
 ## `proctorAvailability` (gözetmen izin günleri)
 

@@ -926,25 +926,25 @@
     /* veri.json yüklenirken / yüklenemezse */
     .veri-durum { margin: 0 0 18px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: #fff; font-weight: 600; }
     .veri-durum.is-error { border-color: #f4b4ae; color: #b42318; background: #fee4e2; }
-    /* Son değişiklikler: DATA'dan eklenen ayrıntı */
+    /* Son değişiklikler: DATA ile eşleşen maddeler */
     .degisiklik p strong.dg-ad { color: var(--navy); }
-    .dg-detay {
-      display: block;
-      width: 100%;
-      margin: 2px 0 6px;
-      padding: 5px 10px;
+    /* Maddedeki ders adı: tıklanınca sınav kartı açılır */
+    .dg-ders {
+      display: inline;
+      padding: 0;
       border: 0;
-      border-radius: 8px;
-      color: #3b5265;
-      background: var(--canvas);
+      color: var(--blue);
+      background: none;
       font: inherit;
-      font-size: .82rem;
-      line-height: 1.45;
+      font-weight: 700;
       text-align: left;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
       cursor: pointer;
     }
-    .dg-detay:hover, .dg-detay:focus-visible { color: var(--blue); background: var(--blue-soft); }
-    .dg-detay b { color: var(--navy); }
+    .dg-ders:hover { color: var(--navy); }
+    .dg-ders:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 3px; }
     /* Düzenleyici (GitHub yetkisiyle sınav düzenleme) */
     [hidden] { display: none !important; }
     .header-inner { flex-wrap: wrap; }
@@ -1074,7 +1074,7 @@
       .edit-room .wide { grid-column: 1 / -1; }
     }
   </style>
-<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}</style></head>
+<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}.dg-saat{background:#fff1dc;color:#8a4b00}.dg-derslik{background:#f1ecfb;color:#5b3fa0}</style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
     <form class="access-card" id="access-form">
@@ -1196,7 +1196,7 @@
       <ol class="feature-list">
         <li><strong>Değişiklik 1 · Ana Sayfa sekmesi.</strong> Sitede ilk açılan sekme. Sınav programındaki güncellemeler (Son değişiklikler) Sınav Programları sayfasının başından buraya taşındı.</li>
         <li><strong>Değişiklik 2 · Takvimi PNG olarak indirme.</strong> Bölüm, öğretim üyesi ve gözetmen kartlarında, Liste/Takvim görünümü düğmelerinin yanında "PNG indir" düğmesi. Haftalık takvimi resim olarak indirir.</li>
-        <li><strong>Değişiklik 3 · Daha açık güncelleme notları.</strong> Ana Sayfa'daki Son değişiklikler maddeleri sınav programıyla eşleştirilir: eklenen gözetmenin adı maddede yazılır, altında sınavın güncel günü, saati, dersliği, gözetmeni ve öğretim elemanı gösterilir. Bu satıra tıklayınca sınav kartı açılır.</li>
+        <li><strong>Değişiklik 3 · Daha açık güncelleme notları.</strong> Ana Sayfa'daki Son değişiklikler maddeleri sınav programıyla eşleştirilir: eklenen gözetmenin adı maddede yazılır ve maddedeki ders adı bağlantı olur; ders adına tıklayınca (ya da klavyeyle seçip Enter'a basınca) o sınavın kartı açılır ve güncel gün, saat, derslik, gözetmen ve öğretim elemanı orada görülür. Eşleşmeyen madde düz metin kalır.</li>
         <li><strong>Değişiklik 4 · PNG'de güncellik uyarısı.</strong> İndirilen takvim resminin en üstünde kırmızı bir uyarı yer alır: listenin hangi tarih ve saatte alındığı ve güncel takvim için iybf-sinav.github.io adresine bakılması gerektiği. Uyarı yalnız resimde görünür.</li>
         <li><strong>Değişiklik 5 · GitHub yetkisiyle sınav düzenleme.</strong> Başlıktaki “Düzenleyici girişi” düğmesiyle, GitHub'da bu depoya yazma yetkisi olanlar kişisel erişim anahtarlarıyla giriş yapar. Girişliyken sınav kartında “Düzenle” sekmesi açılır: tarih, saat, ders kodu ve adı, öğretim elemanı, programlar, öğrenci sayısı, notlar ve derslikler (gözetmenler dahil) değiştirilebilir, sınav silinebilir; Sınav Programları sayfasından yeni sınav eklenebilir. Kaydedilen değişiklik GitHub'a commit edilir ve 1–2 dakika içinde sitede görünür. <em>Not: düzenlemeler v2/veri.json dosyasına kaydedilir. v2'deki düzenlemeler deneme amaçlıdır; v2 ana siteyle eşitlendiğinde (esitle.py çalışınca) veri.json ana sitenin verisiyle değişir ve v2'de yapılan düzenlemeler silinir.</em></li>
         <li><strong>Değişiklik 6 · Veri ile tasarım ayrıldı.</strong> Site, sınav verisini (sınavlar, derslikler, gözetmenler, Son değişiklikler) sayfanın içinden değil v2/veri.json dosyasından okur. Komisyonun programı yalnız bu dosyayı üretir; sitenin tasarımında yapılan değişiklikler veri güncellemelerinde silinmez. Dosyanın biçimi: <a href="https://github.com/iybf-sinav/iybf-sinav.github.io/blob/main/v2/VERI-BICIMI.md" target="_blank" rel="noopener">VERI-BICIMI.md</a>.</li>
@@ -1204,6 +1204,7 @@
         <li><strong>Değişiklik 8 · Gözetmen seçme penceresi.</strong> Düzenleyici girişliyken Düzenle sekmesinde her dersliğin gözetmen alanının yanında “Seç” düğmesi vardır (Sınav sekmesi yalnız görüntüleme içindir). Açılan pencerede o sınavın gün ve saatinde müsait gözetmenler, toplam kaç sınavda görevli oldukları yazılarak en az görevliden en çoğa sıralanır; en az görevliler “önerilen” diye işaretlenir. Müsait olmayanlar altta, nedeniyle (izinli, aynı saatte başka sınavda vb.) soluk gösterilir. Seçilen ad alandaki gözetmenin yerine geçer (alan boşsa ya da birden çok ad varsa eklenir); kayıt otomatik yapılmaz, “Kaydet”e basılınca yapılır.</li>
         <li><strong>Değişiklik 9 · Uygulama hakkında bölümü.</strong> Ana Sayfa'nın en altında, Son değişiklikler kutusunun altında kapalı başlayan “Uygulama hakkında” bölümü (+ ile açılır, − ile kapanır): uygulamanın amacı, sitenin yaptıkları ve teşekkür metni. Teşekkür metni yalnız bu bölümde yer alır; sayfanın altında yalnız “İESU İYBF Sınav Planlama Komisyonu” yazar.</li>
         <li><strong>Değişiklik 10 · Panel yalnız düzenleyicilere, şifresiz.</strong> “Panel” sekmesi yalnız düzenleyici girişi yapılmışken görünür; girişsiz açılan #panel adresi Ana Sayfa'ya döner. Girişliyken panel şifre sormadan açılır: panel şifresi, düzenleyicinin GitHub anahtarıyla özel <em>iybf-sinav/iybf-gizli</em> deposundaki <em>gizli.json</em> dosyasından okunur. Şifre bu herkese açık depoda, sitenin kodunda ya da veri.json'da yer almaz; yalnız tarayıcının belleğinde ve bu sekmenin oturumunda tutulur, “Çıkış” ile silinir. gizli.json okunamazsa panel kendi şifre ekranıyla açılır.</li>
+        <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
       </ol>
     </section>
   </main>
@@ -1587,7 +1588,8 @@
         return items.map(function (item) {
           const head = item.tarih !== last ? "<h4>" + esc(item.tarih) + "</h4>" : "";
           last = item.tarih;
-          return head + '<p><span class="dg-tur dg-' + (item.tur === "Sınav" ? "sinav" : "goz") + '">' + esc(item.tur) + "</span> " + esc(item.metin) + "</p>";
+          const kind = { "Sınav": "sinav", "Saat": "saat", "Derslik": "derslik" }[item.tur] || "goz";
+          return head + '<p' + (item.examId ? ' data-exam="' + esc(item.examId) + '"' : "") + '><span class="dg-tur dg-' + kind + '">' + esc(item.tur) + "</span> " + esc(item.metin) + "</p>";
         }).join("");
       }
       const first = updates[0].tarih;
@@ -1599,7 +1601,7 @@
 
     // Son değişiklikler: "X sınavına (Gün SS:DD, derslik) ..." maddesini DATA'daki sınavla eşleştirir
     function changeExam(text) {
-      const match = text.match(/^(.+?) sınav(?:ına|ının|ı)? \(([^)]*)\)/);
+      const match = text.match(/^(.+?) sınav(?:ına|ının|ında|ı)? \(([^)]*)\)/);
       if (!match) return null;
       // ders adı boşluk ve büyük/küçük harf farkı gözetmeden karşılaştırılır ("Turkey-I" = "Turkey- I")
       function key(value) { return trLower(value).replace(/\s+/g, ""); }
@@ -1628,18 +1630,19 @@
       return proctor.split(",").map(function (name) { return name.trim().replace(/\s*\(dersin hocası\)$/, ""); }).filter(Boolean);
     }
 
-    // Maddeye gözetmen adını ve güncel derslik/hoca/saat bilgisini ekler; eşleşmeyen madde olduğu gibi kalır.
+    // Eşleşen maddede ders adı tıklanabilir olur (sınav kartını açar); "gözetmen eklendi" maddesine gözetmenin adı yazılır.
+    // Eşleşmeyen madde düz metin kalır. Madde "examId" taşıyorsa (otomatik duyurular) önce o sınav kullanılır.
     // Özgün metin data-orig'de saklanır: veri değişince (düzenleme) yeniden çizilebilir.
     function enrichChanges() {
       $$(".degisiklik p").forEach(function (p) {
         const tag = $(".dg-tur", p);
         if (p.dataset.orig === undefined) p.dataset.orig = p.textContent.slice(tag ? tag.textContent.length : 0).trim();
         const text = p.dataset.orig;
-        const next = p.nextElementSibling;
-        if (next && next.classList.contains("dg-detay")) next.remove();
-        const found = changeExam(text);
+        const head = text.match(/^(.+?) sınav(?:ına|ının|ında|ı)? \(/);
+        const byId = p.dataset.exam ? examById(p.dataset.exam) : null;
+        const found = byId ? { exam: byId, rooms: byId.rooms } : changeExam(text);
         let body = esc(text);
-        if (found) {
+        if (found && head) {
           const names = [];
           found.rooms.forEach(function (room) {
             proctorNames(room.proctor).forEach(function (name) { if (names.indexOf(name) === -1) names.push(name); });
@@ -1648,14 +1651,8 @@
           if (names.length && missing.length === names.length && /gözetmen eklendi/.test(text)) {
             body = esc(text).replace("gözetmen eklendi", "gözetmen olarak <strong class=\"dg-ad\">" + esc(names.join(", ")) + "</strong> eklendi");
           }
-          const exam = found.exam;
-          const roomText = found.rooms.map(function (room) {
-            const proctor = room.proctor === "Gerekmiyor" ? "gözetmen gerekmiyor" : "gözetmen <b>" + esc(room.proctor || "belirtilmemiş") + "</b>";
-            return esc(room.room || "Derslik belirtilmemiş") + ": " + proctor;
-          }).join(" · ");
-          p.insertAdjacentHTML("afterend", '<button class="dg-detay" type="button" data-exam-id="' + esc(exam.id) + '">Güncel: ' +
-            esc(exam.dateLabel.slice(0, 5)) + " " + esc(exam.day) + " " + esc(exam.start) + "–" + esc(exam.end) + " · " + roomText +
-            (exam.teacher ? " · Öğretim elemanı: " + esc(exam.teacher) : "") + "</button>");
+          const course = esc(head[1]);
+          body = '<button class="dg-ders" type="button" data-exam-id="' + esc(found.exam.id) + '" title="Sınav kartını aç">' + course + "</button>" + body.slice(course.length);
         }
         p.innerHTML = (tag ? tag.outerHTML + " " : "") + body;
       });
@@ -1961,6 +1958,7 @@
       try { data = JSON.parse(text); } catch (error) { throw new Error("veri.json okunamadı (biçim bozuk); kaydedilmedi."); }
       if (!data || !Array.isArray(data.exams)) throw new Error("veri.json'da sınav listesi bulunamadı; kaydedilmedi.");
       let id = change.id;
+      let before = null;
       if (change.type === "add") {
         const conflicts = proctorConflicts(data, change.exam, null);
         if (conflicts.length) throw conflictError(conflicts);
@@ -1969,6 +1967,7 @@
       } else {
         const index = data.exams.findIndex(function (exam) { return exam.id === change.id; });
         if (index === -1) throw new Error("Bu sınav sitede artık yok (başka biri silmiş olabilir). Sayfayı yenileyip tekrar bakın.");
+        before = data.exams[index];
         if (change.type === "delete") data.exams.splice(index, 1);
         else {
           const conflicts = proctorConflicts(data, change.exam, data.exams[index]);   // GitHub'daki güncel veriyle yeniden denetlenir
@@ -1976,8 +1975,130 @@
           data.exams[index] = change.exam;
         }
       }
+      // Son değişikliklere otomatik duyuru (Değişiklik 11): aynı commit'te, en üste
+      const after = change.type === "delete" ? null : data.exams.find(function (exam) { return exam.id === id; });
+      const notices = describeChange(change.type, before, after);
+      if (notices.length) data.updates = notices.map(function (item) {
+        const entry = { tarih: item.tarih, tur: item.tur, metin: item.metin };
+        if (after) entry.examId = after.id;   // Ana Sayfa'da ders adından sınav kartı açılır
+        return entry;
+      }).concat(data.updates || []);
       deriveData(data);
-      return { text: JSON.stringify(data, null, 1) + (/\n$/.test(text) ? "\n" : ""), data: data, id: id };
+      return { text: JSON.stringify(data, null, 1) + (/\n$/.test(text) ? "\n" : ""), data: data, id: id, notices: notices, before: before, after: after };
+    }
+
+    // ---- Son değişikliklere otomatik duyuru (Değişiklik 11) ----
+    // Kaydedilen değişiklik veri.json "updates" listesinin en üstüne yazılır. Metin "<Ders> sınavında (<Gün> <SS:DD>, <derslik>)"
+    // diye başlar; Ana Sayfa bu başlangıçla maddeyi sınava eşler (Değişiklik 3). Tür: Saat, Derslik, Gözetmen ya da Sınav.
+    const MONTHS = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
+    function todayLabel() {
+      const parts = turkeyNow().split(" ")[0].split(".");   // GG.AA.YYYY (Türkiye saati)
+      return Number(parts[0]) + " " + MONTHS[Number(parts[1]) - 1];
+    }
+
+    // "12:00'ye", "10:00'a", "13:30'a": saatin okunuşuna göre yönelme eki
+    function timeTo(time) {
+      const part = String(time).split(":").map(Number);
+      const n = part[1] || part[0];
+      const ones = { 1: "e", 2: "ye", 3: "e", 4: "e", 5: "e", 6: "ya", 7: "ye", 8: "e", 9: "a" };
+      const tens = { 0: "a", 1: "a", 2: "ye", 3: "a", 4: "a", 5: "ye" };
+      return time + "'" + (n % 10 ? ones[n % 10] : tens[Math.floor(n / 10) % 10]);
+    }
+
+    function roomNames(exam) {
+      return exam.rooms.map(function (room) { return room.room; }).filter(Boolean);
+    }
+
+    function slotHead(exam, rooms) {
+      const names = rooms || roomNames(exam);
+      return "(" + exam.day + " " + exam.start + (names.length ? ", " + names.join(", ") : "") + ")";
+    }
+
+    function proctorKey(value) {
+      return proctorNames(value).map(nameKey).sort().join("|") + (/\(dersin hocası\)/.test(value || "") ? "#h" : "");
+    }
+
+    function shown(value) {
+      return value ? value : "—";
+    }
+
+    // Derslikleri eşler: önce aynı adlılar, kalanlar sırayla (derslik adı değişmişse)
+    function pairRooms(before, after) {
+      const oldLeft = before.rooms.slice();
+      const pairs = [];
+      const added = [];
+      after.rooms.forEach(function (room) {
+        const at = oldLeft.findIndex(function (old) { return old.room && old.room === room.room; });
+        if (at !== -1) pairs.push([oldLeft.splice(at, 1)[0], room]);
+        else added.push(room);
+      });
+      const newLeft = [];
+      added.forEach(function (room) {
+        if (oldLeft.length) pairs.push([oldLeft.shift(), room]);
+        else newLeft.push(room);
+      });
+      return { pairs: pairs, added: newLeft, removed: oldLeft };
+    }
+
+    function proctorNote(room) {
+      return room.proctor && room.proctor !== "Gerekmiyor" ? " (gözetmen: " + room.proctor + ")" : "";
+    }
+
+    // [{ tarih, tur, metin, kind, ... }]; değişiklik yoksa boş liste
+    function describeChange(type, before, after) {
+      const tarih = todayLabel();
+      const out = [];
+      function add(tur, metin, extra) { out.push(Object.assign({ tarih: tarih, tur: tur, metin: metin }, extra || {})); }
+      if (type === "add") {
+        const proctors = after.rooms.map(function (room) { return room.proctor; }).filter(function (value) { return value && value !== "Gerekmiyor"; });
+        add("Sınav", after.course + " sınavı " + slotHead(after) + " programa eklendi" + (proctors.length ? " (gözetmen: " + proctors.join(", ") + ")" : "") + ".", { kind: "add" });
+        return out;
+      }
+      if (type === "delete") {
+        add("Sınav", before.course + " sınavı " + slotHead(before) + " programdan çıkarıldı.", { kind: "delete" });
+        return out;
+      }
+      const matched = pairRooms(before, after);
+      const multi = before.rooms.length > 1 || after.rooms.length > 1;
+      // Saat
+      if (before.date !== after.date || before.start !== after.start) {
+        const longer = (before.end !== after.end) && (examSessions(before) !== examSessions(after) || before.end.slice(3) !== after.end.slice(3) ||
+          Number(after.end.slice(0, 2)) - Number(after.start.slice(0, 2)) !== Number(before.end.slice(0, 2)) - Number(before.start.slice(0, 2)));
+        add("Saat", after.course + " sınavı " + slotHead(before, roomNames(before)) + " " + after.day + " " + timeTo(after.start) + " alındı" +
+          (longer ? " (bitiş " + after.end + ")" : "") + ".", { kind: "time" });
+      } else if (before.end !== after.end) {
+        add("Saat", after.course + " sınavının " + slotHead(after) + " bitiş saati " + before.end + " → " + after.end + " olarak değiştirildi.", { kind: "time" });
+      }
+      // Derslik
+      const renamed = matched.pairs.filter(function (pair) { return pair[0].room !== pair[1].room; });
+      if (renamed.length || matched.added.length || matched.removed.length) {
+        const clauses = [];
+        if (renamed.length) clauses.push("derslik " + renamed.map(function (pair) { return shown(pair[0].room) + " → " + shown(pair[1].room); }).join(", ") + " olarak değiştirildi");
+        matched.added.forEach(function (room) { clauses.push(shown(room.room) + " dersliği eklendi" + proctorNote(room)); });
+        matched.removed.forEach(function (room) { clauses.push(shown(room.room) + " dersliği çıkarıldı" + proctorNote(room)); });
+        add("Derslik", after.course + " sınavında " + slotHead(after) + " " + clauses.join(", ") + ".", { kind: "room" });
+      }
+      // Gözetmen
+      const swaps = matched.pairs.filter(function (pair) { return proctorKey(pair[0].proctor) !== proctorKey(pair[1].proctor); });
+      if (swaps.length) {
+        add("Gözetmen", after.course + " sınavında " + slotHead(after) + " " + swaps.map(function (pair) {
+          return (multi ? shown(pair[1].room) + " gözetmeni " : "gözetmen ") + (pair[0].proctor || "Gerekmiyor") + " → " + (pair[1].proctor || "Gerekmiyor");
+        }).join(", ") + " olarak değiştirildi.", { kind: "proctor", swaps: swaps });
+      }
+      // Diğer bilgiler
+      const fields = [];
+      if (before.course !== after.course) fields.push("ders adı " + shown(before.course) + " → " + shown(after.course));
+      if (before.courseCode !== after.courseCode) fields.push("ders kodu " + shown(before.courseCode) + " → " + shown(after.courseCode));
+      if (before.teacher !== after.teacher) fields.push("öğretim elemanı " + shown(before.teacher) + " → " + shown(after.teacher));
+      if (before.totalStudents !== after.totalStudents) fields.push("öğrenci sayısı " + shown(before.totalStudents) + " → " + shown(after.totalStudents));
+      if (JSON.stringify(before.programs) !== JSON.stringify(after.programs)) fields.push("programlar");
+      if (JSON.stringify(before.notes) !== JSON.stringify(after.notes)) fields.push("notlar");
+      if (matched.pairs.some(function (pair) {
+        return pair[0].capacity !== pair[1].capacity || pair[0].students !== pair[1].students || pair[0].departments !== pair[1].departments;
+      })) fields.push("derslik bilgileri (kapasite, öğrenci, bölümler)");
+      if (fields.length) add("Sınav", after.course + " sınavının " + slotHead(after) + " bilgileri güncellendi: " + fields.join(", ") + ".", { kind: "info" });
+      return out;
     }
 
     // Oku → uygula → yaz; araya başka bir kayıt girerse (409) bir kez yeniden okuyup dener
@@ -2567,19 +2688,20 @@
     // Veri değişince (düzenleme) sayfadaki her şey yeniden çizilir
     function refreshAll() {
       renderSummaries();
+      $("#son-degisiklikler").innerHTML = changesHtml(DATA.updates);   // otomatik duyurular (Değişiklik 11)
       enrichChanges();
       peopleRefreshers.forEach(function (refresh) { refresh(); });
       if ($("#person-modal").open && currentPerson) renderPersonModal();
     }
 
     function initSite() {
-      $("#son-degisiklikler").outerHTML = changesHtml(DATA.updates);
+      $("#son-degisiklikler").innerHTML = changesHtml(DATA.updates);
       renderSummaries();
       initDepartments();
       initModals();
       enrichChanges();
       $("#page-home").addEventListener("click", function (event) {
-        const detail = event.target.closest(".dg-detay");
+        const detail = event.target.closest(".dg-ders");
         if (detail) openExam(detail.dataset.examId);
       });
       initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept" });
