@@ -1140,7 +1140,7 @@
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
-      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "panel/?v=20261102115048"); }
+      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "panel/?v=20261102115355"); }
       if (updateHash) {
         const hashes = { schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
