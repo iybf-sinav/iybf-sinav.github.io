@@ -902,6 +902,25 @@
     .png-sheet { position: fixed; top: 0; left: -10000px; width: 1000px; padding: 24px; background: #fff; }
     .png-sheet h3 { margin: 0 0 14px; color: var(--navy); }
     .png-sheet .week-wrap { overflow: visible; }
+    /* Son değişiklikler: DATA'dan eklenen ayrıntı */
+    .degisiklik p strong.dg-ad { color: var(--navy); }
+    .dg-detay {
+      display: block;
+      width: 100%;
+      margin: 2px 0 6px;
+      padding: 5px 10px;
+      border: 0;
+      border-radius: 8px;
+      color: #3b5265;
+      background: var(--canvas);
+      font: inherit;
+      font-size: .82rem;
+      line-height: 1.45;
+      text-align: left;
+      cursor: pointer;
+    }
+    .dg-detay:hover, .dg-detay:focus-visible { color: var(--blue); background: var(--blue-soft); }
+    .dg-detay b { color: var(--navy); }
   </style>
 <style>#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}</style></head>
 <body>
@@ -1008,6 +1027,7 @@
       <ol class="feature-list">
         <li><strong>Değişiklik 1 · Ana Sayfa sekmesi.</strong> Sitede ilk açılan sekme. Sınav programındaki güncellemeler (Son değişiklikler) Sınav Programları sayfasının başından buraya taşındı.</li>
         <li><strong>Değişiklik 2 · Takvimi PNG olarak indirme.</strong> Bölüm, öğretim üyesi ve gözetmen kartlarında, Liste/Takvim görünümü düğmelerinin yanında "PNG indir" düğmesi. Haftalık takvimi resim olarak indirir.</li>
+        <li><strong>Değişiklik 3 · Daha açık güncelleme notları.</strong> Ana Sayfa'daki Son değişiklikler maddeleri sınav programıyla eşleştirilir: eklenen gözetmenin adı maddede yazılır, altında sınavın güncel günü, saati, dersliği, gözetmeni ve öğretim elemanı gösterilir. Bu satıra tıklayınca sınav kartı açılır.</li>
       </ol>
     </section>
   </main>
@@ -1347,6 +1367,70 @@
       openModal($("#person-modal"));
     }
 
+    // Son değişiklikler: "X sınavına (Gün SS:DD, derslik) ..." maddesini DATA'daki sınavla eşleştirir
+    function changeExam(text) {
+      const match = text.match(/^(.+?) sınav(?:ına|ının|ı)? \(([^)]*)\)/);
+      if (!match) return null;
+      // ders adı boşluk ve büyük/küçük harf farkı gözetmeden karşılaştırılır ("Turkey-I" = "Turkey- I")
+      function key(value) { return trLower(value).replace(/\s+/g, ""); }
+      const course = key(match[1]);
+      const parts = match[2].split(",").map(function (part) { return part.trim(); });
+      const when = (parts[0] || "").match(/^(\S+) (\d{1,2}):(\d{2})$/);
+      const named = parts.slice(1);
+      function atTime(item) { return when && item.day === when[1] && item.start === when[2].padStart(2, "0") + ":" + when[3]; }
+      const sameCourse = DATA.exams.filter(function (exam) { return key(exam.course) === course; });
+      let exam = sameCourse.find(atTime);
+      if (!exam && sameCourse.length === 1) exam = sameCourse[0];   // saat değişmişse ders adından
+      if (!exam && named.length) {
+        // ders adı farklı yazılmışsa: aynı gün, saat ve derslikteki tek sınav
+        const sameSlot = DATA.exams.filter(function (item) {
+          return atTime(item) && item.rooms.some(function (room) { return named.indexOf(room.room) !== -1; });
+        });
+        if (sameSlot.length === 1) exam = sameSlot[0];
+      }
+      if (!exam) return null;
+      const rooms = exam.rooms.filter(function (room) { return named.indexOf(room.room) !== -1; });
+      return { exam: exam, rooms: rooms.length ? rooms : exam.rooms };
+    }
+
+    function proctorNames(proctor) {
+      if (!proctor || proctor === "Gerekmiyor") return [];
+      return proctor.split(",").map(function (name) { return name.trim().replace(/\s*\(dersin hocası\)$/, ""); }).filter(Boolean);
+    }
+
+    // Maddeye gözetmen adını ve güncel derslik/hoca/saat bilgisini ekler; eşleşmeyen madde olduğu gibi kalır.
+    // Özgün metin data-orig'de saklanır: veri değişince (düzenleme) yeniden çizilebilir.
+    function enrichChanges() {
+      $$(".degisiklik p").forEach(function (p) {
+        const tag = $(".dg-tur", p);
+        if (p.dataset.orig === undefined) p.dataset.orig = p.textContent.slice(tag ? tag.textContent.length : 0).trim();
+        const text = p.dataset.orig;
+        const next = p.nextElementSibling;
+        if (next && next.classList.contains("dg-detay")) next.remove();
+        const found = changeExam(text);
+        let body = esc(text);
+        if (found) {
+          const names = [];
+          found.rooms.forEach(function (room) {
+            proctorNames(room.proctor).forEach(function (name) { if (names.indexOf(name) === -1) names.push(name); });
+          });
+          const missing = names.filter(function (name) { return text.indexOf(name) === -1; });
+          if (names.length && missing.length === names.length && /gözetmen eklendi/.test(text)) {
+            body = esc(text).replace("gözetmen eklendi", "gözetmen olarak <strong class=\"dg-ad\">" + esc(names.join(", ")) + "</strong> eklendi");
+          }
+          const exam = found.exam;
+          const roomText = found.rooms.map(function (room) {
+            const proctor = room.proctor === "Gerekmiyor" ? "gözetmen gerekmiyor" : "gözetmen <b>" + esc(room.proctor || "belirtilmemiş") + "</b>";
+            return esc(room.room || "Derslik belirtilmemiş") + ": " + proctor;
+          }).join(" · ");
+          p.insertAdjacentHTML("afterend", '<button class="dg-detay" type="button" data-exam-id="' + esc(exam.id) + '">Güncel: ' +
+            esc(exam.dateLabel.slice(0, 5)) + " " + esc(exam.day) + " " + esc(exam.start) + "–" + esc(exam.end) + " · " + roomText +
+            (exam.teacher ? " · Öğretim elemanı: " + esc(exam.teacher) : "") + "</button>");
+        }
+        p.innerHTML = (tag ? tag.outerHTML + " " : "") + body;
+      });
+    }
+
     // Haftalık takvimi PNG olarak indirir (html2canvas yalnız ilk tıklamada yüklenir)
     function loadHtml2canvas() {
       if (window.html2canvas) return Promise.resolve();
@@ -1466,6 +1550,11 @@
 
     initDepartments();
     initModals();
+    enrichChanges();
+    $("#page-home").addEventListener("click", function (event) {
+      const detail = event.target.closest(".dg-detay");
+      if (detail) openExam(detail.dataset.examId);
+    });
     initPeople({ type: "teacher", names: DATA.teachers, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept" });
     initPeople({ type: "proctor", names: DATA.proctors, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept" });
 
