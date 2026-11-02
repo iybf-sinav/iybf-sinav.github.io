@@ -835,7 +835,8 @@
     #tab-teachers, #page-teachers { --accent: #0f8a6b; }
     #tab-proctors, #page-proctors { --accent: #d9730d; }
     #tab-panel, #page-panel { --accent: #475569; }
-    #tab-features, #page-features { --accent: #b45309; }
+    #page-features { --accent: #475569; }
+    .panel-subnav { margin-bottom: 14px; }
     .top-nav .tab-button { color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, white);
       border: 2px solid color-mix(in srgb, var(--accent) 22%, white); }
     .top-nav .tab-button:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 18%, white); }
@@ -1214,7 +1215,6 @@
       <button class="tab-button" data-app="exam" id="tab-proctors" role="tab" aria-controls="page-proctors" aria-selected="false" data-page="proctors">Gözetmenler</button>
       <button class="tab-button" data-app="envelope" id="tab-envelopes" role="tab" aria-controls="page-envelopes" aria-selected="false" data-page="envelopes" hidden>Sınav Zarfları</button>
       <button class="tab-button" data-app="exam" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel">Panel</button>
-      <button class="tab-button" data-app="exam" id="tab-features" role="tab" aria-controls="page-features" aria-selected="false" data-page="features">Yeni Özellikler</button>
     </div>
   </nav>
 
@@ -1316,10 +1316,18 @@
     </section>
 
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="panel" aria-pressed="true">Panel</button>
+        <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
+      </div>
       <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
     </section>
-    <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
+    <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="panel" aria-pressed="false">Panel</button>
+        <button type="button" data-subpage="features" aria-pressed="true">Yeni Özellikler</button>
+      </div>
       <div class="page-heading">
         <div>
           <h2>Yeni Özellikler</h2>
@@ -1560,6 +1568,12 @@
         '<p>' + count + ' ' + noun + '</p></div></div>';
     }
 
+    // Panel sayfasındaki alt sekmeler: Panel | Yeni Özellikler
+    document.addEventListener("click", function (event) {
+      const button = event.target.closest("[data-subpage]");
+      if (button) activatePage(button.dataset.subpage, true);
+    });
+
     function activatePage(pageName, updateHash) {
       // İki uygulama (Değişiklik 2): Sınav Zarfları sekmesi "Sınav Zarfı Takip Uygulaması"nda, diğerleri "Sınav Takip Uygulaması"nda
       const app = pageName === "envelopes" ? "envelope" : "exam";
@@ -1568,7 +1582,7 @@
       $("#app-name").textContent = app === "envelope" ? "Sınav Zarfı Takip Uygulaması" : "Sınav Takip Uygulaması";
       $("#app-switch").textContent = app === "envelope" ? "Sınav Takip Uygulamasına geç" : "Sınav Zarfı Takip Uygulamasına geç";
       $$(".tab-button").forEach(function (button) {
-        button.setAttribute("aria-selected", String(button.dataset.page === pageName));
+        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" ? "panel" : pageName)));
       });
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
