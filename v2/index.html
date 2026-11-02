@@ -932,6 +932,118 @@
     }
     .dg-detay:hover, .dg-detay:focus-visible { color: var(--blue); background: var(--blue-soft); }
     .dg-detay b { color: var(--navy); }
+    /* Düzenleyici (GitHub yetkisiyle sınav düzenleme) */
+    [hidden] { display: none !important; }
+    .header-inner { flex-wrap: wrap; }
+    .editor-button {
+      margin-left: auto;
+      max-width: 100%;
+      padding: 7px 13px;
+      border: 1px solid rgba(255, 255, 255, .5);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(255, 255, 255, .12);
+      font-size: .8rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      cursor: pointer;
+    }
+    .editor-button:hover { background: rgba(255, 255, 255, .22); }
+    .editor-button.is-on { color: var(--navy); background: #fff; }
+    .modal.modal-narrow { width: min(560px, calc(100vw - 24px)); }
+    .editor-panel p, .editor-panel ol { margin: 0 0 12px; font-size: .92rem; }
+    .editor-panel ol { padding-left: 20px; }
+    .editor-panel li + li { margin-top: 4px; }
+    .editor-panel a { color: var(--blue); font-weight: 700; }
+    .editor-small { color: var(--muted); font-size: .82rem !important; }
+    .editor-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .editor-row input { flex: 1 1 220px; min-width: 0; }
+    .edit-form label > span {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .edit-form input, .edit-form select, .edit-form textarea, .editor-panel input {
+      width: 100%;
+      min-width: 0;
+      padding: 8px 10px;
+      border: 1px solid #cddae3;
+      border-radius: 9px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      font-size: .9rem;
+    }
+    .edit-form textarea { resize: vertical; }
+    .edit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 12px; }
+    .edit-grid .span2 { grid-column: span 2; }
+    .edit-grid .wide { grid-column: 1 / -1; }
+    .edit-rooms { min-width: 0; margin: 16px 0 0; padding: 10px 12px 12px; border: 1px solid var(--line); border-radius: 12px; }
+    .edit-rooms legend { padding: 0 6px; color: var(--navy); font-weight: 800; }
+    .edit-help { margin: 0 0 6px; color: var(--muted); font-size: .8rem; }
+    .edit-room {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, .8fr) minmax(0, .8fr) minmax(0, 2fr) minmax(0, 2fr) auto;
+      gap: 8px;
+      align-items: end;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .edit-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .edit-form button, .editor-panel button {
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--navy);
+      background: #fff;
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .edit-form button:disabled, .editor-panel button:disabled { cursor: progress; opacity: .6; }
+    .edit-form .edit-save, .editor-panel .edit-save { border-color: var(--navy); color: #fff; background: var(--navy); }
+    .edit-form .edit-delete { margin-left: auto; border-color: #f4c7c3; color: #b42318; }
+    .edit-form [data-add-room] { margin-top: 10px; }
+    .edit-status { min-height: 1.2em; margin: 12px 0 0; font-size: .88rem; font-weight: 700; }
+    .edit-status.is-error { color: #b42318; }
+    .edit-notice { margin: 0 0 12px; padding: 10px 14px; border-radius: 10px; color: #1d6b43; background: #e8f6ee; font-weight: 700; }
+    .add-exam-button {
+      padding: 8px 14px;
+      border: 1px solid var(--navy);
+      border-radius: 999px;
+      color: #fff;
+      background: var(--navy);
+      font-size: .86rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .editor-toast {
+      position: fixed;
+      z-index: 60;
+      bottom: 20px;
+      left: 50%;
+      max-width: calc(100vw - 32px);
+      padding: 12px 18px;
+      border-radius: 12px;
+      color: #fff;
+      background: #1d6b43;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+      transform: translateX(-50%);
+    }
+    @media (max-width: 560px) {
+      .editor-button { margin-left: 0; }
+      .modal.modal-narrow { width: 100vw; }
+      .edit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .edit-grid .span2 { grid-column: 1 / -1; }
+      .edit-room { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .edit-room .wide { grid-column: 1 / -1; }
+    }
   </style>
 <style>#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}</style></head>
 <body>
@@ -953,6 +1065,7 @@
         <h1>İşletme ve Yönetim Bilimleri Fakültesi</h1>
         <p class="header-meta">2026-2027 Güz Dönemi Vize Sınav Programı · 2–6 Kasım 2026</p>
       </div>
+      <button class="editor-button" id="editor-button" type="button">Düzenleyici girişi</button>
     </div>
   </header>
 
@@ -987,6 +1100,7 @@
           <p>Bölümünüzü seçerek derslerin tarih, saat, derslik ve gözetmen bilgilerini görüntüleyin.</p>
         </div>
         <span class="summary-pill" id="schedule-summary"></span>
+        <button class="add-exam-button" id="add-exam-button" type="button" hidden>+ Yeni sınav ekle</button>
       </div>
       <div class="department-grid" id="department-grid"></div>
     </section>
@@ -1040,6 +1154,7 @@
         <li><strong>Değişiklik 2 · Takvimi PNG olarak indirme.</strong> Bölüm, öğretim üyesi ve gözetmen kartlarında, Liste/Takvim görünümü düğmelerinin yanında "PNG indir" düğmesi. Haftalık takvimi resim olarak indirir.</li>
         <li><strong>Değişiklik 3 · Daha açık güncelleme notları.</strong> Ana Sayfa'daki Son değişiklikler maddeleri sınav programıyla eşleştirilir: eklenen gözetmenin adı maddede yazılır, altında sınavın güncel günü, saati, dersliği, gözetmeni ve öğretim elemanı gösterilir. Bu satıra tıklayınca sınav kartı açılır.</li>
         <li><strong>Değişiklik 4 · PNG'de güncellik uyarısı.</strong> İndirilen takvim resminin en üstünde kırmızı bir uyarı yer alır: listenin hangi tarih ve saatte alındığı ve güncel takvim için iybf-sinav.github.io adresine bakılması gerektiği. Uyarı yalnız resimde görünür.</li>
+        <li><strong>Değişiklik 5 · GitHub yetkisiyle sınav düzenleme.</strong> Başlıktaki “Düzenleyici girişi” düğmesiyle, GitHub'da bu depoya yazma yetkisi olanlar kişisel erişim anahtarlarıyla giriş yapar. Girişliyken sınav kartında “Düzenle” sekmesi açılır: tarih, saat, ders kodu ve adı, öğretim elemanı, programlar, öğrenci sayısı, notlar ve derslikler (gözetmenler dahil) değiştirilebilir, sınav silinebilir; Sınav Programları sayfasından yeni sınav eklenebilir. Kaydedilen değişiklik GitHub'a commit edilir ve 1–2 dakika içinde sitede görünür. <em>Not: v2'deki düzenlemeler deneme amaçlıdır; v2 ana siteyle eşitlendiğinde (esitle.py) sınav verisi ana sitedekiyle değişir ve v2'de yapılan düzenlemeler silinir.</em></li>
       </ol>
     </section>
   </main>
@@ -1074,10 +1189,24 @@
       <div class="view-toggle" role="group" aria-label="Kart bölümü">
         <button type="button" data-tab="exam" aria-pressed="true">Sınav</button>
         <button type="button" data-tab="envelope" aria-pressed="false">Zarf</button>
+        <button type="button" data-tab="edit" aria-pressed="false" hidden>Düzenle</button>
       </div>
       <div id="exam-modal-content"></div>
     </div>
   </dialog>
+
+  <dialog class="modal modal-narrow" id="editor-modal" aria-labelledby="editor-modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="modal-kicker">GitHub</p>
+        <h3 id="editor-modal-title">Düzenleyici girişi</h3>
+      </div>
+      <button class="modal-close" type="button" data-close aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body editor-panel" id="editor-modal-content"></div>
+  </dialog>
+
+  <div class="editor-toast" id="editor-toast" role="status" hidden></div>
 
   <footer class="site-footer">
     <div class="footer-inner">İESU İYBF Sınav Planlama Komisyonu; bu uygulamayı geliştiren Arş. Gör. Melih Mert Oskay’a ve değerli katkılarıyla destek veren Arş. Gör. Umut Saraç’a teşekkür eder.</div>
@@ -1341,17 +1470,27 @@
     let currentExam = null;
     let examTab = "exam";
 
-    function renderExamModal() {
+    // Düzenle sekmesi yalnız düzenleyici girişliyken; yeni sınavda yalnız Düzenle
+    function updateExamTabs() {
       $$("#exam-modal [data-tab]").forEach(function (button) {
+        button.hidden = button.dataset.tab === "edit" ? !editor : !currentExam.id;
         button.setAttribute("aria-pressed", String(button.dataset.tab === examTab));
       });
-      $("#exam-modal-content").innerHTML = examTab === "exam" ? examCardHtml(currentExam) : envelopeHtml();
+    }
+
+    function renderExamModal() {
+      if (examTab === "edit" && !editor) examTab = "exam";
+      updateExamTabs();
+      const notice = examNotice ? '<p class="edit-notice" role="status">' + esc(examNotice) + '</p>' : "";
+      $("#exam-modal-content").innerHTML = notice +
+        (examTab === "edit" ? editFormHtml(currentExam) : examTab === "exam" ? examCardHtml(currentExam) : envelopeHtml());
     }
 
     function openExam(id) {
       currentExam = examById(id);
       if (!currentExam) return;
       examTab = "exam";
+      examNotice = "";
       $("#exam-modal-kind").textContent = currentExam.courseCode || "Sınav";
       $("#exam-modal-title").textContent = currentExam.course;
       renderExamModal();
@@ -1538,29 +1677,53 @@
       });
       $("#exam-modal").addEventListener("click", function (event) {
         const tabButton = event.target.closest("[data-tab]");
-        if (!tabButton) return;
-        examTab = tabButton.dataset.tab;
-        renderExamModal();
+        if (tabButton) {
+          examTab = tabButton.dataset.tab;
+          examNotice = "";
+          renderExamModal();
+          return;
+        }
+        // düzenleme formu düğmeleri
+        const form = event.target.closest(".edit-form");
+        if (!form || event.target.disabled) return;
+        if (event.target.closest("[data-add-room]")) {
+          $("[data-rooms]", form).insertAdjacentHTML("beforeend", roomEditHtml({ room: "", capacity: "", students: "", proctor: "Gerekmiyor", departments: "" }));
+        } else if (event.target.closest("[data-remove-room]")) {
+          event.target.closest(".edit-room").remove();
+        } else if (event.target.closest("[data-edit-reset]")) {
+          renderExamModal();
+        } else if (event.target.closest("[data-edit-delete]")) {
+          deleteExam(form);
+        }
+      });
+      $("#exam-modal").addEventListener("submit", function (event) {
+        event.preventDefault();
+        saveExamForm(event.target);
       });
     }
+
+    const peopleRefreshers = [];
 
     function initPeople(config) {
       const grid = $(config.grid);
       const search = $(config.search);
       const dept = $(config.dept);
-      const departmentsOf = {};
-      config.names.forEach(function (name) {
-        departmentsOf[name] = DATA.departments.filter(function (department) {
-          return personExams(config.type, name).some(function (entry) { return inDepartment(entry.exam, department.code); });
-        }).map(function (department) { return department.code; });
-      });
+      let departmentsOf = {};
+      function computeDepartments() {
+        departmentsOf = {};
+        config.names().forEach(function (name) {
+          departmentsOf[name] = DATA.departments.filter(function (department) {
+            return personExams(config.type, name).some(function (entry) { return inDepartment(entry.exam, department.code); });
+          }).map(function (department) { return department.code; });
+        });
+      }
       dept.innerHTML = '<option value="">Tüm bölümler</option>' + DATA.departments.map(function (department) {
         return '<option value="' + esc(department.code) + '">' + esc(department.name) + '</option>';
       }).join("");
 
       function render() {
         const query = trLower(search.value);
-        const filtered = config.names.filter(function (name) {
+        const filtered = config.names().filter(function (name) {
           return trLower(name).indexOf(query) !== -1 && (!dept.value || departmentsOf[name].indexOf(dept.value) !== -1);
         });
         grid.innerHTML = filtered.length ? filtered.map(function (name) {
@@ -1568,7 +1731,9 @@
         }).join("") : '<div class="empty-list">Filtreyle eşleşen isim bulunamadı.</div>';
       }
 
+      computeDepartments();
       render();
+      peopleRefreshers.push(function () { computeDepartments(); render(); });
       search.addEventListener("input", render);
       dept.addEventListener("change", render);
       grid.addEventListener("click", function (event) {
@@ -1577,10 +1742,429 @@
       });
     }
 
-    $("#schedule-summary").textContent = DATA.meta.examCount + " sınav · " + DATA.meta.period;
-    $("#teacher-summary").textContent = DATA.meta.teacherCount + " öğretim elemanı";
-    $("#proctor-summary").textContent = DATA.meta.proctorCount + " gözetmen";
+    // ---- Düzenleyici: GitHub'da depoya yazma yetkisi olanlar sınavları düzenler ----
+    // Kaydet: v2/index.html GitHub'dan okunur, DATA satırında yalnız ilgili sınav değişir,
+    // gözetmen atamaları ve sayımlar sınavlardan yeniden türetilir, dosya commit edilir.
+    const GITHUB_API = "https://api.github.com";
+    const GITHUB_REPO = "iybf-sinav/iybf-sinav.github.io";
+    const EDIT_FILE = "v2/index.html";
+    const EDITOR_KEY = "iybf-v2-duzenleyici-anahtar";
+    const SAVED_TEXT = "Kaydedildi; sitede 1–2 dakika içinde görünür.";
+    const V2_NOTE = "v2'deki düzenlemeler deneme amaçlıdır: v2 ana siteyle eşitlendiğinde (esitle.py) sınav verisi ana sitedekiyle değişir ve burada yapılan düzenlemeler silinir.";
+    const EXTERNAL_COURSE = / \((Sağlık Bilimleri Fakültesi|Üniversite ortak seçmeli ders)\)$/;   // başka birimlere verilen gözetmenlikler
+    let editor = null;   // { token, login }
+    let examNotice = "";
 
+    function storedToken() {
+      try { return localStorage.getItem(EDITOR_KEY) || ""; } catch (error) { return ""; }
+    }
+
+    function storeToken(token) {
+      try {
+        if (token) localStorage.setItem(EDITOR_KEY, token);
+        else localStorage.removeItem(EDITOR_KEY);
+      } catch (error) {}
+    }
+
+    function githubError(status, detail) {
+      const texts = {
+        0: "GitHub'a bağlanılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.",
+        401: "Anahtar geçersiz ya da süresi dolmuş. Yeni bir anahtar oluşturup tekrar giriş yapın.",
+        403: "GitHub bu işleme izin vermedi: anahtarda Contents → Read and write izni olmayabilir ya da istek sınırı aşılmış olabilir.",
+        404: "Depo ya da dosya bulunamadı: anahtar bu depoya erişemiyor olabilir.",
+        409: "Dosya bu sırada başka biri tarafından değiştirildi. Lütfen tekrar deneyin.",
+        422: "GitHub kaydı kabul etmedi. Lütfen tekrar deneyin."
+      };
+      const error = new Error(texts[status] || "GitHub hatası (" + status + "). Lütfen tekrar deneyin.");
+      error.status = status;
+      error.detail = detail || "";
+      return error;
+    }
+
+    function githubRequest(token, method, path, body) {
+      const headers = { Accept: "application/vnd.github+json", Authorization: "Bearer " + token };
+      if (body) headers["Content-Type"] = "application/json";
+      return fetch(GITHUB_API + path, { method: method, headers: headers, cache: "no-store", body: body ? JSON.stringify(body) : undefined })
+        .catch(function () { throw githubError(0); })
+        .then(function (response) {
+          return response.json().catch(function () { return {}; }).then(function (json) {
+            if (!response.ok) throw githubError(response.status, json.message);
+            return json;
+          });
+        });
+    }
+
+    function verifyToken(token) {
+      return Promise.all([githubRequest(token, "GET", "/repos/" + GITHUB_REPO), githubRequest(token, "GET", "/user")]).then(function (results) {
+        if (!results[0].permissions || results[0].permissions.push !== true) {
+          const error = new Error("Bu GitHub hesabının " + GITHUB_REPO + " deposuna yazma yetkisi yok.");
+          error.status = 403;
+          throw error;
+        }
+        return results[1].login;
+      });
+    }
+
+    // UTF-8 metin ↔ base64 (GitHub Contents API)
+    function base64ToText(base64) {
+      const binary = atob(base64.replace(/\s+/g, ""));
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder("utf-8", { ignoreBOM: true }).decode(bytes);
+    }
+
+    function textToBase64(text) {
+      const bytes = new TextEncoder().encode(text);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      return btoa(binary);
+    }
+
+    // Python'un json.dumps(..., ensure_ascii=False) çıktısıyla aynı yazım: değişmeyen kısımlar bire bir kalır
+    function pyJson(value) {
+      if (Array.isArray(value)) return "[" + value.map(pyJson).join(", ") + "]";
+      if (value && typeof value === "object") {
+        return "{" + Object.keys(value).map(function (key) { return pyJson(key) + ": " + pyJson(value[key]); }).join(", ") + "}";
+      }
+      if (typeof value === "string") return JSON.stringify(value).replace(/<\//g, "<\\/");   // metindeki kapanış etiketi betiği bitirmesin
+      return JSON.stringify(value);
+    }
+
+    function examNumber(exam) {
+      return parseInt(String(exam.id).replace(/\D+/g, ""), 10) || 0;
+    }
+
+    function plainOrder(a, b) {
+      return a < b ? -1 : a > b ? 1 : 0;
+    }
+
+    // 8_site_uret.py'deki gibi: atamalar sınav numarası sırasıyla, öğretim elemanı/gözetmen listeleri ve sayımlar sınavlardan
+    function deriveData(data) {
+      data.exams.sort(function (a, b) { return plainOrder(a.date, b.date) || plainOrder(a.start, b.start); });
+      const assignments = [];
+      data.exams.slice().sort(function (a, b) { return examNumber(a) - examNumber(b); }).forEach(function (exam) {
+        const external = EXTERNAL_COURSE.test(exam.course);
+        exam.rooms.forEach(function (room) {
+          proctorNames(room.proctor).forEach(function (name) {
+            assignments.push({ id: exam.id, date: exam.date, dateLabel: exam.dateLabel, day: exam.day, start: exam.start, end: exam.end,
+              courseCode: exam.courseCode, course: exam.course, programs: exam.programs, teacher: exam.teacher, totalStudents: exam.totalStudents,
+              examId: exam.id, room: room.room, roomStudents: external ? "" : (room.students || "0"), proctor: name, note: "" });
+          });
+        });
+      });
+      function unique(values) {
+        return Array.from(new Set(values.filter(Boolean))).sort();
+      }
+      data.assignments = assignments;
+      data.teachers = unique(data.exams.map(function (exam) { return exam.teacher; }));
+      data.proctors = unique(assignments.map(function (item) { return item.proctor; }));
+      data.meta.examCount = data.exams.filter(function (exam) { return !EXTERNAL_COURSE.test(exam.course); }).length;
+      data.meta.assignmentCount = assignments.length;
+      data.meta.teacherCount = data.teachers.length;
+      data.meta.proctorCount = data.proctors.length;
+      return data;
+    }
+
+    // DATA satırının yeri (esitle.py ile aynı parça: "const DATA = " ile ilk ";\n" arası)
+    function dataBounds(text) {
+      const found = /\n {4}const DATA = /.exec(text);
+      const end = found ? text.indexOf(";\n", found.index + found[0].length) : -1;
+      if (end === -1) throw new Error("Dosyada sınav verisi bulunamadı; kaydedilmedi.");
+      return { start: found.index + found[0].length, end: end };
+    }
+
+    function applyChange(text, change) {
+      const bounds = dataBounds(text);
+      const data = JSON.parse(text.slice(bounds.start, bounds.end));
+      let id = change.id;
+      if (change.type === "add") {
+        id = "exam-" + (data.exams.reduce(function (max, exam) { return Math.max(max, examNumber(exam)); }, 0) + 1);
+        data.exams.push(Object.assign({}, change.exam, { id: id }));
+      } else {
+        const index = data.exams.findIndex(function (exam) { return exam.id === change.id; });
+        if (index === -1) throw new Error("Bu sınav sitede artık yok (başka biri silmiş olabilir). Sayfayı yenileyip tekrar bakın.");
+        if (change.type === "delete") data.exams.splice(index, 1);
+        else data.exams[index] = change.exam;
+      }
+      deriveData(data);
+      return { text: text.slice(0, bounds.start) + pyJson(data) + text.slice(bounds.end), data: data, id: id };
+    }
+
+    // Oku → uygula → yaz; araya başka bir kayıt girerse (409) bir kez yeniden okuyup dener
+    function commitChange(change) {
+      const path = "/repos/" + GITHUB_REPO + "/contents/" + EDIT_FILE;
+      const suffix = { add: " eklendi", delete: " silindi", update: "" }[change.type];
+      function attempt(retry) {
+        return githubRequest(editor.token, "GET", path + "?ref=main").then(function (file) {
+          if (file.encoding !== "base64" || !file.content) throw new Error("Dosya GitHub'dan okunamadı; kaydedilmedi.");
+          const original = base64ToText(file.content);
+          const result = applyChange(original, change);
+          if (result.text === original) return Object.assign(result, { unchanged: true });
+          return githubRequest(editor.token, "PUT", path, {
+            message: "v2 düzenleme: " + change.course + suffix + " (" + editor.login + ")",
+            content: textToBase64(result.text),
+            sha: file.sha,
+            branch: "main"
+          }).then(function () { return result; });
+        }).catch(function (error) {
+          if (retry && (error.status === 409 || (error.status === 422 && /sha/i.test(error.detail)))) return attempt(false);
+          throw error;
+        });
+      }
+      return attempt(true);
+    }
+
+    function examDays() {
+      const days = [];
+      DATA.exams.slice().sort(examOrder).forEach(function (exam) {
+        if (!days.some(function (day) { return day.date === exam.date; })) days.push({ date: exam.date, dateLabel: exam.dateLabel, day: exam.day });
+      });
+      return days;
+    }
+
+    function inputHtml(label, name, value, extra, className) {
+      return '<label' + (className ? ' class="' + className + '"' : '') + '><span>' + label + '</span>' +
+        '<input name="' + name + '" value="' + esc(value) + '"' + (extra || "") + '></label>';
+    }
+
+    function roomEditHtml(room) {
+      return '<div class="edit-room">' +
+        inputHtml("Derslik", "room", room.room) +
+        inputHtml("Kapasite", "capacity", room.capacity, ' inputmode="numeric"') +
+        inputHtml("Öğrenci", "students", room.students, ' inputmode="numeric"') +
+        inputHtml("Gözetmen", "proctor", room.proctor, ' list="edit-proctors"', "wide") +
+        inputHtml("Bölümler", "departments", room.departments, "", "wide") +
+        '<button type="button" data-remove-room aria-label="Dersliği sil">Sil</button>' +
+      '</div>';
+    }
+
+    function editFormHtml(exam) {
+      const days = examDays();
+      if (exam.date && !days.some(function (day) { return day.date === exam.date; })) days.push({ date: exam.date, dateLabel: exam.dateLabel, day: exam.day });
+      const options = function (values) {
+        return values.map(function (value) { return '<option value="' + esc(value) + '"></option>'; }).join("");
+      };
+      return '<form class="edit-form" novalidate>' +
+        '<div class="edit-grid">' +
+          '<label><span>Tarih</span><select name="date">' + days.map(function (day) {
+            return '<option value="' + esc(day.date) + '"' + (day.date === exam.date ? " selected" : "") + '>' + esc(day.dateLabel + " " + day.day) + '</option>';
+          }).join("") + '</select></label>' +
+          inputHtml("Başlangıç", "start", exam.start, ' type="time"') +
+          inputHtml("Bitiş", "end", exam.end, ' type="time"') +
+          inputHtml("Ders kodu", "courseCode", exam.courseCode) +
+          inputHtml("Ders adı", "course", exam.course, "", "span2") +
+          inputHtml("Öğretim elemanı", "teacher", exam.teacher, ' list="edit-teachers"', "span2") +
+          inputHtml("Toplam öğrenci", "totalStudents", exam.totalStudents, ' inputmode="numeric"') +
+          inputHtml("Programlar (virgülle)", "programs", exam.programs.join(", "), ' placeholder="ör. BUS-1, ECF-3"', "wide") +
+          '<label class="wide"><span>Notlar (her satıra bir not)</span><textarea name="notes" rows="2">' + esc(exam.notes.join("\n")) + '</textarea></label>' +
+        '</div>' +
+        '<fieldset class="edit-rooms"><legend>Derslikler</legend>' +
+          '<p class="edit-help">Birden çok gözetmen virgülle yazılır. Gözetmen gerekmiyorsa "Gerekmiyor" (boş bırakılırsa da öyle kaydedilir); dersin hocası gözetmense "Ad Soyad (dersin hocası)".</p>' +
+          '<div data-rooms>' + exam.rooms.map(roomEditHtml).join("") + '</div>' +
+          '<button type="button" data-add-room>+ Derslik ekle</button>' +
+        '</fieldset>' +
+        '<datalist id="edit-teachers">' + options(DATA.teachers) + '</datalist>' +
+        '<datalist id="edit-proctors">' + options(["Gerekmiyor"].concat(DATA.proctors)) + '</datalist>' +
+        '<p class="edit-status" role="alert" aria-live="polite"></p>' +
+        '<div class="edit-actions">' +
+          '<button class="edit-save" type="submit">' + (exam.id ? "Kaydet" : "Sınavı ekle") + '</button>' +
+          '<button type="button" data-edit-reset>Vazgeç</button>' +
+          (exam.id ? '<button class="edit-delete" type="button" data-edit-delete>Sınavı sil</button>' : '') +
+        '</div>' +
+        '<p class="editor-small">Kaydedince değişiklik GitHub\'a ' + esc(editor ? editor.login : "") + ' adıyla commit edilir. ' + esc(V2_NOTE) + '</p>' +
+      '</form>';
+    }
+
+    function examFromForm(form, base) {
+      const value = function (name) { return form.elements[name].value.trim(); };
+      const list = function (text, separator) {
+        return text.split(separator).map(function (item) { return item.trim(); }).filter(Boolean);
+      };
+      const day = examDays().concat([{ date: base.date, dateLabel: base.dateLabel, day: base.day }]).find(function (item) {
+        return item.date === form.elements.date.value;
+      });
+      const exam = {
+        id: base.id, date: day.date, dateLabel: day.dateLabel, day: day.day, start: value("start"), end: value("end"),
+        courseCode: value("courseCode"), course: value("course"), programs: list(value("programs"), ","), teacher: value("teacher"),
+        totalStudents: value("totalStudents"), notes: list(form.elements.notes.value, "\n"),
+        rooms: $$(".edit-room", form).map(function (row) {
+          const field = function (name) { return $('[name="' + name + '"]', row).value.trim(); };
+          return { room: field("room"), capacity: field("capacity"), students: field("students"),
+            proctor: list(field("proctor"), ",").join(", ") || "Gerekmiyor", departments: field("departments") };
+        }).filter(function (room) {
+          return room.room || room.capacity || room.students || room.departments || room.proctor !== "Gerekmiyor";
+        })
+      };
+      if (!exam.course) throw new Error("Ders adı boş olamaz.");
+      if (!/^\d{2}:\d{2}$/.test(exam.start) || !/^\d{2}:\d{2}$/.test(exam.end)) throw new Error("Başlangıç ve bitiş saatini SS:DD biçiminde girin.");
+      if (exam.start >= exam.end) throw new Error("Bitiş saati başlangıç saatinden sonra olmalı.");
+      const numbers = [exam.totalStudents].concat(exam.rooms.map(function (room) { return room.capacity; }), exam.rooms.map(function (room) { return room.students; }));
+      if (numbers.some(function (number) { return !/^\d*$/.test(number); })) throw new Error("Öğrenci ve kapasite alanlarına yalnız rakam yazın.");
+      return Object.assign({}, base, exam);   // bilinmeyen alanlar (varsa) korunur
+    }
+
+    function setEditStatus(form, text, isError) {
+      const status = $(".edit-status", form);
+      status.textContent = text;
+      status.classList.toggle("is-error", !!isError);
+    }
+
+    function showToast(text) {
+      const toast = $("#editor-toast");
+      toast.textContent = text;
+      toast.hidden = false;
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(function () { toast.hidden = true; }, 6000);
+    }
+
+    function runSave(form, change) {
+      const buttons = $$("button", form);
+      buttons.forEach(function (button) { button.disabled = true; });
+      setEditStatus(form, "GitHub'a kaydediliyor…");
+      commitChange(change).then(function (result) {
+        Object.keys(result.data).forEach(function (key) { DATA[key] = result.data[key]; });
+        refreshAll();
+        if (change.type === "delete") {
+          $("#exam-modal").close();
+          showToast("Sınav silindi; sitede 1–2 dakika içinde görünür.");
+          return;
+        }
+        currentExam = examById(result.id);
+        examTab = "exam";
+        examNotice = result.unchanged ? "Değişiklik yok; sitedeki bilgi zaten aynı." : SAVED_TEXT;
+        $("#exam-modal-kind").textContent = currentExam.courseCode || "Sınav";
+        $("#exam-modal-title").textContent = currentExam.course;
+        renderExamModal();
+        $("#exam-modal .modal-body").scrollTop = 0;
+      }).catch(function (error) {
+        buttons.forEach(function (button) { button.disabled = false; });
+        setEditStatus(form, (error && error.message) || "Kaydedilemedi. Lütfen tekrar deneyin.", true);
+      });
+    }
+
+    function saveExamForm(form) {
+      let exam;
+      try {
+        exam = examFromForm(form, currentExam);
+      } catch (error) {
+        setEditStatus(form, error.message, true);
+        return;
+      }
+      runSave(form, { type: currentExam.id ? "update" : "add", id: currentExam.id, exam: exam, course: exam.course });
+    }
+
+    function deleteExam(form) {
+      if (!confirm("“" + currentExam.course + "” sınavı silinsin mi? Silme hemen GitHub'a kaydedilir.")) return;
+      runSave(form, { type: "delete", id: currentExam.id, course: currentExam.course });
+    }
+
+    function openNewExam() {
+      const day = examDays()[0];
+      currentExam = { id: "", date: day.date, dateLabel: day.dateLabel, day: day.day, start: "10:00", end: "10:50", courseCode: "", course: "",
+        programs: [], teacher: "", totalStudents: "", notes: [], rooms: [{ room: "", capacity: "", students: "", proctor: "Gerekmiyor", departments: "" }] };
+      examTab = "edit";
+      examNotice = "";
+      $("#exam-modal-kind").textContent = "Düzenleyici";
+      $("#exam-modal-title").textContent = "Yeni sınav ekle";
+      renderExamModal();
+      openModal($("#exam-modal"));
+    }
+
+    function renderEditorModal() {
+      const content = $("#editor-modal-content");
+      if (editor) {
+        content.innerHTML = '<p><strong>' + esc(editor.login) + '</strong> olarak giriş yaptınız. Sınav kartlarında “Düzenle” sekmesi ve Sınav Programları sayfasında “Yeni sınav ekle” düğmesi açıktır.</p>' +
+          '<p class="editor-small">' + esc(V2_NOTE) + '</p>' +
+          '<div class="editor-row"><button type="button" data-logout>Çıkış</button></div>';
+        return;
+      }
+      content.innerHTML = '<p>GitHub\'da <strong>' + esc(GITHUB_REPO) + '</strong> deposuna yazma yetkisi olanlar sitede sınavları düzenleyebilir. Bunun için bir GitHub kişisel erişim anahtarı (token) gerekir:</p>' +
+        '<ol>' +
+          '<li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub\'da yeni anahtar sayfasını</a> açın (Fine-grained token).</li>' +
+          '<li>Resource owner: <strong>iybf-sinav</strong>; Repository access: <strong>Only select repositories</strong> → <strong>' + esc(GITHUB_REPO) + '</strong>.</li>' +
+          '<li>Permissions → Repository permissions → <strong>Contents: Read and write</strong>.</li>' +
+          '<li>“Generate token” ile oluşan anahtarı (github_pat_… ile başlar) kopyalayıp aşağıya yapıştırın.</li>' +
+        '</ol>' +
+        '<form class="editor-row" id="editor-form">' +
+          '<label class="sr-only" for="editor-token">GitHub anahtarı</label>' +
+          '<input id="editor-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…">' +
+          '<button class="edit-save" type="submit">Giriş yap</button>' +
+        '</form>' +
+        '<p class="edit-status" id="editor-status" role="alert" aria-live="polite"></p>' +
+        '<p class="editor-small">Anahtar yalnız bu tarayıcıda saklanır ve “Çıkış” ile silinir. Ortak kullanılan bir bilgisayarda işiniz bitince çıkış yapın.</p>';
+    }
+
+    function setEditor(value) {
+      editor = value;
+      const button = $("#editor-button");
+      button.textContent = editor ? "Düzenleyici: " + editor.login : "Düzenleyici girişi";
+      button.classList.toggle("is-on", !!editor);
+      $("#add-exam-button").hidden = !editor;
+      if (!editor && currentExam && !currentExam.id) $("#exam-modal").close();   // çıkışta düzenleme arayüzü kapanır
+      if (!editor && $("#exam-modal").open) renderExamModal();
+      else if (currentExam) updateExamTabs();
+      renderEditorModal();
+    }
+
+    function initEditor() {
+      $("#editor-button").addEventListener("click", function () {
+        renderEditorModal();
+        openModal($("#editor-modal"));
+      });
+      $("#add-exam-button").addEventListener("click", openNewExam);
+      $("#editor-modal").addEventListener("click", function (event) {
+        if (event.target.closest("[data-logout]")) {
+          storeToken("");
+          setEditor(null);
+        }
+      });
+      $("#editor-modal").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const token = $("#editor-token").value.trim();
+        const status = $("#editor-status");
+        const submit = $("#editor-form button");
+        status.classList.remove("is-error");
+        if (!token) {
+          status.textContent = "Önce anahtarı yapıştırın.";
+          status.classList.add("is-error");
+          return;
+        }
+        status.textContent = "Doğrulanıyor…";
+        submit.disabled = true;
+        verifyToken(token).then(function (login) {
+          storeToken(token);
+          setEditor({ token: token, login: login });
+        }).catch(function (error) {
+          submit.disabled = false;
+          status.textContent = error.message;
+          status.classList.add("is-error");
+        });
+      });
+      const token = storedToken();
+      if (token) {
+        verifyToken(token).then(function (login) {
+          setEditor({ token: token, login: login });
+        }).catch(function (error) {
+          if (error.status === 401 || error.status === 403) storeToken("");   // ağ hatasında anahtar kalır, sonraki açılışta yeniden denenir
+        });
+      }
+    }
+
+    function renderSummaries() {
+      $("#schedule-summary").textContent = DATA.meta.examCount + " sınav · " + DATA.meta.period;
+      $("#teacher-summary").textContent = DATA.meta.teacherCount + " öğretim elemanı";
+      $("#proctor-summary").textContent = DATA.meta.proctorCount + " gözetmen";
+    }
+
+    // Veri değişince (düzenleme) sayfadaki her şey yeniden çizilir
+    function refreshAll() {
+      renderSummaries();
+      enrichChanges();
+      peopleRefreshers.forEach(function (refresh) { refresh(); });
+      if ($("#person-modal").open && currentPerson) renderPersonModal();
+    }
+
+    renderSummaries();
     initDepartments();
     initModals();
     enrichChanges();
@@ -1588,8 +2172,9 @@
       const detail = event.target.closest(".dg-detay");
       if (detail) openExam(detail.dataset.examId);
     });
-    initPeople({ type: "teacher", names: DATA.teachers, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept" });
-    initPeople({ type: "proctor", names: DATA.proctors, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept" });
+    initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept" });
+    initPeople({ type: "proctor", names: function () { return DATA.proctors; }, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept" });
+    initEditor();
 
     const initialHash = location.hash.replace("#", "");
     const pageByHash = {
