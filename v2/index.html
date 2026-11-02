@@ -880,6 +880,29 @@
     .unit-table .strong { font-weight: 800; color: var(--accent); }
   }
   </style>
+  <style>
+    #tab-home, #page-home { --accent: #102a43; }
+    #tab-features, #page-features { --accent: #b45309; }
+    .feature-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .feature-list li { padding: 14px 16px; border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 12px; background: #fff; }
+    .feature-list strong { color: var(--accent); }
+    .png-button {
+      margin: 0 0 14px 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--navy);
+      background: #fff;
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .png-button:disabled { cursor: progress; opacity: .7; }
+    .png-sheet { position: fixed; top: 0; left: -10000px; width: 1000px; padding: 24px; background: #fff; }
+    .png-sheet h3 { margin: 0 0 14px; color: var(--navy); }
+    .png-sheet .week-wrap { overflow: visible; }
+  </style>
 <style>#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}</style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
@@ -906,16 +929,28 @@
   <div style="padding:8px 16px;color:#fff;background:#b45309;text-align:center;font-weight:700;font-size:.9rem">DENEME SÜRÜMÜ (v2) · Asıl site: <a href="../" style="color:#fff">iybf-sinav.github.io</a></div>
   <nav class="top-nav" aria-label="Program sayfaları">
     <div class="nav-inner" role="tablist">
-      <button class="tab-button" id="tab-schedule" role="tab" aria-controls="page-schedule" aria-selected="true" data-page="schedule">Sınav Programları</button>
+      <button class="tab-button" id="tab-home" role="tab" aria-controls="page-home" aria-selected="true" data-page="home">Ana Sayfa</button>
+      <button class="tab-button" id="tab-schedule" role="tab" aria-controls="page-schedule" aria-selected="false" data-page="schedule">Sınav Programları</button>
       <button class="tab-button" id="tab-teachers" role="tab" aria-controls="page-teachers" aria-selected="false" data-page="teachers">Öğretim Üyeleri</button>
       <button class="tab-button" id="tab-proctors" role="tab" aria-controls="page-proctors" aria-selected="false" data-page="proctors">Gözetmenler</button>
       <button class="tab-button" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel">Panel</button>
+      <button class="tab-button" id="tab-features" role="tab" aria-controls="page-features" aria-selected="false" data-page="features">Yeni Özellikler</button>
     </div>
   </nav>
 
   <p id="js-uyari" style="margin:0;padding:12px 16px;color:#79520c;background:#fff7df;text-align:center;font-weight:600">Bölümler ve program görünmüyorsa bu sayfa bir önizleme ekranında (WhatsApp, Dosyalar, Drive) açılmıştır. Lütfen tarayıcıdan şu adresi açın: <a href="https://iybf-sinav.github.io/">iybf-sinav.github.io</a></p>
   <main>
-    <section class="page" id="page-schedule" role="tabpanel" aria-labelledby="tab-schedule">
+    <section class="page" id="page-home" role="tabpanel" aria-labelledby="tab-home">
+      <div class="page-heading">
+        <div>
+          <h2>Ana Sayfa</h2>
+          <p>Sınav programındaki güncellemeler burada duyurulur.</p>
+        </div>
+      </div>
+      <section class="degisiklik" aria-label="Son değişiklikler"><h3>Son değişiklikler</h3><h4>2 Kasım</h4><p><span class="dg-tur dg-goz">Gözetmen</span> Political Structure and Life in Turkey-I sınavına (Pazartesi 13:00, 6D4) gözetmen eklendi.</p></section>
+    </section>
+
+    <section class="page" id="page-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
       <div class="page-heading">
         <div>
           <h2>Bölümlere Göre Sınav Programı</h2>
@@ -923,7 +958,6 @@
         </div>
         <span class="summary-pill" id="schedule-summary"></span>
       </div>
-      <section class="degisiklik" aria-label="Son değişiklikler"><h3>Son değişiklikler</h3><h4>2 Kasım</h4><p><span class="dg-tur dg-goz">Gözetmen</span> Political Structure and Life in Turkey-I sınavına (Pazartesi 13:00, 6D4) gözetmen eklendi.</p></section>
       <div class="department-grid" id="department-grid"></div>
     </section>
 
@@ -964,6 +998,18 @@
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
     </section>
+    <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
+      <div class="page-heading">
+        <div>
+          <h2>Yeni Özellikler</h2>
+          <p>Bu deneme sürümünde (v2) asıl siteden farklı olarak eklenenler. Beğenilenler asıl siteye taşınır.</p>
+        </div>
+      </div>
+      <ol class="feature-list">
+        <li><strong>Değişiklik 1 · Ana Sayfa sekmesi.</strong> Sitede ilk açılan sekme. Sınav programındaki güncellemeler (Son değişiklikler) Sınav Programları sayfasının başından buraya taşındı.</li>
+        <li><strong>Değişiklik 2 · Takvimi PNG olarak indirme.</strong> Bölüm, öğretim üyesi ve gözetmen kartlarında, Liste/Takvim görünümü düğmelerinin yanında "PNG indir" düğmesi. Haftalık takvimi resim olarak indirir.</li>
+      </ol>
+    </section>
   </main>
 
   <dialog class="modal" id="person-modal" aria-labelledby="person-modal-title">
@@ -979,6 +1025,7 @@
         <button type="button" data-view="list" aria-pressed="true">Liste görünümü</button>
         <button type="button" data-view="calendar" aria-pressed="false">Takvim görünümü</button>
       </div>
+      <button class="png-button" type="button" data-png>PNG indir</button>
       <div id="person-modal-content"></div>
     </div>
   </dialog>
@@ -1144,7 +1191,7 @@
       });
       if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "../panel/?v=20261102122009"); }
       if (updateHash) {
-        const hashes = { schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
+        const hashes = { home: "ana-sayfa", features: "yeni-ozellikler", schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1300,6 +1347,52 @@
       openModal($("#person-modal"));
     }
 
+    // Haftalık takvimi PNG olarak indirir (html2canvas yalnız ilk tıklamada yüklenir)
+    function loadHtml2canvas() {
+      if (window.html2canvas) return Promise.resolve();
+      return new Promise(function (resolve, reject) {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    function downloadCalendarPng(button) {
+      const title = $("#person-modal-title").textContent;
+      const kind = $("#person-modal-kind").textContent;
+      const sheet = document.createElement("div");
+      sheet.className = "png-sheet";
+      sheet.innerHTML = '<p class="modal-kicker">' + esc(kind) + ' · ' + esc(DATA.meta.period) + '</p><h3>' + esc(title) + '</h3>' +
+        weekHtml(personExams(currentPerson.type, currentPerson.name), currentPerson.type !== "teacher");
+      $("#person-modal").appendChild(sheet);
+      button.disabled = true;
+      button.textContent = "Hazırlanıyor…";
+      loadHtml2canvas().then(function () {
+        return html2canvas(sheet, { scale: 2, backgroundColor: "#ffffff" });
+      }).then(function (canvas) {
+        return new Promise(function (resolve) { canvas.toBlob(resolve, "image/png"); });
+      }).then(function (blob) {
+        const link = document.createElement("a");
+        // dosya adı: Türkçe harfler sadeleştirilir (bazı tarayıcılar aksi hâlde "download" adıyla kaydeder)
+        const tr = { "ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u", "Ç": "C", "Ğ": "G", "İ": "I", "Ö": "O", "Ş": "S", "Ü": "U" };
+        link.download = ("Sinav Takvimi - " + title).replace(/[çğıöşüÇĞİÖŞÜ]/g, function (ch) { return tr[ch]; })
+          .replace(/[^A-Za-z0-9 .-]+/g, "").trim() + ".png";
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(function () { URL.revokeObjectURL(link.href); }, 10000);
+      }).catch(function () {
+        alert("Takvim resmi oluşturulamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.");
+      }).then(function () {
+        sheet.remove();
+        button.disabled = false;
+        button.textContent = "PNG indir";
+      });
+    }
+
     function initModals() {
       $$(".modal").forEach(function (modal) {
         modal.addEventListener("click", function (event) {
@@ -1308,6 +1401,11 @@
         });
       });
       $("#person-modal").addEventListener("click", function (event) {
+        const pngButton = event.target.closest("[data-png]");
+        if (pngButton) {
+          downloadCalendarPng(pngButton);
+          return;
+        }
         const viewButton = event.target.closest("[data-view]");
         if (viewButton) {
           personView = viewButton.dataset.view;
@@ -1376,9 +1474,11 @@
       "sinav-programi": "schedule",
       "ogretim-uyeleri": "teachers",
       "gozetmenler": "proctors",
-      "panel": "panel"
+      "panel": "panel",
+      "ana-sayfa": "home",
+      "yeni-ozellikler": "features"
     };
-    activatePage(pageByHash[initialHash] || "schedule", false);
+    activatePage(pageByHash[initialHash] || "home", false);
   </script>
 </body>
 </html>
