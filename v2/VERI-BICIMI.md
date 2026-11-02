@@ -174,6 +174,20 @@ Kaydetmeden önce (ve gözetmen, tarih, saat alanı değiştikçe) girilen her g
 
 Aynı sınavın kendisi çakışma sayılmaz. Sınavda zaten kayıtlı olan bir gözetmen, sınavın gün/saati değişmedikçe yeniden denetlenmez (komisyonun bilerek yaptığı atamalar düzenlemeyi kilitlemesin); gün/saat değişirse bütün gözetmenler yeni zamana göre denetlenir. Denetim GitHub'daki güncel veri.json'la kayıt anında bir kez daha yapılır.
 
+## Gizli bilgiler: `gizli.json` (özel depo)
+
+Panel şifresi **bu herkese açık depoya, sitenin koduna ya da `veri.json`'a yazılmaz.** Düzenleyici girişi yapılmışken site şifreyi, düzenleyicinin GitHub anahtarıyla, **özel** `iybf-sinav/iybf-gizli` deposundaki `gizli.json` dosyasından okur (`GET https://api.github.com/repos/iybf-sinav/iybf-gizli/contents/gizli.json`). Okunan şifre yalnız tarayıcının belleğinde ve, panelin kendisi gibi, o sekmenin oturumunda (`sessionStorage` `panel_sifre`) tutulur; localStorage'a yazılmaz, “Çıkış”ta silinir.
+
+Biçim (değer örnektir, uydurmadır):
+
+```json
+{"panelSifresi": "örnek-şifre"}
+```
+
+- `panelSifresi`: Panel sekmesi açılınca panele verilir, panel şifre sormadan açılır (Değişiklik 10). Yoksa ya da dosya okunamazsa panel kendi şifre ekranıyla açılır.
+
+**Kim, nasıl oluşturur:** depo sahibi (iybf-sinav hesabı) GitHub'da **Private** (özel) bir `iybf-gizli` deposu açar, içine yukarıdaki biçimde `gizli.json` dosyasını ekler ve düzenleyicileri bu depoya da ortak (collaborator) yapar. Düzenleyicinin klasik anahtarındaki `repo` kapsamı özel depoyu okumaya yeter. Panel şifresi `kod/Yöntem/panel_sifre.txt`'deki şifredir (o dosya da GitHub'a yüklenmez).
+
 ## Siteye nasıl gelir
 
 - v2'de: depo kökünden `python3 v2/esitle.py`. Kökte `veri.json` varsa onu, yoksa ana sitenin (`index.html`) gömülü verisini ve `kod/Yöntem/degisiklikler.json`'u okuyup `v2/veri.json`'u yazar. **Dikkat:** v2'de “Düzenle” ile yapılan değişiklikler bu sırada ana sitenin verisiyle değişir.

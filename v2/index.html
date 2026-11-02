@@ -1074,7 +1074,7 @@
       .edit-room .wide { grid-column: 1 / -1; }
     }
   </style>
-<style>#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}</style></head>
+<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}</style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
     <form class="access-card" id="access-form">
@@ -1105,7 +1105,7 @@
       <button class="tab-button" id="tab-schedule" role="tab" aria-controls="page-schedule" aria-selected="false" data-page="schedule">Sınav Programları</button>
       <button class="tab-button" id="tab-teachers" role="tab" aria-controls="page-teachers" aria-selected="false" data-page="teachers">Öğretim Üyeleri</button>
       <button class="tab-button" id="tab-proctors" role="tab" aria-controls="page-proctors" aria-selected="false" data-page="proctors">Gözetmenler</button>
-      <button class="tab-button" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel">Panel</button>
+      <button class="tab-button" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel" hidden>Panel</button>
       <button class="tab-button" id="tab-features" role="tab" aria-controls="page-features" aria-selected="false" data-page="features">Yeni Özellikler</button>
     </div>
   </nav>
@@ -1183,6 +1183,7 @@
     </section>
 
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
     </section>
     <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
@@ -1202,6 +1203,7 @@
         <li><strong>Değişiklik 7 · Gözetmen çakışma ve izin kontrolü.</strong> Düzenle sekmesinde gözetmen yazılırken ve kaydetmeden önce her gözetmen denetlenir: aynı gün, örtüşen saatte başka bir sınavda gözetmen mi, o saatte kendi dersinin sınavı var mı, o gün izinli mi. Sorun varsa açık bir mesaj gösterilir (ör. “Şeyma Sertçelik bu saatte müsait değil: Pazartesi 10:00–10:50 Yönetim Bilişim Sistemlerine Giriş (6A1) sınavında gözetmen.”) ve kayıt yapılmaz. Sınavın günü ya da saati değişince bütün gözetmenler yeni zamana göre denetlenir. Gözetmen önerilerinde o saatte müsait olmayanlar “(müsait değil)” diye işaretlenir. İzin günleri gözetmen atama dosyasındaki (Gözetmen Yükü) bilgiden alındı; v2/veri.json'da <em>proctorAvailability</em> alanında durur.</li>
         <li><strong>Değişiklik 8 · Gözetmen seçme penceresi.</strong> Düzenleyici girişliyken Düzenle sekmesinde her dersliğin gözetmen alanının yanında “Seç” düğmesi vardır (Sınav sekmesi yalnız görüntüleme içindir). Açılan pencerede o sınavın gün ve saatinde müsait gözetmenler, toplam kaç sınavda görevli oldukları yazılarak en az görevliden en çoğa sıralanır; en az görevliler “önerilen” diye işaretlenir. Müsait olmayanlar altta, nedeniyle (izinli, aynı saatte başka sınavda vb.) soluk gösterilir. Seçilen ad alandaki gözetmenin yerine geçer (alan boşsa ya da birden çok ad varsa eklenir); kayıt otomatik yapılmaz, “Kaydet”e basılınca yapılır.</li>
         <li><strong>Değişiklik 9 · Uygulama hakkında bölümü.</strong> Ana Sayfa'nın en altında, Son değişiklikler kutusunun altında kapalı başlayan “Uygulama hakkında” bölümü (+ ile açılır, − ile kapanır): uygulamanın amacı, sitenin yaptıkları ve teşekkür metni. Teşekkür metni yalnız bu bölümde yer alır; sayfanın altında yalnız “İESU İYBF Sınav Planlama Komisyonu” yazar.</li>
+        <li><strong>Değişiklik 10 · Panel yalnız düzenleyicilere, şifresiz.</strong> “Panel” sekmesi yalnız düzenleyici girişi yapılmışken görünür; girişsiz açılan #panel adresi Ana Sayfa'ya döner. Girişliyken panel şifre sormadan açılır: panel şifresi, düzenleyicinin GitHub anahtarıyla özel <em>iybf-sinav/iybf-gizli</em> deposundaki <em>gizli.json</em> dosyasından okunur. Şifre bu herkese açık depoda, sitenin kodunda ya da veri.json'da yer almaz; yalnız tarayıcının belleğinde ve bu sekmenin oturumunda tutulur, “Çıkış” ile silinir. gizli.json okunamazsa panel kendi şifre ekranıyla açılır.</li>
       </ol>
     </section>
   </main>
@@ -1402,13 +1404,14 @@
     }
 
     function activatePage(pageName, updateHash) {
+      if (pageName === "panel" && !editor) pageName = "home";   // Panel yalnız düzenleyicilere (Değişiklik 10)
       $$(".tab-button").forEach(function (button) {
         button.setAttribute("aria-selected", String(button.dataset.page === pageName));
       });
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
-      if (pageName === "panel") { const f = document.getElementById("panel-frame"); if (!f.getAttribute("src")) f.setAttribute("src", "../panel/?v=20261102142031"); }
+      if (pageName === "panel") openPanel();
       if (updateHash) {
         const hashes = { home: "ana-sayfa", features: "yeni-ozellikler", schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel" };
         history.replaceState(null, "", "#" + hashes[pageName]);
@@ -2398,6 +2401,73 @@
       openModal($("#exam-modal"));
     }
 
+    // ---- Gizli bilgiler (Değişiklik 10) ----
+    // Panel şifresi bu herkese açık depoda DEĞİL, düzenleyicinin anahtarıyla okunan özel depodaki
+    // gizli.json'da durur (biçimi VERI-BICIMI.md). Yalnız bellekte ve sekme oturumunda tutulur; çıkışta silinir.
+    const SECRET_REPO = "iybf-sinav/iybf-gizli";
+    const SECRET_FILE = "gizli.json";
+    const PANEL_URL = "../panel/?v=20261102142031";
+    const PANEL_KEY = "panel_sifre";   // panel/index.html bu sessionStorage anahtarını okuyup şifre sormadan açılır
+    let secretsPromise = null;   // Promise<{ data, error }>
+    let panelPeoplePromise = null;   // Promise<[{ ad, mail }]>: panel verisindeki gözetmenler
+
+    function loadSecrets() {
+      if (!editor) return Promise.resolve({ data: null, error: "Düzenleyici girişi yok." });
+      if (secretsPromise) return secretsPromise;
+      const token = editor.token;
+      const promise = fetch(GITHUB_API + "/repos/" + SECRET_REPO + "/contents/" + SECRET_FILE, {
+        headers: { Accept: "application/vnd.github.raw+json", Authorization: "Bearer " + token }, cache: "no-store"
+      }).then(function (response) {
+        if (!response.ok) throw githubError(response.status);
+        return response.text();
+      }).then(function (text) {
+        let data = JSON.parse(text.replace(/^\uFEFF/, ""));
+        // ham içerik yerine dosya kaydı gelirse (base64) çözülür
+        if (data && data.encoding === "base64" && typeof data.content === "string") data = JSON.parse(base64ToText(data.content).replace(/^\uFEFF/, ""));
+        if (!data || typeof data !== "object") throw new Error("gizli.json biçimi bozuk");
+        return { data: data, error: "" };
+      }).catch(function (error) {
+        if (secretsPromise === promise) secretsPromise = null;   // sonra yeniden denenebilir
+        return { data: null, error: (error && error.message) || "okunamadı" };
+      });
+      secretsPromise = promise;
+      return promise;
+    }
+
+    function clearSecrets() {
+      secretsPromise = null;
+      panelPeoplePromise = null;
+      try { sessionStorage.removeItem(PANEL_KEY); } catch (error) {}
+      const frame = $("#panel-frame");
+      if (frame && frame.dataset.open) { frame.src = "about:blank"; delete frame.dataset.open; }   // açık panel kapatılır
+      const info = $("#panel-bilgi");
+      if (info) { info.hidden = true; info.textContent = ""; }
+    }
+
+    // Panel sekmesi: önce gizli.json'dan panel şifresi oturuma yazılır, sonra panel yüklenir (şifre sormadan açılır)
+    function openPanel() {
+      const frame = $("#panel-frame");
+      if (!editor || frame.dataset.open || frame.dataset.loading) return;
+      const info = $("#panel-bilgi");
+      info.hidden = false;
+      info.textContent = "Panel açılıyor…";
+      frame.dataset.loading = "1";
+      loadSecrets().then(function (result) {
+        delete frame.dataset.loading;
+        if (!editor) return;
+        const secret = result.data && typeof result.data.panelSifresi === "string" ? result.data.panelSifresi : "";
+        if (secret) {
+          try { sessionStorage.setItem(PANEL_KEY, secret); } catch (error) {}
+          info.hidden = true;
+          info.textContent = "";
+        } else {
+          info.textContent = "Otomatik giriş için " + SECRET_REPO + " deposunda gizli.json gerekli.";
+        }
+        frame.dataset.open = "1";
+        frame.src = PANEL_URL;
+      });
+    }
+
     function renderEditorModal() {
       const content = $("#editor-modal-content");
       if (editor) {
@@ -2431,6 +2501,13 @@
       button.textContent = editor ? "Düzenleyici: " + editor.login : "Düzenleyici girişi";
       button.classList.toggle("is-on", !!editor);
       $("#add-exam-button").hidden = !editor;
+      $("#tab-panel").hidden = !editor;   // Panel yalnız düzenleyicilere (Değişiklik 10)
+      if (!editor) {
+        clearSecrets();
+        if (!$("#page-panel").hidden) activatePage("home", true);
+      } else if (location.hash === "#panel" && $("#page-panel").hidden) {
+        activatePage("panel", false);   // #panel adresiyle gelip giriş sonradan doğrulandıysa
+      }
       if (!editor && currentExam && !currentExam.id) $("#exam-modal").close();   // çıkışta düzenleme arayüzü kapanır
       if (!editor && $("#exam-modal").open) renderExamModal();
       else if (currentExam) updateExamTabs();
