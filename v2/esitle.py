@@ -2,15 +2,31 @@
   python3 v2/esitle.py               v2'yi canlı sitenin tam kopyasına döndürür (v2'deki tasarım değişiklikleri silinir)
   python3 v2/esitle.py --sadece-veri yalnız sınav verisini (veri.json) ve e-postaları canlıdan kopyalar
 Kopyada: deneme şeridi, sekme başlığında "[v2 Deneme]", düzenlemeler v2/veri.json'a yazılır, panel ../panel/ adresinden açılır,
-boş bir "Yeni Özellikler" sekmesi eklenir."""
+boş bir "Yeni Özellikler" sekmesi eklenir.
+Sınav zarfı kayıtları (v2/veri.json "envelopes" alanı, yalnız v2'de):
+  --sadece-veri  canlı veri kopyalanır ama v2/veri.json'daki "envelopes" alanı korunur (yeni dosyanın sonuna yazılır).
+  seçeneksiz     tam sıfırlamada "envelopes" de silinir (v2 canlının birebir kopyasına döner); bu beklenen davranıştır."""
+import json
 import shutil
 import sys
 
+if "--sadece-veri" in sys.argv:
+    try:
+        zarflar = json.load(open("v2/veri.json", encoding="utf-8")).get("envelopes")
+    except (OSError, ValueError):
+        zarflar = None
+    veri = json.load(open("veri.json", encoding="utf-8"))
+    if zarflar:
+        veri["envelopes"] = zarflar
+        open("v2/veri.json", "w", encoding="utf-8", newline="\n").write(json.dumps(veri, ensure_ascii=False, indent=1) + "\n")
+    else:
+        shutil.copyfile("veri.json", "v2/veri.json")
+    shutil.copyfile("epostalar.json", "v2/epostalar.json")
+    print("v2 verisi canlıyla eşitlendi" + (" (zarf kayıtları korundu: %d)" % len(zarflar) if zarflar else ""))
+    sys.exit()
+
 shutil.copyfile("veri.json", "v2/veri.json")
 shutil.copyfile("epostalar.json", "v2/epostalar.json")
-if "--sadece-veri" in sys.argv:
-    print("v2 verisi canlıyla eşitlendi")
-    sys.exit()
 
 h = open("index.html", encoding="utf-8").read().replace("\r\n", "\n")
 
