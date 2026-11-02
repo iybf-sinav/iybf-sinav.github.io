@@ -252,7 +252,7 @@ function uygunPenceresi(e) {
   const ozet = `${gun.ad} ${gun.tarih}, ${e.bas}–${e.bit}`;
   const konu = `Vize sınavı gözetmenliği – ${e.ders} (${ozet})`;
   const mailAdr = ad => { const k = D.kisiler.find(x => x.ad === ad); return k ? k.mail : ""; };
-  const mailBag = (adres, metin, yazi, sinif) => adres ? `<a class="mail ${sinif || ""}" href="mailto:${adres}?subject=${encodeURIComponent(konu)}&body=${encodeURIComponent(metin)}">✉ ${yazi}</a>` : "";
+  const mailBag = (adres, metin, yazi, sinif) => adres ? `<a class="mail ${sinif || ""}" href="https://outlook.cloud.microsoft/mail/deeplink/compose?to=${encodeURIComponent(adres).replace(/%40/g, "@")}&subject=${encodeURIComponent(konu)}&body=${encodeURIComponent(metin)}" target="_blank" rel="noopener">✉ ${yazi}</a>` : "";
   const gorevli = e.odalar.flatMap(o => o.gozetmen.filter(a => mailAdr(a)).map(a => [a, o.oda]));
   const gorevMetni = (ad, oda) => `Merhaba ${ad},\n\n${ozet} saatlerinde ${e.ders} sınavında ${oda} dersliğinde gözetmen olarak görevlendirildiniz.\n\nBilgilerinize sunarım. İyi çalışmalar.`;
   const talepMetni = ad => `Merhaba ${ad},\n\n${ozet} saatlerinde ${e.ders} sınavı için gözetmen olarak görev alabilir misiniz? Uygunsanız lütfen dönüş yapınız.\n\nİyi çalışmalar.`;

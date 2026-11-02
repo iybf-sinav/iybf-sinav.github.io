@@ -1222,9 +1222,9 @@
         <li><strong>Değişiklik 9 · Uygulama hakkında bölümü.</strong> Ana Sayfa'nın en altında, Son değişiklikler kutusunun altında kapalı başlayan “Uygulama hakkında” bölümü (+ ile açılır, − ile kapanır): uygulamanın amacı, sitenin yaptıkları ve teşekkür metni. Teşekkür metni yalnız bu bölümde yer alır; sayfanın altında yalnız “İESU İYBF Sınav Planlama Komisyonu” yazar.</li>
         <li><strong>Değişiklik 10 · Panel yalnız düzenleyicilere, şifresiz.</strong> “Panel” sekmesi yalnız düzenleyici girişi yapılmışken görünür; girişsiz açılan #panel adresi Ana Sayfa'ya döner. Girişliyken panel şifre sormadan açılır: panel şifresi, düzenleyicinin GitHub anahtarıyla özel <em>iybf-sinav/iybf-gizli</em> deposundaki <em>gizli.json</em> dosyasından okunur. Şifre bu herkese açık depoda, sitenin kodunda ya da veri.json'da yer almaz; yalnız tarayıcının belleğinde ve bu sekmenin oturumunda tutulur, “Çıkış” ile silinir. gizli.json okunamazsa panel kendi şifre ekranıyla açılır.</li>
         <li><strong>Değişiklik 11 · Son değişikliklere otomatik duyuru.</strong> Düzenleyici bir sınavı kaydettiğinde (değiştirme, ekleme, silme) aynı kayıtla Ana Sayfa'daki Son değişiklikler kutusunun en üstüne bugünün tarihiyle bir madde eklenir. Tür etiketi değişikliğe göre Saat, Derslik, Gözetmen ya da Sınav olur; birden çok şey değiştiyse her tür için ayrı madde yazılır. Örnekler: “Terörizm ve İstihbarat sınavında (Pazartesi 10:00, 6D1) gözetmen Gerekmiyor → Taha Gümüş olarak değiştirildi.”, “Terörizm ve İstihbarat sınavı (Pazartesi 10:00, 6D1) Salı 12:00'ye alındı.” Hiçbir şey değişmediyse madde eklenmez. Maddedeki ders adına tıklayınca sınav kartı açılır (Değişiklik 3).</li>
-        <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme e-posta programında hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
+        <li><strong>Değişiklik 12 · Değişikliği bildir.</strong> Düzenleyici kaydı tamamlayınca “Değişiklik yapıldı” penceresi açılır: değişikliğin özeti (Son değişikliklere yazılan madde), bildirilecek kişiler ve “Değişikliği bildir” düğmesi. Düğme okul hesabıyla Outlook web’de (outlook.cloud.microsoft) hazır bir taslak açar: alıcılar değişiklikten etkilenen gözetmenler (eklenen ve çıkarılan; saat ya da derslik değiştiyse sınavın bütün gözetmenleri) ve dersin öğretim elemanı, konu “Sınav değişikliği: Ders adı”, metin sade bir duyuru ve güncel programın adresi. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez; adresi girilmemiş kişiler pencerede yalnız adıyla (“e-postası girilmemiş: Ad”) yazılır, taslak yine açılır.</li>
         <li><strong>Değişiklik 13 · Gözetmen kartlarında görev sayısı.</strong> Gözetmenler sayfasındaki her isim kartının sağ kenarında gözetmenin toplam görev sayısı küçük ve soluk yazılır (ör. “17 görev”). Sayım gözetmen seçme penceresindekiyle aynıdır (komisyon kuralı: 60 dakikadan uzun sınav 2 görev, kendi dersindeki gözetmenlik dahil). Herkese görünür; bir sınav düzenlenip kaydedilince sayı hemen güncellenir. Öğretim Üyeleri kartları değişmedi.</li>
-        <li><strong>Değişiklik 15 · Düzenle sekmesinde gözetmene haber ver / sor.</strong> Her dersliğin gözetmen alanının altında “Gözetmene haber ver” (görevlendirildiniz) ve “Gözetmene sor” (görev alabilir misiniz?) düğmeleri vardır. Düğme, alandaki gözetmen (birden çok ad varsa hepsi) için e-posta programında hazır taslak açar; konu ve metne formdaki ders, gün, saat ve derslik yazılır. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez. Düğme kayıt yapmaz; gözetmen değişikliği için Kaydet’e basılır.</li>
+        <li><strong>Değişiklik 15 · Düzenle sekmesinde gözetmene haber ver / sor.</strong> Her dersliğin gözetmen alanının altında “Gözetmene haber ver” (görevlendirildiniz) ve “Gözetmene sor” (görev alabilir misiniz?) düğmeleri vardır. Düğme, alandaki gözetmen (birden çok ad varsa hepsi) için okul hesabıyla Outlook web'de (outlook.cloud.microsoft) hazır taslak açar; konu ve metne formdaki ders, gün, saat ve derslik yazılır. Adresler v2/epostalar.json dosyasından alınır ve sayfada gösterilmez. Düğme kayıt yapmaz; gözetmen değişikliği için Kaydet’e basılır.</li>
         <li><strong>Değişiklik 14 · İYBF Tüm Sınav Programı.</strong> Sınav Programları sayfasında bölüm kartlarının başında “TÜMÜ” rozetli, koyu lacivert “İYBF Tüm Sınav Programı” kartı. Açılan pencerede fakültenin bütün sınavları yer alır: liste görünümünde gün, saat, derslik, ders adı, öğretim elemanı ve programlar (telefonda tablo kendi kutusunda kaydırılır); takvim görünümünde haftalık tabloda aynı saatteki bütün sınavlar alt alta (ders adı, derslik, öğretim elemanı). “PNG indir” bütün takvimi güncellik uyarısıyla tek resim olarak indirir; bir sınava tıklayınca sınav kartı açılır.</li>
       </ol>
     </section>
@@ -2631,7 +2631,9 @@
     }
 
     function mailtoUrl(emails, subject, body) {
-      return "mailto:" + emails.join(",") + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      // okul hesabı Chrome'da Outlook web'de açık olduğu için taslak mailto (kişisel posta programı) yerine Outlook web'de açılır
+      return "https://outlook.cloud.microsoft/mail/deeplink/compose?to=" + encodeURIComponent(emails.join(";")).replace(/%40/g, "@").replace(/%3B/g, ";") +
+        "&subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
     }
 
     // Düzenle sekmesinde dersliğin gözetmenine "haber ver" / "sor" e-posta taslağı (Değişiklik 15); kayıt yapmaz
@@ -2670,6 +2672,8 @@
         if (!to.length) { setEditStatus(form, "e-postası girilmemiş: " + missing.join(", "), true); return; }
         const link = document.createElement("a");
         link.href = mailtoUrl(to, subject, body);   // adresler yalnız bağlantıda; sayfada yazılmaz
+        link.target = "_blank";
+        link.rel = "noopener";
         link.click();
         setEditStatus(form, "E-posta taslağı açıldı" + (missing.length ? " (e-postası girilmemiş: " + missing.join(", ") + ")" : "") +
           ". Gözetmen değişikliği için Kaydet’e basmayı unutmayın.");
@@ -2717,6 +2721,8 @@
         $("[data-missing]", content).innerHTML = missing.map(function (name) { return "e-postası girilmemiş: " + esc(name); }).join("<br>");
         const link = $("#notify-send");
         link.href = mailtoUrl(to, subject, body);   // adresler yalnız bağlantıda; sayfada yazılmaz
+        link.target = "_blank";
+        link.rel = "noopener";
         link.removeAttribute("aria-disabled");
         link.removeAttribute("role");
         link.textContent = "Değişikliği bildir";
@@ -2789,7 +2795,7 @@
     // gizli.json'da durur (biçimi VERI-BICIMI.md). Yalnız bellekte ve sekme oturumunda tutulur; çıkışta silinir.
     const SECRET_REPO = "iybf-sinav/iybf-gizli";
     const SECRET_FILE = "gizli.json";
-    const PANEL_URL = "../panel/?v=20261102142031";
+    const PANEL_URL = "../panel/?v=20261102162210";
     const PANEL_KEY = "panel_sifre";   // panel/index.html bu sessionStorage anahtarını okuyup şifre sormadan açılır
     let secretsPromise = null;   // Promise<{ data, error }>
     let panelPeoplePromise = null;   // Promise<[{ ad, mail }]>: panel verisindeki gözetmenler
