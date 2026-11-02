@@ -256,6 +256,18 @@ def html_uret(data):
     return h
 
 
+def veri_json_yaz(data, yol):
+    """Canlı site (v3 tasarımı) sınav verisini veri.json'dan okur: veri_kur çıktısı + Son değişiklikler + gözetmen izin günleri.
+    Biçim: v2/VERI-BICIMI.md. Siteden yapılan düzenlemeler (GitHub'da 'düzenleme:' commit'leri) önce Excel'e işlenmeden yükleme yapılmaz."""
+    def oku(ad):
+        y = os.path.join(KOK, "Yöntem", ad)
+        return json.load(open(y, encoding="utf-8")) if os.path.exists(y) else []
+    veri = dict(data)
+    veri["updates"] = [{"tarih": g["tarih"], "tur": g["tur"], "metin": g["metin"]} for g in oku("degisiklikler.json")]
+    veri["proctorAvailability"] = oku("izinler.json")
+    open(yol, "w", encoding="utf-8", newline="\n").write(json.dumps(veri, ensure_ascii=False, indent=1) + "\n")
+
+
 if __name__ == "__main__":
     L, sinavlar = sinavlari_topla()
     print(len(L), "sınav")
@@ -267,4 +279,5 @@ if __name__ == "__main__":
         os.makedirs(klasor, exist_ok=True)
         yol = os.path.join(klasor, "index.html")
         open(yol, "w", encoding="utf-8").write(html_uret(data))
+        veri_json_yaz(data, os.path.join(klasor, "veri.json"))
         print("->", yol, "|", data["meta"]["examCount"], "sınav,", data["meta"]["assignmentCount"], "görev,", data["meta"]["proctorCount"], "gözetmen,", data["meta"]["teacherCount"], "öğretim üyesi")
