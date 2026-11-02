@@ -4,7 +4,7 @@
   "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
   "period": "2–6 Kasım 2026",
   "examCount": 120,
-  "assignmentCount": 91,
+  "assignmentCount": 90,
   "teacherCount": 45,
   "proctorCount": 14
  },
@@ -108,7 +108,7 @@
      "room": "6D1",
      "capacity": "17",
      "students": "14",
-     "proctor": "Şeyma Sertçelik",
+     "proctor": "Gerekmiyor",
      "departments": "SBUİ 11, HAV 3"
     }
    ]
@@ -3644,26 +3644,6 @@
    "room": "6A2",
    "roomStudents": "31",
    "proctor": "Merve Sevinç Sakar",
-   "note": ""
-  },
-  {
-   "id": "exam-2",
-   "date": "2026-11-02",
-   "dateLabel": "02.11.2026",
-   "day": "Pazartesi",
-   "start": "10:00",
-   "end": "10:50",
-   "courseCode": "2016B4030",
-   "course": "Terörizm ve İstihbarat",
-   "programs": [
-    "SBUİ-5"
-   ],
-   "teacher": "Erhan CANİKOĞLU",
-   "totalStudents": "14",
-   "examId": "exam-2",
-   "room": "6D1",
-   "roomStudents": "14",
-   "proctor": "Şeyma Sertçelik",
    "note": ""
   },
   {
