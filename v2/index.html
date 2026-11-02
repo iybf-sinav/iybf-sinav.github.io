@@ -927,6 +927,24 @@
     .zoom-content { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
     .zoom-content .week-wrap { overflow: visible; }
     .zoom-content .week-table { min-width: 0; }
+    /* Derslikler sekmesi (Değişiklik 1): kat kat derslik kartları */
+    #tab-rooms, #page-rooms { --accent: #0e7490; }
+    .floor-list { display: grid; gap: 14px; }
+    .floor-row { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; align-items: start; }
+    .floor-label { padding: 12px 0 0; color: var(--accent); font-size: 1rem; font-weight: 850; white-space: nowrap; }
+    .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; min-width: 0; }
+    .room-grid .department-button { --c: var(--accent); display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; min-height: 0; padding: 12px 14px; }
+    .room-grid .department-button:hover { border-color: var(--c); background: color-mix(in srgb, var(--c) 7%, white); }
+    .room-code { display: block; color: var(--navy); font-size: 1.3rem; font-weight: 850; line-height: 1.15; overflow-wrap: anywhere; }
+    .room-meta { display: block; margin-top: 4px; color: var(--muted); font-size: .78rem; line-height: 1.3; }
+    .course-table.is-room td:nth-child(3) { white-space: normal; }
+    @media (max-width: 560px) {
+      .floor-row { grid-template-columns: 1fr; gap: 6px; }
+      .floor-label { padding: 0 0 4px; border-bottom: 2px solid color-mix(in srgb, var(--accent) 30%, white); }
+      .room-grid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+      .room-grid .department-button { min-height: 0; padding: 10px 11px; }
+      .room-code { font-size: 1.12rem; }
+    }
     .png-uyari {
       margin: 0 0 16px;
       padding: 12px 16px;
@@ -1129,6 +1147,7 @@
     <div class="nav-inner" role="tablist">
       <button class="tab-button" id="tab-home" role="tab" aria-controls="page-home" aria-selected="true" data-page="home">Ana Sayfa</button>
       <button class="tab-button" id="tab-schedule" role="tab" aria-controls="page-schedule" aria-selected="false" data-page="schedule">Sınav Programları</button>
+      <button class="tab-button" id="tab-rooms" role="tab" aria-controls="page-rooms" aria-selected="false" data-page="rooms">Derslikler</button>
       <button class="tab-button" id="tab-teachers" role="tab" aria-controls="page-teachers" aria-selected="false" data-page="teachers">Öğretim Üyeleri</button>
       <button class="tab-button" id="tab-proctors" role="tab" aria-controls="page-proctors" aria-selected="false" data-page="proctors">Gözetmenler</button>
       <button class="tab-button" id="tab-panel" role="tab" aria-controls="page-panel" aria-selected="false" data-page="panel">Panel</button>
@@ -1172,6 +1191,17 @@
         <button class="add-exam-button" id="add-exam-button" type="button" hidden>+ Yeni sınav ekle</button>
       </div>
       <div class="department-grid" id="department-grid"></div>
+    </section>
+
+    <section class="page" id="page-rooms" role="tabpanel" aria-labelledby="tab-rooms" hidden>
+      <div class="page-heading">
+        <div>
+          <h2>Derslikler</h2>
+          <p>Kat kat derslikler. Bir dersliğe tıklayarak o derslikteki sınavları liste veya haftalık takvim olarak görüntüleyin.</p>
+        </div>
+        <span class="summary-pill" id="room-summary"></span>
+      </div>
+      <div class="floor-list" id="floor-list"></div>
     </section>
 
     <section class="page" id="page-teachers" role="tabpanel" aria-labelledby="tab-teachers" hidden>
@@ -1220,7 +1250,7 @@
         </div>
       </div>
       <ol class="feature-list">
-        <li>Henüz yeni özellik yok; v2 şu an canlı sitenin kopyası.</li>
+        <li><strong>Değişiklik 1 · Derslikler sekmesi.</strong> Sınav Programları'ndan sonra yeni “Derslikler” sekmesi: derslikler kat kat dizilir (en üst kat en üstte; satır içinde önce A, sonra D derslikleri). Kartta sınav sayısı ve kapasite yazar; dersliğe tıklayınca o derslikteki sınavlar liste ya da takvim olarak açılır (PNG indir ve yakınlaştırma dahil).</li>
       </ol>
     </section>
   </main>
@@ -1440,7 +1470,7 @@
       });
       if (pageName === "panel") openPanel();
       if (updateHash) {
-        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", features: "yeni-ozellikler" };
+        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", features: "yeni-ozellikler" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1504,6 +1534,10 @@
           return { exam: exam, rooms: exam.rooms.map(function (room) { return room.room; }).filter(Boolean) };
         }).sort(function (a, b) { return examOrder(a.exam, b.exam); });
       }
+      if (type === "room") {
+        const found = roomIndex().find(function (item) { return item.code === name; });
+        return found ? found.entries.slice() : [];
+      }
       if (type === "teacher") {
         return DATA.exams.filter(function (exam) { return exam.teacher === name; }).map(function (exam) {
           return { exam: exam, rooms: exam.rooms.map(function (room) { return room.room; }).filter(Boolean) };
@@ -1519,20 +1553,103 @@
       }).sort(function (a, b) { return examOrder(a.exam, b.exam); });
     }
 
-    function courseListHtml(entries, showTeacher, showPrograms) {
+    // roomMode (Derslikler): Derslik sütunu yerine Gözetmen sütunu (entry.proctor)
+    function courseListHtml(entries, showTeacher, showPrograms, roomMode) {
       if (!entries.length) return '<div class="empty-list">Programda sınav bulunmuyor.</div>';
-      return '<div class="week-wrap"><table class="course-table"><thead><tr>' +
-        '<th>Gün</th><th>Saat</th><th>Derslik</th><th>Ders adı</th>' + (showTeacher ? '<th>Öğretim elemanı</th>' : '') +
-        (showPrograms ? '<th>Programlar</th>' : '') + '</tr></thead><tbody>' + entries.map(function (entry) {
+      return '<div class="week-wrap"><table class="course-table' + (roomMode ? ' is-room' : '') + '"><thead><tr>' +
+        '<th>Gün</th><th>Saat</th>' + (roomMode ? '' : '<th>Derslik</th>') + '<th>Ders adı</th>' + (showTeacher ? '<th>Öğretim elemanı</th>' : '') +
+        (roomMode ? '<th>Gözetmen</th>' : '') + (showPrograms ? '<th>Programlar</th>' : '') + '</tr></thead><tbody>' + entries.map(function (entry) {
         const exam = entry.exam;
         return '<tr data-exam-id="' + esc(exam.id) + '" tabindex="0">' +
           '<td>' + esc(exam.day) + ' <small>' + esc(exam.dateLabel.slice(0, 5)) + '</small></td>' +
           '<td>' + esc(exam.start) + '–' + esc(exam.end) + '</td>' +
-          '<td>' + esc(entry.rooms.join(", ")) + '</td>' +
-          '<td><strong>' + esc(exam.course) + '</strong></td>' +
+          (roomMode ? '' : '<td>' + esc(entry.rooms.join(", ")) + '</td>') +
+          '<td><strong>' + esc(exam.course) + '</strong>' + (entry.joined ? ' <small>(birleşik salon ' + esc(entry.joined) + ')</small>' : '') + '</td>' +
           (showTeacher ? '<td>' + esc(exam.teacher) + '</td>' : '') +
+          (roomMode ? '<td>' + esc(entry.proctor) + '</td>' : '') +
           (showPrograms ? '<td class="programs-cell">' + esc(exam.programs.join(", ")) + '</td>' : '') + '</tr>';
       }).join("") + '</tbody></table></div>';
+    }
+
+    // ---- Derslikler (Değişiklik 1) ----
+    // Derslik listesi sınavların derslik alanlarından türetilir. Birleşik salon ("3A5-3A6-3D6-3D7") her parçasında sayılır.
+    // Kat: koddaki baştaki sayı (7D1 → 7, 11L5 → 11); rakamla başlamayanlar "Diğer" satırında.
+    function roomParts(name) {
+      const text = String(name || "").trim();
+      const parts = text.split(/\s*[-–,\/]\s*/).filter(Boolean);
+      return parts.length > 1 && parts.every(function (part) { return /^\d/.test(part); }) ? parts : [text];
+    }
+
+    function proctorLabel(proctor) {
+      if (!proctor || proctor === "Gerekmiyor") return "Gerekmiyor (dersin hocası)";
+      return proctor;
+    }
+
+    function roomIndex() {
+      const map = {};
+      DATA.exams.forEach(function (exam) {
+        exam.rooms.forEach(function (room) {
+          const parts = roomParts(room.room);
+          parts.forEach(function (code) {
+            if (!/[0-9A-Za-zÇĞİÖŞÜçğıöşü]/.test(code)) return;   // boş / geçersiz kod
+            const item = map[code] = map[code] || { code: code, entries: [], capacities: [] };
+            if (parts.length === 1 && /^\d+$/.test(room.capacity || "")) item.capacities.push(Number(room.capacity));
+            const old = item.entries.find(function (entry) { return entry.exam.id === exam.id; });
+            const proctor = proctorLabel(room.proctor);
+            if (old) { if (old.proctor.indexOf(proctor) === -1) old.proctor += ", " + proctor; return; }
+            item.entries.push({ exam: exam, rooms: [code], proctor: proctor, joined: parts.length > 1 ? room.room : "" });
+          });
+        });
+      });
+      return Object.keys(map).map(function (code) {
+        const item = map[code];
+        const match = code.match(/^(\d+)\s*([^\d\s]*)\s*(\d*)/);
+        item.floor = match ? Number(match[1]) : null;
+        item.letter = match ? match[2].toLocaleUpperCase("tr-TR") : "";
+        item.number = match && match[3] ? Number(match[3]) : 0;
+        item.capacity = item.capacities.length ? Math.max.apply(null, item.capacities) : null;
+        item.entries.sort(function (a, b) { return examOrder(a.exam, b.exam); });
+        return item;
+      });
+    }
+
+    // Satır içi sıra: önce A, sonra D, sonra diğer harfler; her harfte numaraya göre
+    function roomOrder(a, b) {
+      const rank = function (letter) { return letter === "A" ? 0 : letter === "D" ? 1 : 2; };
+      return rank(a.letter) - rank(b.letter) || a.letter.localeCompare(b.letter, "tr") || a.number - b.number || a.code.localeCompare(b.code, "tr");
+    }
+
+    function renderRooms() {
+      const rooms = roomIndex();
+      const floors = {};
+      const other = [];
+      rooms.forEach(function (room) {
+        if (room.floor === null) other.push(room);
+        else (floors[room.floor] = floors[room.floor] || []).push(room);
+      });
+      const rows = Object.keys(floors).map(Number).sort(function (a, b) { return b - a; }).map(function (floor) {
+        return { label: floor + ". Kat", floor: String(floor), rooms: floors[floor].sort(roomOrder) };
+      });
+      if (other.length) rows.push({ label: "Diğer", floor: "diger", rooms: other.sort(function (a, b) { return a.code.localeCompare(b.code, "tr"); }) });
+      $("#floor-list").innerHTML = rows.length ? rows.map(function (row) {
+        return '<div class="floor-row" data-floor="' + esc(row.floor) + '"><div class="floor-label">' + esc(row.label) + '</div><div class="room-grid">' +
+          row.rooms.map(function (room) {
+            return '<button class="department-button" type="button" data-room="' + esc(room.code) + '">' +
+              '<span class="room-code">' + esc(room.code) + '</span>' +
+              '<span class="room-meta" data-room-count>' + room.entries.length + ' sınav</span>' +
+              (room.capacity !== null ? '<span class="room-meta">Kapasite ' + room.capacity + '</span>' : '') +
+            '</button>';
+          }).join("") + '</div></div>';
+      }).join("") : '<div class="empty-list">Programda derslik bilgisi yok.</div>';
+      $("#room-summary").textContent = rooms.length + " derslik";
+    }
+
+    function initRooms() {
+      renderRooms();
+      $("#floor-list").addEventListener("click", function (event) {
+        const card = event.target.closest("[data-room]");
+        if (card) openPerson("room", card.dataset.room);
+      });
     }
 
     // Haftalık takvim: satırlarda saatler, sütunlarda günler (programdaki bütün gün ve saatler)
@@ -1549,9 +1666,12 @@
           return '<td>' + entries.filter(function (entry) {
             return entry.exam.date === day.date && entry.exam.start === time;
           }).map(function (entry) {
+            // Derslik takviminde (entry.proctor): ders adı, öğretim elemanı, gözetmen
+            const lines = entry.proctor !== undefined
+              ? (entry.exam.teacher ? '<em>' + esc(entry.exam.teacher) + '</em>' : '') + '<span>Gözetmen: ' + esc(entry.proctor) + '</span>'
+              : '<span>' + esc(entry.rooms.join(", ")) + '</span>' + (showTeacher ? '<em>' + esc(entry.exam.teacher) + '</em>' : '');
             return '<button class="cal-item" type="button" data-exam-id="' + esc(entry.exam.id) + '">' +
-              '<strong>' + esc(entry.exam.course) + '</strong><span>' + esc(entry.rooms.join(", ")) + '</span>' +
-              (showTeacher ? '<em>' + esc(entry.exam.teacher) + '</em>' : '') + '</button>';
+              '<strong>' + esc(entry.exam.course) + '</strong>' + lines + '</button>';
           }).join("") + '</td>';
         }).join("") + '</tr>';
       }).join("") + '</tbody></table></div>';
@@ -1613,7 +1733,7 @@
       });
       const entries = personExams(currentPerson.type, currentPerson.name);
       const showTeacher = currentPerson.type !== "teacher";   // öğretim üyesinin kendi kartında tekrar yazılmaz
-      $("#person-modal-content").innerHTML = personView === "list" ? courseListHtml(entries, showTeacher, currentPerson.type === "all") : zoomHtml(weekHtml(entries, showTeacher));
+      $("#person-modal-content").innerHTML = personView === "list" ? courseListHtml(entries, showTeacher, currentPerson.type === "all", currentPerson.type === "room") : zoomHtml(weekHtml(entries, showTeacher));
       if (personView !== "list") zoomFit();
     }
 
@@ -1701,7 +1821,7 @@
     function openPerson(type, name) {
       currentPerson = { type: type, name: name };
       const department = DATA.departments.find(function (item) { return item.code === name; });
-      $("#person-modal-kind").textContent = { teacher: "Öğretim üyesi", proctor: "Gözetmen", department: "Bölüm sınav programı", all: "Tüm sınav programı" }[type];
+      $("#person-modal-kind").textContent = { teacher: "Öğretim üyesi", proctor: "Gözetmen", department: "Bölüm sınav programı", all: "Tüm sınav programı", room: "Derslik" }[type];
       $("#person-modal-title").textContent = type === "all" ? "İYBF Tüm Sınav Programı" : type === "department" ? department.name : name;
       renderPersonModal();
       openModal($("#person-modal"));
@@ -2972,6 +3092,7 @@
       $("#son-degisiklikler").innerHTML = changesHtml(DATA.updates);   // otomatik duyurular (Değişiklik 11)
       enrichChanges();
       peopleRefreshers.forEach(function (refresh) { refresh(); });
+      renderRooms();
       if ($("#person-modal").open && currentPerson) renderPersonModal();
     }
 
@@ -2979,6 +3100,7 @@
       $("#son-degisiklikler").innerHTML = changesHtml(DATA.updates);
       renderSummaries();
       initDepartments();
+      initRooms();
       initModals();
       initZoom();
       enrichChanges();
@@ -3016,6 +3138,7 @@
     const initialHash = location.hash.replace("#", "");
     const pageByHash = {
       "sinav-programi": "schedule",
+      "derslikler": "rooms",
       "ogretim-uyeleri": "teachers",
       "gozetmenler": "proctors",
       "panel": "panel",
