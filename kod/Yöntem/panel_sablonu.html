@@ -338,7 +338,7 @@ function yuk() {
   return `<div class="ozet"><span class="rozet"><b>Gözetmen yükü</b></span><span class="rozet">En çok ${max} görev</span></div>
     <div class="tablo-kap"><table class="yuk"><thead><tr><th>Gözetmen</th><th>Toplam*</th><th>Atanan</th><th>Kendi sınavı</th><th>İngilizce</th><th>Muafiyet sınavı (saat)**</th>${KISA.map(k => `<th>${k}</th>`).join("")}<th>İzin / not</th></tr></thead>
     <tbody>${satir}</tbody><tfoot><tr><td style="padding:8px 10px;text-align:left">Günlük toplam</td><td></td><td></td><td></td><td></td><td></td>${gt}<td></td></tr></tfoot></table></div>
-    <div class="not-yazi">* Toplam: kendi dersi dahil; 90 dakikalık ve 2 saatlik sınavlar 2 görev sayılır. Çizgili günler gözetmenin izin günüdür.<br>** Ortak dersler muafiyet sınavında görev (2 saat); Toplam’a katılmaz.</div>`;
+    <div class="not-yazi">* Toplam: kendi dersi ve muafiyet sınavı dahil; 90 dakikalık ve 2 saatlik sınavlar 2 görev sayılır. Çizgili günler gözetmenin izin günüdür.<br>** Ortak dersler muafiyet sınavında görev (2 saat); Toplam’a dahildir.</div>`;
 }
 </script>
 </body>
