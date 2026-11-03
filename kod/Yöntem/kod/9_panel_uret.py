@@ -93,7 +93,7 @@ def veri_olustur(liste_no):
         if m:
             izin = [KISA.index(x.strip()) for x in m.group(1).split(",") if x.strip() in KISA]
         kisiler[r[0]] = {"ad": r[0], "toplam": r[1], "atanan": r[2], "kendi": r[3], "ing": r[4], "gunluk": list(r[5:10]),
-                         "izin": izin, "not": r[10] or "", "mail": posta.get(r[0], ""), "mesgul": []}
+                         "izin": izin, "not": r[10] or "", "mail": posta.get(r[0], ""), "muaf": (r[11] if len(r) > 11 else 0) or 0, "mesgul": []}
     for (ders, g, h), gor in atama.items():
         dk = sure.get((ders, g, h), 60)
         n = math.ceil(dk / 60)

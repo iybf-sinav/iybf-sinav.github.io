@@ -332,13 +332,13 @@ function gozetmenler() {
 
 function yuk() {
   const max = Math.max(...D.kisiler.map(k => k.toplam));
-  const satir = D.kisiler.map(k => `<tr><td>${esc(k.ad)}</td><td><b>${k.toplam}</b></td><td>${k.atanan}</td><td class="${k.kendi ? "" : "sifir"}">${k.kendi}</td><td class="${k.ing ? "" : "sifir"}">${k.ing}</td>` +
+  const satir = D.kisiler.map(k => `<tr><td>${esc(k.ad)}</td><td><b>${k.toplam}</b></td><td>${k.atanan}</td><td class="${k.kendi ? "" : "sifir"}">${k.kendi}</td><td class="${k.ing ? "" : "sifir"}">${k.ing}</td><td class="${k.muaf ? "" : "sifir"}">${k.muaf}</td>` +
     k.gunluk.map((n, g) => `<td class="${k.izin.includes(g) ? "izin-gun " : ""}${n ? "" : "sifir"}">${n}</td>`).join("") + `<td class="izn">${esc(k.not)}</td></tr>`).join("");
   const gt = [0, 1, 2, 3, 4].map(g => `<td><b>${D.kisiler.reduce((t, k) => t + k.gunluk[g], 0)}</b></td>`).join("");
   return `<div class="ozet"><span class="rozet"><b>Gözetmen yükü</b></span><span class="rozet">En çok ${max} görev</span></div>
-    <div class="tablo-kap"><table class="yuk"><thead><tr><th>Gözetmen</th><th>Toplam*</th><th>Atanan</th><th>Kendi sınavı</th><th>İngilizce</th>${KISA.map(k => `<th>${k}</th>`).join("")}<th>İzin / not</th></tr></thead>
-    <tbody>${satir}</tbody><tfoot><tr><td style="padding:8px 10px;text-align:left">Günlük toplam</td><td></td><td></td><td></td><td></td>${gt}<td></td></tr></tfoot></table></div>
-    <div class="not-yazi">* Toplam: kendi dersi dahil; 90 dakikalık ve 2 saatlik sınavlar 2 görev sayılır. Çizgili günler gözetmenin izin günüdür.</div>`;
+    <div class="tablo-kap"><table class="yuk"><thead><tr><th>Gözetmen</th><th>Toplam*</th><th>Atanan</th><th>Kendi sınavı</th><th>İngilizce</th><th>Muafiyet sınavı (saat)**</th>${KISA.map(k => `<th>${k}</th>`).join("")}<th>İzin / not</th></tr></thead>
+    <tbody>${satir}</tbody><tfoot><tr><td style="padding:8px 10px;text-align:left">Günlük toplam</td><td></td><td></td><td></td><td></td><td></td>${gt}<td></td></tr></tfoot></table></div>
+    <div class="not-yazi">* Toplam: kendi dersi dahil; 90 dakikalık ve 2 saatlik sınavlar 2 görev sayılır. Çizgili günler gözetmenin izin günüdür.<br>** Ortak dersler muafiyet sınavında görev (2 saat); Toplam’a katılmaz.</div>`;
 }
 </script>
 </body>
