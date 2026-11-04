@@ -839,6 +839,34 @@
     .data-info { max-width: 760px; margin: 0 0 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: .92rem; line-height: 1.5; }
     .panel-subnav { margin-bottom: 14px; flex-wrap: wrap; max-width: 100%; }
     #page-rules { --accent: #475569; }
+    /* Panel'e tek şifreyle giriş (Değişiklik 7) */
+    .panel-gate { max-width: 440px; margin: 10px auto 0; padding: 26px 24px; border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: var(--shadow); }
+    .panel-gate h2 { margin: 0; color: var(--navy); font-size: 1.35rem; }
+    .panel-gate p { margin: 6px 0 16px; color: var(--muted); font-size: .92rem; }
+    .panel-gate label { display: block; margin-bottom: 6px; color: var(--navy); font-size: .82rem; font-weight: 800; }
+    .panel-gate input { width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; font: inherit; }
+    .panel-gate button { width: 100%; margin-top: 12px; padding: 11px 16px; border: 0; border-radius: 10px; color: #fff; background: var(--navy); font: inherit; font-weight: 800; cursor: pointer; }
+    .panel-gate button:disabled { opacity: .6; cursor: progress; }
+    .panel-gate-error { min-height: 1.4em; margin: 10px 0 0 !important; color: #b42318 !important; font-weight: 700; }
+    .panel-gate-error.is-info { color: var(--muted) !important; }
+    .view-toggle .panel-lock { margin-left: 8px; color: #b42318; }
+    /* Kurallar kategori sekmeleri ve gözetmen kısıtları tablosu (Değişiklik 7) */
+    .rules-tabs { display: flex; flex-wrap: wrap; max-width: 100%; }
+    .rules-tabs small { margin-left: 4px; opacity: .7; font-weight: 600; }
+    .proctor-limits { margin: 0 0 16px; padding: 14px 16px; border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 12px; background: #fff; }
+    .proctor-limits h3 { margin: 0 0 4px; font-size: 1.02rem; color: var(--navy); }
+    .proctor-limits > p { margin: 0 0 10px; color: var(--muted); font-size: .88rem; }
+    .proctor-limits-wrap { overflow-x: auto; }
+    .proctor-limits table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .proctor-limits th, .proctor-limits td { padding: 7px 8px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .proctor-limits th { color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .03em; border-top: 0; }
+    .proctor-limits td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .proctor-limits .pl-rule { display: block; }
+    .proctor-limits .pl-rule b { color: #64748b; font-weight: 600; margin-right: 3px; }
+    @media (max-width: 560px) { .proctor-limits table, .proctor-limits thead, .proctor-limits tbody, .proctor-limits tr, .proctor-limits td { display: block; }
+      .proctor-limits thead { display: none; } .proctor-limits tr { padding: 8px 0; border-top: 1px solid var(--line); }
+      .proctor-limits td { padding: 2px 0; border: 0; } .proctor-limits td.num { text-align: left; }
+      .proctor-limits td[data-label]::before { content: attr(data-label) ": "; color: var(--muted); font-weight: 700; } }
     .rules-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
     .rules-filters .search-input { flex: 1 1 220px; min-width: 0; max-width: 100%; }
     .rules-filters .filter-select { flex: 0 1 auto; max-width: 100%; }
@@ -1354,12 +1382,23 @@
       <div class="department-grid env-grid" id="env-departments"></div>
     </section>
 
+    <section class="page" id="page-panelgate" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <form class="panel-gate" id="panel-gate-form" novalidate>
+        <h2>Panel</h2>
+        <p>Panel'in bütün bölümleri (Panel, Veriler, Kurallar, Yeni Özellikler) şifreyle açılır. Şifre bu sekme kapanana kadar hatırlanır.</p>
+        <label for="panel-gate-password">Panel şifresi</label>
+        <input id="panel-gate-password" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="current-password">
+        <button type="submit" id="panel-gate-submit">Paneli aç</button>
+        <p class="panel-gate-error" id="panel-gate-error" role="alert" aria-live="polite"></p>
+      </form>
+    </section>
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="panel" aria-pressed="true">Panel</button>
         <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
+        <button type="button" class="panel-lock" data-panel-lock>Paneli kilitle</button>
       </div>
       <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
@@ -1370,6 +1409,7 @@
         <button type="button" data-subpage="data" aria-pressed="true">Veriler</button>
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
+        <button type="button" class="panel-lock" data-panel-lock>Paneli kilitle</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1386,6 +1426,7 @@
         <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
         <button type="button" data-subpage="rules" aria-pressed="true">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
+        <button type="button" class="panel-lock" data-panel-lock>Paneli kilitle</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1393,6 +1434,7 @@
           <p>Sınav programının hangi kurallarla kurulduğu. Kurallar komisyonun yerleştirme kodundan ve belgelerinden derlendi. “Genel” her dönem geçerli kuraldır; “Bu dönem” Kasım 2026 vizesine özel karardır. Liste finalde gözden geçirilecek.</p>
         </div>
       </div>
+      <div class="view-toggle rules-tabs" id="rules-tabs" role="group" aria-label="Kural kategorileri"></div>
       <div class="rules-filters">
         <label class="sr-only" for="rules-search">Kurallarda ara</label>
         <input class="search-input" id="rules-search" type="search" placeholder="Kurallarda ara…" autocomplete="off">
@@ -1412,6 +1454,7 @@
         </select>
         <span class="rules-count" id="rules-count" role="status" aria-live="polite"></span>
       </div>
+      <div id="proctor-limits" hidden></div>
       <div id="rules-list"><p class="rules-empty">Kurallar yükleniyor…</p></div>
       <p class="rules-doc">Belgenin tamamı: <a href="https://github.com/iybf-sinav/iybf-sinav.github.io/blob/main/2627vizeprogrami/v2/KURALLAR.md" target="_blank" rel="noopener">KURALLAR.md</a></p>
     </section>
@@ -1421,6 +1464,7 @@
         <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="true">Yeni Özellikler</button>
+        <button type="button" class="panel-lock" data-panel-lock>Paneli kilitle</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1435,6 +1479,7 @@
         <li><strong>Değişiklik 4 · Başlıkta uygulama geçişi ve Panel'de Veriler sekmesi.</strong> Uygulama geçiş düğmesi menünün üstünden başlığa (Düzenleyici girişi düğmesinin yanına) taşındı; başlık metni, sekme başlığı ve başlık rengi uygulamaya göre değişir (Sınav Takip mavi-yeşil, Sınav Zarfı Takip bordo-mor). “Excel olarak indir” düğmesi Panel'in yeni “Veriler” alt sekmesine (#veriler) taşındı.</li>
         <li><strong>Değişiklik 5 · Panel'de Kurallar sekmesi.</strong> Panel'in yeni “Kurallar” alt sekmesi (#kurallar) sınav programının kurulduğu kuralları bölüm bölüm gösterir (komisyonun yerleştirme kodundan ve belgelerinden derlenen 171 kural). Kurallar aranabilir; kapsama (Genel / Bu dönem) ve türe (Sert / Yumuşak / Sayım / Bilgi) göre süzülebilir. “Çelişkiler” ve “Finalde sorulacaklar” bölümleri vurgulanır.</li>
         <li><strong>Değişiklik 6 · Yeni başlık ve uygulama seçici.</strong> Başlıkta yalnız fakültenin adı yazar; alt satır iki uygulamada da “2026-2027 Güz Dönemi Vize Sınav Takip Uygulaması · 2–6 Kasım 2026”dır. Başlığın sağındaki iki düğmeli seçiciyle (“Sınav Programı” | “Sınav Zarfları”, seçili olan beyaz) uygulamalar arasında geçilir; eski “…Uygulamasına geç” düğmesi kalktı. Başlık rengi uygulamaya göre değişmeye devam eder; telefonda düğmeler başlığın altına iner. Başlık metinleri ve sekme başlığı veri.json'daki meta alanlarından (programName, period) gelir; düzenlemelerin yazıldığı dosya sayfanın klasöründen bulunur. Böylece site klasörü kopyalanıp yeni dönem için kullanılabilir (bkz. /bossablon/). Sınav eklerken programda olmayan bir gün için “Başka tarih…” seçilebilir.</li>
+        <li><strong>Değişiklik 7 · Panel'e tek şifreyle giriş ve Kurallar sekmeleri.</strong> Panel sekmesi (ve #panel, #veriler, #kurallar, #yeni-ozellikler adresleri) önce şifre ister; alt sekmeler ve içerik şifre doğrulanınca açılır. Şifre sitede yazılı değildir: sahibin panelinin şifreli paketiyle doğrulanır; aynı tarayıcı sekmesinde yeniden sorulmaz ve sahibin paneli de ikinci kez şifre istemez. “Paneli kilitle” düğmesi şifreyi unutturur. Düzenleyici girişi bundan bağımsızdır. Kurallar sayfası kategori sekmelerine ayrıldı (Tümü · Takvim · Sınav yerleştirme · Derslikler · Gözetmen kısıtları · Görev sayımı · Bu döneme özel kararlar · Çelişkiler · Finalde sorulacaklar · Diğer); arama ve süzgeçler seçili sekmede çalışır. “Gözetmen kısıtları” sekmesinde ayrıca her gözetmenin izin günleri, toplam görevi, sınav sayısı ve adının geçtiği döneme özel kararlar sitenin güncel verisinden tablo olarak gösterilir.</li>
       </ol>
     </section>
   </main>
@@ -1669,7 +1714,7 @@
         '<p>' + count + ' ' + noun + '</p></div></div>';
     }
 
-    // Panel sayfasındaki alt sekmeler: Panel | Veriler | Kurallar | Yeni Özellikler
+    // Panel sayfasındaki alt sekmeler: Panel | Veriler | Kurallar | Yeni Özellikler (hepsi tek şifreyle açılır, Değişiklik 7)
     document.addEventListener("click", function (event) {
       const button = event.target.closest("[data-subpage]");
       if (button) activatePage(button.dataset.subpage, true);
@@ -1679,6 +1724,68 @@
     let RULES = null;
     const RULE_TYPE = { sert: "Sert", yumusak: "Yumuşak", sayim: "Sayım", bilgi: "Bilgi" };
     const RULE_SCOPE = { genel: "Genel", donem: "Bu dönem" };
+    // Kategori sekmeleri (Değişiklik 7): kurallar.json "bolum" alanının numarasına göre; listede olmayan numaralar "Diğer"e düşer
+    const RULE_TABS = [
+      { key: "tumu", label: "Tümü" },
+      { key: "takvim", label: "Takvim", nums: [1] },
+      { key: "yerlestirme", label: "Sınav yerleştirme", nums: [2, 3] },
+      { key: "derslik", label: "Derslikler", nums: [4] },
+      { key: "gozetmen", label: "Gözetmen kısıtları", nums: [5] },
+      { key: "sayim", label: "Görev sayımı", nums: [6] },
+      { key: "donem", label: "Bu döneme özel kararlar", nums: [9] },
+      { key: "celiski", label: "Çelişkiler", nums: [11] },
+      { key: "final", label: "Finalde sorulacaklar", nums: [12] },
+      { key: "diger", label: "Diğer" }   // veri tuzakları, yayından sonraki değişiklikler, site ve panel
+    ];
+    let rulesTab = "tumu";
+    function ruleTab(rule) {
+      const number = parseInt(rule.bolum, 10);
+      const tab = RULE_TABS.find(function (item) { return item.nums && item.nums.indexOf(number) !== -1; });
+      return tab ? tab.key : "diger";
+    }
+    function renderRuleTabs() {
+      $("#rules-tabs").innerHTML = RULE_TABS.map(function (tab) {
+        const count = tab.key === "tumu" ? RULES.length : RULES.filter(function (rule) { return ruleTab(rule) === tab.key; }).length;
+        if (!count && tab.key !== "tumu") return "";
+        return '<button type="button" data-rules-tab="' + tab.key + '" aria-pressed="' + (tab.key === rulesTab) + '">' + esc(tab.label) + '<small>' + count + '</small></button>';
+      }).join("");
+    }
+    document.addEventListener("click", function (event) {
+      const button = event.target.closest("[data-rules-tab]");
+      if (!button || !RULES || !RULES.length) return;
+      rulesTab = button.dataset.rulesTab;
+      $$("[data-rules-tab]").forEach(function (item) { item.setAttribute("aria-pressed", String(item === button)); });
+      renderRules();
+    });
+    // Gözetmen kısıtları sekmesi: canlı veriden her gözetmenin izin günleri, görev sayısı ve kişiye özel kararlar
+    function proctorLimitsHtml() {
+      if (!DATA) return '<p class="rules-empty">Sınav verisi yükleniyor…</p>';
+      const counts = proctorTaskCounts();
+      const leave = {};
+      (DATA.proctorAvailability || []).forEach(function (item) { leave[item.name] = item.unavailable || []; });
+      const names = Array.from(new Set((DATA.proctors || []).concat(Object.keys(leave)))).filter(Boolean)
+        .sort(function (a, b) { return a.localeCompare(b, "tr"); });
+      if (!names.length) return '<div class="proctor-limits"><h3>Gözetmenler</h3><p>Veride gözetmen yok.</p></div>';
+      const personal = RULES.filter(function (rule) { return rule.kapsam === "donem"; });
+      const rows = names.map(function (name) {
+        const key = nameKey(name);
+        const exams = {};
+        (DATA.assignments || []).forEach(function (item) { if (item.proctor === name) exams[item.examId] = true; });
+        const days = (leave[name] || []).map(function (item) { return item.day + (item.reason && item.reason !== "izin" ? " (" + item.reason + ")" : ""); });
+        const rules = personal.filter(function (rule) { return nameKey(rule.baslik + " " + rule.aciklama).indexOf(key) !== -1; });
+        return '<tr><td><strong>' + esc(name) + '</strong></td>' +
+          '<td data-label="İzin günleri">' + (days.length ? esc(days.join(", ")) : "—") + '</td>' +
+          '<td class="num" data-label="Toplam görev">' + (counts[name] || 0) + '</td>' +
+          '<td class="num" data-label="Sınav">' + Object.keys(exams).length + '</td>' +
+          '<td data-label="Kişiye özel kararlar">' + (rules.length ? rules.map(function (rule) {
+            return '<span class="pl-rule"><b>' + esc(rule.id) + '</b>' + esc(rule.baslik) + '</span>';
+          }).join("") : "—") + '</td></tr>';
+      }).join("");
+      return '<div class="proctor-limits"><h3>Gözetmenlerin izin günleri ve görev yükü</h3>' +
+        '<p>Sitenin güncel verisinden (veri.json): izin günleri, toplam görev (90 dk ve üzeri sınav 2 görev sayılır), sınav sayısı ve adının geçtiği döneme özel kararlar.</p>' +
+        '<div class="proctor-limits-wrap"><table><thead><tr><th>Gözetmen</th><th>İzin günleri</th><th>Toplam görev</th><th>Sınav</th><th>Kişiye özel kararlar</th></tr></thead><tbody>' +
+        rows + '</tbody></table></div></div>';
+    }
     function openRules() {
       if (RULES) return;
       RULES = [];
@@ -1688,6 +1795,7 @@
       }).then(function (data) {
         if (!Array.isArray(data)) throw new Error("beklenen liste yok");
         RULES = data;
+        renderRuleTabs();
         renderRules();
       }).catch(function (error) {
         RULES = null;
@@ -1698,7 +1806,11 @@
       if (!RULES || !RULES.length) return;
       const query = $("#rules-search").value.trim().toLocaleLowerCase("tr");
       const scope = $("#rules-scope").value, type = $("#rules-type").value;
+      const limits = $("#proctor-limits");
+      limits.hidden = rulesTab !== "gozetmen";
+      limits.innerHTML = rulesTab === "gozetmen" ? proctorLimitsHtml() : "";
       const shown = RULES.filter(function (rule) {
+        if (rulesTab !== "tumu" && ruleTab(rule) !== rulesTab) return false;
         if (scope && rule.kapsam !== scope) return false;
         if (type && rule.tur !== type) return false;
         return !query || [rule.baslik, rule.aciklama, rule.kaynak].join(" ").toLocaleLowerCase("tr").indexOf(query) !== -1;
@@ -1709,7 +1821,7 @@
         if (!groups[rule.bolum]) { groups[rule.bolum] = []; order.push(rule.bolum); }
         groups[rule.bolum].push(rule);
       });
-      const filtering = Boolean(query || scope || type);
+      const filtering = Boolean(query || scope || type || rulesTab !== "tumu");
       $("#rules-list").innerHTML = order.length ? order.map(function (name, index) {
         const warn = /Çelişki|Finalde/.test(name);
         // süzgeç yokken ilk iki bölüm ile vurgulu bölümler açık; süzgeç varken hepsi açık
@@ -1754,14 +1866,18 @@
       document.body.dataset.app = app;
       $$(".tab-button[data-app]").forEach(function (button) { button.hidden = button.dataset.app !== app; });
       renderHeader();
+      // Panel bölümleri şifre doğrulanana kadar açılmaz; yerine şifre kapısı görünür (Değişiklik 7)
+      let shown = pageName;
+      if (PANEL_PAGES.indexOf(pageName) !== -1 && !panelOpen) { panelTarget = pageName; shown = "panelgate"; }
       $$(".tab-button").forEach(function (button) {
-        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" || pageName === "data" || pageName === "rules" ? "panel" : pageName)));
+        button.setAttribute("aria-selected", String(button.dataset.page === (PANEL_PAGES.indexOf(pageName) !== -1 ? "panel" : pageName)));
       });
       $$(".page").forEach(function (page) {
-        page.hidden = page.id !== "page-" + pageName;
+        page.hidden = page.id !== "page-" + shown;
       });
-      if (pageName === "panel") openPanel();
-      if (pageName === "rules") openRules();
+      if (shown === "panelgate") showPanelGate();
+      if (shown === "panel") openPanel();
+      if (shown === "rules") openRules();
       if (updateHash) {
         const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler", rules: "kurallar" };
         history.replaceState(null, "", "#" + hashes[pageName]);
@@ -3774,6 +3890,99 @@
     function panelPeople() { return Promise.resolve([]); }   // adresler epostalar.json'dan alınır
     function clearSecrets() {}
 
+    // ---- Panel'e tek şifreyle giriş (Değişiklik 7) ----
+    // Şifre koda yazılmaz: kök panel sayfasındaki şifreli paket (const P = {s, v, c, i}) sahibin paneliyle aynı yöntemle
+    // (decryptPanel: PBKDF2-SHA256 → AES-GCM) çözülebiliyorsa şifre doğrudur. Doğru şifre sessionStorage "panel_sifre"ye yazılır;
+    // sahibin paneli (iframe) bu anahtarı okuyup kendi şifre ekranını atlar. "Paneli kilitle" anahtarı siler.
+    const PANEL_PAGES = ["panel", "data", "rules", "features"];
+    const PANEL_KEY = "panel_sifre";
+    let panelOpen = false;
+    let panelTarget = "panel";
+    let panelPacketLoad = null;
+    let panelStoredTried = false;
+
+    function panelPacket() {
+      if (!panelPacketLoad) {
+        panelPacketLoad = fetch(PANEL_URL, { cache: "no-store" }).then(function (response) {
+          if (!response.ok) throw new Error(String(response.status));
+          return response.text();
+        }).then(function (html) {
+          const match = html.match(/const P = (\{[^;]*?\});/);
+          const packet = match ? JSON.parse(match[1]) : null;
+          if (!packet || !packet.s || !packet.v || !packet.c || !packet.i) throw new Error("şifreli paket bulunamadı");
+          return packet;
+        }).catch(function (error) {
+          panelPacketLoad = null;
+          const wrapped = new Error("Panel sayfasına ulaşılamadı; bağlantınızı kontrol edip yeniden deneyin. (" + error.message + ")");
+          wrapped.network = true;
+          throw wrapped;
+        });
+      }
+      return panelPacketLoad;
+    }
+    function checkPanelPassword(password) {   // true: şifre doğru, false: yanlış; ağ sorununda hata
+      return panelPacket().then(function (packet) {
+        return decryptPanel(packet, password).then(function () { return true; }, function () { return false; });
+      });
+    }
+    function panelGateStatus(text, info) {
+      const box = $("#panel-gate-error");
+      box.textContent = text;
+      box.classList.toggle("is-info", !!info);
+    }
+    function unlockPanel(password) {
+      try { sessionStorage.setItem(PANEL_KEY, password); } catch (error) {}
+      panelOpen = true;
+      $("#panel-gate-password").value = "";
+      panelGateStatus("");
+      if (!$("#page-panelgate").hidden) activatePage(panelTarget, false);
+    }
+    function lockPanel() {
+      try { sessionStorage.removeItem(PANEL_KEY); } catch (error) {}
+      panelOpen = false;
+      panelStoredTried = true;
+      const frame = $("#panel-frame");   // açık panel de kapanır; yeniden açılınca şifre sorulur
+      frame.removeAttribute("src");
+      delete frame.dataset.open;
+      activatePage("panel", true);
+    }
+    function showPanelGate() {
+      let saved = "";
+      try { saved = sessionStorage.getItem(PANEL_KEY) || ""; } catch (error) {}
+      if (saved && !panelStoredTried) {   // aynı sekme oturumunda yeniden sorulmaz
+        panelStoredTried = true;
+        panelGateStatus("Kayıtlı şifre doğrulanıyor…", true);
+        checkPanelPassword(saved).then(function (valid) {
+          if (valid) { unlockPanel(saved); return; }
+          try { sessionStorage.removeItem(PANEL_KEY); } catch (error) {}
+          panelGateStatus("");
+        }).catch(function (error) { panelStoredTried = false; panelGateStatus(error.message); });
+        return;
+      }
+      if (!saved || panelStoredTried) setTimeout(function () { if (!$("#page-panelgate").hidden) $("#panel-gate-password").focus(); }, 0);
+    }
+    $("#panel-gate-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const input = $("#panel-gate-password");
+      const submit = $("#panel-gate-submit");
+      const password = input.value;
+      if (!password.trim()) { panelGateStatus("Önce şifreyi yazın."); return; }
+      if (!(window.crypto && crypto.subtle)) { panelGateStatus("Bu tarayıcı şifre çözmeyi desteklemiyor; güncel bir tarayıcıyla açın."); return; }
+      submit.disabled = true;
+      panelGateStatus("Doğrulanıyor…", true);
+      checkPanelPassword(password).then(function (valid) {
+        submit.disabled = false;
+        if (valid) unlockPanel(password);
+        else { panelGateStatus("Şifre hatalı. Lütfen tekrar deneyin."); input.select(); }
+      }).catch(function (error) {
+        submit.disabled = false;
+        panelGateStatus(error.message);
+      });
+    });
+    document.addEventListener("click", function (event) {
+      if (event.target.closest("[data-panel-lock]")) lockPanel();
+    });
+
     function openPanel() {
       const frame = $("#panel-frame");
       if (frame.dataset.open) return;
@@ -3885,6 +4094,7 @@
       if ($("#envelope-modal").open && envView) renderEnvelopeModal();
       if ($("#envcard-modal").open && envExam) { envExam = examById(envExam.id) || envExam; renderEnvelopeCard(); }
       if ($("#person-modal").open && currentPerson) renderPersonModal();
+      if (RULES && RULES.length && rulesTab === "gozetmen") renderRules();
     }
 
     function initSite() {
