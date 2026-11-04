@@ -2896,7 +2896,7 @@
      "room": "6D4",
      "capacity": "25",
      "students": "28",
-     "proctor": "Seda Emir",
+     "proctor": "Şeyma Sertçelik",
      "departments": "YBS 28"
     }
    ]
@@ -4828,7 +4828,7 @@
    "examId": "exam-97",
    "room": "6D4",
    "roomStudents": "28",
-   "proctor": "Seda Emir",
+   "proctor": "Şeyma Sertçelik",
    "note": ""
   },
   {
@@ -5647,6 +5647,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "4 Kasım",
+   "tur": "Gözetmen",
+   "metin": "Veri Madenciliği sınavında (Perşembe 15:00, 6D4) gözetmen Seda Emir → Şeyma Sertçelik olarak değiştirildi.",
+   "examId": "exam-97"
+  },
   {
    "tarih": "4 Kasım",
    "tur": "Gözetmen",
