@@ -2924,14 +2924,16 @@
       (DATA.proctorAvailability || []).forEach(function (item) {
         izin[item.name] = (item.unavailable || []).map(function (u) { return excelText(u.day) + (u.reason ? " (" + excelText(u.reason) + ")" : ""); }).join(", ");
       });
+      const muaf = {};   // ortak ders muafiyet sınavı (saat): veri.json "muafiyetSaat"; Toplam'a dahildir
+      (DATA.muafiyetSaat || []).forEach(function (item) { muaf[item.name] = Number(item.saat) || 0; });
       const names = {};
       (DATA.proctors || []).concat(Object.keys(counts), Object.keys(izin)).forEach(function (name) { if (excelText(name)) names[name] = true; });
       const yuk = Object.keys(names).sort(function (a, b) { return a.localeCompare(b, "tr"); }).map(function (name) {
         const seen = {};
         (DATA.assignments || []).forEach(function (item) { if (item.proctor === name) seen[item.examId] = true; });
-        return [excelText(name), counts[name] || 0, Object.keys(seen).length, izin[name] || ""];
+        return [excelText(name), (counts[name] || 0) + (muaf[name] || 0), counts[name] || 0, muaf[name] || 0, Object.keys(seen).length, izin[name] || ""];
       });
-      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Toplam görev", "Sınav sayısı", "İzin günleri"], yuk), "Gözetmen yükü");
+      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Toplam görev (muafiyet dahil)", "Sınav görevi", "Muafiyet sınavı (saat)", "Sınav sayısı", "İzin günleri"], yuk), "Gözetmen yükü");
 
       const degisiklikler = (DATA.updates || []).map(function (item) { return [excelText(item.tarih), excelText(item.tur), excelText(item.metin)]; });
       XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Tarih", "Tür", "Metin"], degisiklikler), "Son değişiklikler");

@@ -31,6 +31,7 @@ Deneme sürümü (v2, https://iybf-sinav.github.io/v2/) sınav programını sayf
 | `proctors` | Zorunlu (türetilir) | Gözetmenler sayfasındaki isimler; `assignments`'tan hesaplanır. |
 | `updates` | İsteğe bağlı | Ana Sayfa'daki “Son değişiklikler” kutusu. Yoksa ya da boşsa kutu görünmez. |
 | `proctorAvailability` | İsteğe bağlı | Gözetmenlerin izinli / müsait olmadığı gün ve saatler. “Düzenle” bu günlere gözetmen atanmasını engeller. Yoksa ya da boşsa yalnız saat çakışması denetlenir. |
+| `muafiyetSaat` | İsteğe bağlı | Gözetmenin ortak ders muafiyet sınavında görev yaptığı saat: `[{"name": "Ad Soyad", "saat": 2}]`. Toplam görev sayısına eklenir (panel ve Excel indirme). Yoksa 0 sayılır. |
 
 “Türetilir” denen alanlar elle yazılmaz; `8_site_uret.py` (`veri_kur`) ve sitedeki “Düzenle” özelliği bunları sınavlardan aynı kuralla yeniden hesaplar.
 

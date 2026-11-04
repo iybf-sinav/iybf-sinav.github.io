@@ -5793,5 +5793,63 @@
     }
    ]
   }
+ ],
+ "muafiyetSaat": [
+  {
+   "name": "Seda Emir",
+   "saat": 0
+  },
+  {
+   "name": "Melih Mert Oskay",
+   "saat": 2
+  },
+  {
+   "name": "Mehmet Deniz Nalbantoğlu",
+   "saat": 2
+  },
+  {
+   "name": "Ozan Atalay",
+   "saat": 2
+  },
+  {
+   "name": "Taha Gümüş",
+   "saat": 2
+  },
+  {
+   "name": "Kadriye Giray",
+   "saat": 2
+  },
+  {
+   "name": "Hilal Önge",
+   "saat": 2
+  },
+  {
+   "name": "Şeyma Sertçelik",
+   "saat": 0
+  },
+  {
+   "name": "Duygu Yayla Eldem",
+   "saat": 2
+  },
+  {
+   "name": "Begüm İnanç",
+   "saat": 2
+  },
+  {
+   "name": "Tahsin Mert Saygın",
+   "saat": 2
+  },
+  {
+   "name": "Elif Nur Eken",
+   "saat": 2
+  },
+  {
+   "name": "Tunahan Başoğlu",
+   "saat": 2
+  },
+  {
+   "name": "Merve Sevinç Sakar",
+   "saat": 2
+  }
  ]
 }
