@@ -2442,6 +2442,32 @@
       return item ? Number(item.saat) || 0 : 0;
     }
 
+    // Müsait gözetmen için notlar: sınavın hemen öncesinde/sonrasında başka görevi var mı, kaç saat ardışık çalışır (panelle aynı kural)
+    function adjacentNotes(exam, name) {
+      if (!exam.start || !exam.end) return [];
+      const key = nameKey(name);
+      const hourOf = function (time) { return Number(String(time).slice(0, 2)); };
+      const sh = hourOf(exam.start);
+      const eh = hourOf(exam.end) + (Number(String(exam.end).slice(3, 5)) > 0 ? 1 : 0);
+      const spans = [];
+      DATA.exams.forEach(function (other) {
+        if (other.date !== exam.date || (exam.id && other.id === exam.id)) return;
+        if (!other.rooms.some(function (room) { return proctorNames(room.proctor).some(function (item) { return nameKey(item) === key; }); })) return;
+        spans.push([hourOf(other.start), hourOf(other.start) + examSessions(other)]);
+      });
+      const busy = function (hour) { return spans.some(function (span) { return hour >= span[0] && hour < span[1]; }); };
+      let run = eh - sh;
+      let hour = sh - 1;
+      while (busy(hour)) { run++; hour--; }
+      hour = eh;
+      while (busy(hour)) { run++; hour++; }
+      const notes = [];
+      if (busy(sh - 1)) notes.push("öncesinde sınavı var");
+      if (busy(eh)) notes.push("sonrasında sınavı var");
+      if (run >= 3) notes.push(run + " saat ardışık olur");
+      return notes;
+    }
+
     function splitProctor(value) {
       return String(value || "").split(",").map(function (item) { return item.trim(); }).filter(function (item) { return item && item !== "Gerekmiyor"; });
     }
@@ -2460,7 +2486,7 @@
         });
         if (key === oldKey) reasons.push("şu an bu derslikte");
         proctorProblems(DATA, exam, name).forEach(function (problem) { reasons.push(problem.short); });
-        return { name: name, count: (counts[name] || 0) + proctorMuafiyet(name), reasons: reasons };
+        return { name: name, count: (counts[name] || 0) + proctorMuafiyet(name), reasons: reasons, notes: reasons.length ? [] : adjacentNotes(exam, name) };
       }).sort(function (a, b) {
         return a.count - b.count || a.name.localeCompare(b.name, "tr");
       });
@@ -2479,7 +2505,7 @@
         (picker.oldName ? '<p class="editor-small">Yerine seçilecek: <strong>' + esc(picker.oldName) + '</strong></p>' : '<p class="editor-small">Seçilen gözetmen bu dersliğe eklenir.</p>') +
         '<h4 class="picker-heading">Müsait gözetmenler (' + free.length + ') · en az görevliden çoğa (muafiyet sınavı dahil)</h4>' +
         (free.length ? '<ul class="picker-list">' + free.map(function (item) {
-          return '<li class="pick-li"><button type="button" data-pick="' + esc(item.name) + '"><span class="pick-name">' + esc(item.name) + '</span>' +
+          return '<li class="pick-li"><button type="button" data-pick="' + esc(item.name) + '"><span class="pick-name">' + esc(item.name) + (item.notes.length ? '<small>' + esc(item.notes.join("; ")) + '</small>' : '') + '</span>' +
             (item.count === least ? '<span class="pick-badge">önerilen</span>' : '') +
             '<span class="pick-count">' + item.count + ' görev</span></button>' +
             '<button type="button" class="pick-mail" data-pick-mail="sor" data-name="' + esc(item.name) + '" title="Görev alıp alamayacağını soran e-posta taslağı açar">✉ Görev sor</button>' +
