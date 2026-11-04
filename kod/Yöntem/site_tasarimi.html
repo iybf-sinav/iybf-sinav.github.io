@@ -1976,7 +1976,7 @@
     // gözetmen atamaları ve sayımlar sınavlardan yeniden türetilir, dosya commit edilir.
     const GITHUB_API = "https://api.github.com";
     const GITHUB_REPO = "iybf-sinav/iybf-sinav.github.io";
-    const EDIT_FILE = "veri.json";
+    const EDIT_FILE = "2627vizeprogrami/veri.json";
     const EDITOR_KEY = "iybf-v2-duzenleyici-anahtar";
     const TOKEN_URL = "https://github.com/settings/tokens/new?scopes=repo&description=iybf-sinav";   // klasik anahtar; "repo" kutusu önceden işaretli
     const SAVED_TEXT = "Kaydedildi; sitede 1–2 dakika içinde görünür.";
@@ -2968,7 +2968,7 @@
     });
 
     // ---- Panel sekmesi: panel/ sayfası kendi şifre ekranıyla açılır (şifre panelde sorulur) ----
-    const PANEL_URL = "panel/?v=" + Math.floor(Date.now() / 600000);   // önbellek 10 dakikada bir yenilenir
+    const PANEL_URL = "../panel/?v=" + Math.floor(Date.now() / 600000);   // önbellek 10 dakikada bir yenilenir
     function panelPeople() { return Promise.resolve([]); }   // adresler epostalar.json'dan alınır
     function clearSecrets() {}
 

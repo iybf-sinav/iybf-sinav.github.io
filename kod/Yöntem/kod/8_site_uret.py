@@ -2,7 +2,7 @@
 
 Girdi : Sınav Çıktıları/Aşama 2 - Derslik Dosyası (6. Kat) ... .xlsx (6. kat programı)
         + okul dosyasındaki büyük salon/lab sınavları (aşağıda EKSTRA) + Sınav Çıktıları/Gözetmen Atamaları - Liste N ... .xlsx
-Çıktı : Sınav Çıktıları/GitHub Pages/Liste N/index.html  (GitHub Pages'e index.html olarak konur)
+Çıktı : Sınav Çıktıları/GitHub Pages/Liste N/index.html  (depoda 2627vizeprogrami/index.html olarak konur; kökteki index.html yönlendirmedir)
 Çalıştırma: py -3 Yöntem\\kod\\8_site_uret.py
 """
 import ast

@@ -1,12 +1,19 @@
 # İYBF Sınav Programı: kodlar ve notlar
 
-Bu klasör sayfayı üreten kodların güncel kopyasıdır (2 Kasım 2026). Canlı sayfa bu klasörün dışındaki `index.html` ve `panel/index.html` dosyalarıdır.
+Bu klasör sayfayı üreten kodların güncel kopyasıdır (2 Kasım 2026).
+
+## Klasör düzeni (4 Kasım 2026'dan itibaren)
+- `2627vizeprogrami/` : 2026-2027 Güz vize programı (canlı sayfa). `index.html`, `veri.json`, `epostalar.json` burada. Siteden yapılan düzenlemeler `2627vizeprogrami/veri.json`'a yazılır.
+- `2627vizeprogrami/v2/` : geliştiricilerin deneme sürümü.
+- `2627finalprogrami/` : final programı (hazırlanıyor). `bossablon/` : yeni dönem için boş şablon.
+- Kökteki `index.html` yalnız `2627vizeprogrami/`'ye YÖNLENDİRİR; üzerine site YAZMAYIN. Eski `v2/` adresi de yeni yere yönlendirir.
+- `panel/` kökte kalır (bütün dönemler `../panel/` ile açar).
 
 ## Sayfa nasıl üretilir
 1. `Yöntem/kod/7_gozetmenlik_formati.py` gözetmen kişi dosyalarını yazar.
 2. `Yöntem/kod/9_panel_uret.py` şifreli panel sayfasını üretir (`panel/index.html` olarak yüklenir).
 3. `Yöntem/kod/8_site_uret.py` ana sayfayı üretir (`index.html` olarak yüklenir).
-4. Üretilen iki dosya bu deponun kökündeki `index.html` ve `panel/index.html` yerine konur ve yüklenir.
+4. Üretilen dosyalar `2627vizeprogrami/index.html`, `2627vizeprogrami/veri.json` ve `panel/index.html` yerine konur ve yüklenir (kökteki `index.html` yönlendirmedir, ona dokunulmaz). `2627vizeprogrami/index.html`'de iki yol farklıdır: `EDIT_FILE = "2627vizeprogrami/veri.json"` ve `PANEL_URL = "../panel/?v=…"` (`Yöntem/site_tasarimi.html` bu hâliyle güncellendi).
 
 Girdi Excel dosyaları (derslik dosyası, gözetmen atamaları) bu depoda YOKTUR; her dönem yeniden verilir.
 
