@@ -3,9 +3,9 @@
   "institution": "İstanbul Esenyurt Üniversitesi",
   "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
   "period": "2–6 Kasım 2026",
-  "examCount": 121,
-  "assignmentCount": 92,
-  "teacherCount": 46,
+  "examCount": 120,
+  "assignmentCount": 90,
+  "teacherCount": 45,
   "proctorCount": 14
  },
  "departments": [
@@ -61,38 +61,6 @@
   }
  ],
  "exams": [
-  {
-   "id": "exam-126",
-   "date": "2026-11-02",
-   "dateLabel": "02.11.2026",
-   "day": "Pazartesi",
-   "start": "07:00",
-   "end": "07:50",
-   "courseCode": "0000000",
-   "course": "Muafiyet",
-   "programs": [
-    "Diğer"
-   ],
-   "teacher": "Yok",
-   "totalStudents": "100",
-   "notes": [],
-   "rooms": [
-    {
-     "room": "-",
-     "capacity": "5",
-     "students": "5",
-     "proctor": "Ozan Atalay",
-     "departments": "Diğer"
-    },
-    {
-     "room": "",
-     "capacity": "5",
-     "students": "5",
-     "proctor": "Melih Mert Oskay",
-     "departments": ""
-    }
-   ]
-  },
   {
    "id": "exam-1",
    "date": "2026-11-02",
@@ -5613,46 +5581,6 @@
    "roomStudents": "",
    "proctor": "Melih Mert Oskay",
    "note": ""
-  },
-  {
-   "id": "exam-126",
-   "date": "2026-11-02",
-   "dateLabel": "02.11.2026",
-   "day": "Pazartesi",
-   "start": "07:00",
-   "end": "07:50",
-   "courseCode": "0000000",
-   "course": "Muafiyet",
-   "programs": [
-    "Diğer"
-   ],
-   "teacher": "Yok",
-   "totalStudents": "100",
-   "examId": "exam-126",
-   "room": "-",
-   "roomStudents": "5",
-   "proctor": "Ozan Atalay",
-   "note": ""
-  },
-  {
-   "id": "exam-126",
-   "date": "2026-11-02",
-   "dateLabel": "02.11.2026",
-   "day": "Pazartesi",
-   "start": "07:00",
-   "end": "07:50",
-   "courseCode": "0000000",
-   "course": "Muafiyet",
-   "programs": [
-    "Diğer"
-   ],
-   "teacher": "Yok",
-   "totalStudents": "100",
-   "examId": "exam-126",
-   "room": "",
-   "roomStudents": "5",
-   "proctor": "Melih Mert Oskay",
-   "note": ""
   }
  ],
  "teachers": [
@@ -5696,7 +5624,6 @@
   "Tuğba KOYUNCU ÇAKMAK",
   "Vesam TALAB",
   "Yağmur ÇETİNTAŞ",
-  "Yok",
   "Zekeriya ŞAHİN",
   "Ülker BAŞAR",
   "İbrahim Bora ORAN",
@@ -5720,12 +5647,6 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
-  {
-   "tarih": "4 Kasım",
-   "tur": "Sınav",
-   "metin": "Muafiyet sınavı (Pazartesi 07:00, -) programa eklendi (gözetmen: Ozan Atalay, Melih Mert Oskay).",
-   "examId": "exam-126"
-  },
   {
    "tarih": "2 Kasım",
    "tur": "Gözetmen",
