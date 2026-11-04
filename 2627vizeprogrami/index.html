@@ -2435,6 +2435,13 @@
       return counts;
     }
 
+    // Ortak ders muafiyet sınavı (saat): veri.json "muafiyetSaat"; Seç ekranındaki görev sayısına eklenir
+    function proctorMuafiyet(name) {
+      const key = nameKey(name);
+      const item = (DATA.muafiyetSaat || []).find(function (entry) { return nameKey(entry.name) === key; });
+      return item ? Number(item.saat) || 0 : 0;
+    }
+
     function splitProctor(value) {
       return String(value || "").split(",").map(function (item) { return item.trim(); }).filter(function (item) { return item && item !== "Gerekmiyor"; });
     }
@@ -2453,7 +2460,7 @@
         });
         if (key === oldKey) reasons.push("şu an bu derslikte");
         proctorProblems(DATA, exam, name).forEach(function (problem) { reasons.push(problem.short); });
-        return { name: name, count: counts[name] || 0, reasons: reasons };
+        return { name: name, count: (counts[name] || 0) + proctorMuafiyet(name), reasons: reasons };
       }).sort(function (a, b) {
         return a.count - b.count || a.name.localeCompare(b.name, "tr");
       });
@@ -2470,7 +2477,7 @@
       $("#picker-modal-content").innerHTML =
         '<p class="picker-slot">' + esc(exam.dateLabel + " " + exam.day + " · " + exam.start + "–" + exam.end + " · Derslik " + (room.room || "belirtilmemiş")) + '</p>' +
         (picker.oldName ? '<p class="editor-small">Yerine seçilecek: <strong>' + esc(picker.oldName) + '</strong></p>' : '<p class="editor-small">Seçilen gözetmen bu dersliğe eklenir.</p>') +
-        '<h4 class="picker-heading">Müsait gözetmenler (' + free.length + ') · en az görevliden çoğa</h4>' +
+        '<h4 class="picker-heading">Müsait gözetmenler (' + free.length + ') · en az görevliden çoğa (muafiyet sınavı dahil)</h4>' +
         (free.length ? '<ul class="picker-list">' + free.map(function (item) {
           return '<li class="pick-li"><button type="button" data-pick="' + esc(item.name) + '"><span class="pick-name">' + esc(item.name) + '</span>' +
             (item.count === least ? '<span class="pick-badge">önerilen</span>' : '') +
