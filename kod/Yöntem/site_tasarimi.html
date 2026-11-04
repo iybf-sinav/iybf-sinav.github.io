@@ -1100,7 +1100,7 @@
       .edit-room .wide { grid-column: 1 / -1; }
     }
   </style>
-<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}.dg-saat{background:#fff1dc;color:#8a4b00}.dg-derslik{background:#f1ecfb;color:#5b3fa0}</style></head>
+<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}.dg-saat{background:#fff1dc;color:#8a4b00}.dg-derslik{background:#f1ecfb;color:#5b3fa0}</style><style>.excel-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px}.excel-button{padding:9px 16px;border:0;border-radius:10px;color:#fff;background:#1d6f42;font:inherit;font-size:.9rem;font-weight:700;cursor:pointer}.excel-button:hover{background:#155232}.excel-button:disabled{opacity:.6;cursor:progress}.excel-status{color:var(--muted);font-size:.88rem;font-weight:600}.excel-status:empty{display:none}</style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
     <form class="access-card" id="access-form">
@@ -1207,6 +1207,7 @@
     </section>
 
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="excel-bar"><button class="excel-button" type="button" id="excel-download">Excel olarak indir</button><span class="excel-status" id="excel-status" role="status" aria-live="polite"></span></div>
       <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
     </section>
@@ -2850,6 +2851,121 @@
       renderExamModal();
       openModal($("#exam-modal"));
     }
+
+    // ---- Panel: "Excel olarak indir" (sitenin o an okuduğu veri, düzenlemeler dahil; e-posta adresleri yazılmaz) ----
+    // SheetJS yalnız düğmeye basılınca yüklenir.
+    const XLSX_URL = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+    let xlsxLoading = null;
+    function loadXlsx() {
+      if (window.XLSX) return Promise.resolve(window.XLSX);
+      if (xlsxLoading) return xlsxLoading;
+      xlsxLoading = new Promise(function (resolve, reject) {
+        const script = document.createElement("script");
+        script.src = XLSX_URL;
+        script.onload = function () { window.XLSX ? resolve(window.XLSX) : reject(new Error("kütüphane yüklenemedi")); };
+        script.onerror = function () { script.remove(); reject(new Error("kütüphane yüklenemedi")); };
+        document.head.appendChild(script);
+      }).catch(function (error) { xlsxLoading = null; throw error; });
+      return xlsxLoading;
+    }
+
+    function excelText(value) {   // e-posta adresi gibi görünen her şey çıkarılır
+      return String(value == null ? "" : value).replace(/[^\s@,;()<>]+@[^\s@,;()<>]+\.[^\s@,;()<>]+/g, "").replace(/\s{2,}/g, " ").trim();
+    }
+    function excelNumber(value) {
+      const text = excelText(value);
+      return /^\d+$/.test(text) ? Number(text) : text;
+    }
+    function excelStamp(iso) {   // ISO zaman → "04.11.2026 14:30" (Türkiye saati)
+      if (!iso) return "";
+      const date = new Date(iso);
+      if (isNaN(date)) return excelText(iso);
+      return date.toLocaleString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    }
+    function excelStep(step) {
+      return step ? [excelStamp(step.tarih), excelText(step.kim)].filter(Boolean).join(" · ") || "Evet" : "";
+    }
+
+    function excelSheet(XLSX, header, rows) {
+      const sheet = XLSX.utils.aoa_to_sheet([header].concat(rows));
+      sheet["!cols"] = header.map(function (title, column) {
+        const longest = rows.reduce(function (max, row) { return Math.max(max, String(row[column] == null ? "" : row[column]).length); }, String(title).length);
+        return { wch: Math.min(Math.max(longest + 2, 8), 60) };
+      });
+      sheet["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rows.length, c: header.length - 1 } }) };
+      return sheet;
+    }
+
+    function excelWorkbook(XLSX) {
+      const book = XLSX.utils.book_new();
+      const exams = DATA.exams.slice().sort(examOrder);
+      const sinavlar = [];
+      exams.forEach(function (exam) {
+        (exam.rooms || []).forEach(function (room) {
+          sinavlar.push([excelText(exam.dateLabel), excelText(exam.day), excelText(exam.start), excelText(exam.end),
+            excelText(exam.courseCode), excelText(exam.course), excelText(exam.teacher), excelText((exam.programs || []).join(", ")),
+            excelNumber(exam.totalStudents), excelText(room.room), excelNumber(room.capacity), excelNumber(room.students),
+            excelText(room.proctor), excelText(room.departments), excelText((exam.notes || []).join("; ")), excelText(exam.id)]);
+        });
+      });
+      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Tarih", "Gün", "Başlangıç", "Bitiş", "Ders kodu", "Ders adı", "Öğretim elemanı",
+        "Programlar", "Toplam öğrenci", "Derslik", "Kapasite", "Derslikteki öğrenci", "Gözetmen", "Bölümler", "Notlar", "Sınav no"], sinavlar), "Sınavlar");
+
+      const gorevler = (DATA.assignments || []).slice().sort(function (a, b) {
+        return String(a.proctor).localeCompare(String(b.proctor), "tr") || String(a.date).localeCompare(String(b.date)) || String(a.start).localeCompare(String(b.start));
+      }).map(function (item) {
+        return [excelText(item.proctor), excelText(item.dateLabel), excelText(item.day), excelText(item.start + "–" + item.end),
+          excelText(item.courseCode), excelText(item.course), excelText(item.room)];
+      });
+      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Tarih", "Gün", "Saat", "Ders kodu", "Ders", "Derslik"], gorevler), "Gözetmen görevleri");
+
+      const counts = proctorTaskCounts();
+      const izin = {};
+      (DATA.proctorAvailability || []).forEach(function (item) {
+        izin[item.name] = (item.unavailable || []).map(function (u) { return excelText(u.day) + (u.reason ? " (" + excelText(u.reason) + ")" : ""); }).join(", ");
+      });
+      const names = {};
+      (DATA.proctors || []).concat(Object.keys(counts), Object.keys(izin)).forEach(function (name) { if (excelText(name)) names[name] = true; });
+      const yuk = Object.keys(names).sort(function (a, b) { return a.localeCompare(b, "tr"); }).map(function (name) {
+        const seen = {};
+        (DATA.assignments || []).forEach(function (item) { if (item.proctor === name) seen[item.examId] = true; });
+        return [excelText(name), counts[name] || 0, Object.keys(seen).length, izin[name] || ""];
+      });
+      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Toplam görev", "Sınav sayısı", "İzin günleri"], yuk), "Gözetmen yükü");
+
+      const degisiklikler = (DATA.updates || []).map(function (item) { return [excelText(item.tarih), excelText(item.tur), excelText(item.metin)]; });
+      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Tarih", "Tür", "Metin"], degisiklikler), "Son değişiklikler");
+
+      if (typeof envelopeExams === "function") {   // v2: sınav zarfı takibi
+        const zarflar = envelopeExams().map(function (exam) {
+          const rec = envRecord(exam.id) || {};
+          return [excelText(exam.courseCode + " " + exam.course), excelText(exam.dateLabel), excelText(exam.start + "–" + exam.end),
+            excelText(exam.teacher), envStateText(envRecord(exam.id)), excelText(rec.dolap), excelStep(rec.teslim),
+            excelStep(rec.bolumOnay), excelStep(rec.komisyonOnay), excelText(rec.not)];
+        });
+        XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Ders", "Tarih", "Saat", "Öğretim elemanı", "Konum", "Dolap", "Teslim",
+          "Bölüm onayı", "Komisyon onayı", "Not"], zarflar), "Sınav zarfları");
+      }
+      return book;
+    }
+
+    function downloadExcel() {
+      const button = $("#excel-download");
+      const status = $("#excel-status");
+      if (!DATA) { status.textContent = "Veri henüz yüklenmedi; biraz sonra yeniden deneyin."; return; }
+      button.disabled = true;
+      status.textContent = "Excel dosyası hazırlanıyor…";
+      loadXlsx().then(function (XLSX) {
+        const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+        XLSX.writeFile(excelWorkbook(XLSX), "IYBF Sinav Programi Verisi " + today + ".xlsx", { compression: true });
+        status.textContent = "";
+      }).catch(function () {
+        status.textContent = "Excel dosyası hazırlanamadı: gerekli kütüphane yüklenemedi. İnternet bağlantınızı kontrol edip yeniden deneyin.";
+      }).then(function () { button.disabled = false; });
+    }
+    document.addEventListener("click", function (event) {
+      if (event.target.closest("#excel-download")) downloadExcel();
+    });
 
     // ---- Panel sekmesi: panel/ sayfası kendi şifre ekranıyla açılır (şifre panelde sorulur) ----
     const PANEL_URL = "panel/?v=" + Math.floor(Date.now() / 600000);   // önbellek 10 dakikada bir yenilenir
