@@ -2486,7 +2486,7 @@
      "room": "6D4",
      "capacity": "25",
      "students": "26",
-     "proctor": "Şeyma Sertçelik",
+     "proctor": "Kadriye Giray",
      "departments": "UTF 26"
     },
     {
@@ -4683,7 +4683,7 @@
    "examId": "exam-82",
    "room": "6D4",
    "roomStudents": "26",
-   "proctor": "Şeyma Sertçelik",
+   "proctor": "Kadriye Giray",
    "note": ""
   },
   {
@@ -5667,6 +5667,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "4 Kasım",
+   "tur": "Gözetmen",
+   "metin": "İşletmeye Giriş sınavında (Perşembe 11:00, 6A1, 6A2, 6D1, 6D3, 6D4, 6D5) 6D4 gözetmeni Şeyma Sertçelik → Kadriye Giray olarak değiştirildi.",
+   "examId": "exam-82"
+  },
   {
    "tarih": "4 Kasım",
    "tur": "Gözetmen",
