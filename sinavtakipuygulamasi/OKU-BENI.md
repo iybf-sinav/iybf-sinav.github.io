@@ -12,7 +12,7 @@ Bu klasör uygulamanın **kaynağıdır** ve aynı zamanda **demosudur**. Bütü
 - `veri.json`: boş veri. `meta.mode` = `"demo"` bu klasörü demo yapar (aşağıda). Biçim: bu klasördeki `VERI-BICIMI.md`.
 - `epostalar.json`: boş e-posta listesi.
 - `kurallar.json`: genel kurallar (`"kapsam": "genel"`); yeni uygulamalara bunlar kopyalanır.
-- `VERI-BICIMI.md`: `veri.json`'un tam biçimi (2. aşama alanları ve uyarı kuralları dahil).
+- `VERI-BICIMI.md`: `veri.json`'un tam biçimi (2. aşama alanları, uyarı kuralları ve Excel sayfa/sütun eşlemesi dahil).
 - `YZ-REHBERI.md`: bir yapay zekâ oturumunun bu verisi nasıl okuyup yazacağı (kişisel öğrenci verisi yazılmaz).
 
 ## Kayıtlar, uyarılar, Ayarlar ve Kontrol (2. aşama)
@@ -31,6 +31,20 @@ Bu klasör uygulamanın **kaynağıdır** ve aynı zamanda **demosudur**. Bütü
 - **Panel → Ayarlar**: gözetmen eşiği, kapasite esnemesi, art arda sınav sınırı, uzun sınav süresi (görev sayımı), yalnız uyar.
 - **Panel → Kontrol**: bütün program aynı kurallarla taranır; sorun listesi (tür, ders, gün-saat, açıklama), tıklayınca sınav kartı.
 - Bütün bu kayıtlar `veri.json`'a `loadDoc`/`saveDoc` yoluyla yazılır (demoda tarayıcıya, gerçek dönemde GitHub'a).
+
+## Veri Tablosu, Excel ve yazdırma (3. aşama)
+
+- **Panel → Veri Tablosu** (yalnız düzenleme yetkisi olanlara; demoda herkese): Sınavlar, Derslikler, Öğretim Elemanları,
+  Gözetmenler, Bölümler, Duyurular sayfaları Excel gibi düzenlenir (hücreye yaz, Enter/Tab/oklarla gez, satır ekle/sil,
+  başlığa basınca sırala, ara). Değişiklikler taslakta durur; **Değişiklikleri kaydet** taslağı tam doğrular (hatalı hücreler
+  kırmızı, listeden hücreye gidilir), Kontrol kurallarını çalıştırır (`warnOnly`'e uyarak) ve `saveDoc` ile **tek kayıt** yapar. **Vazgeç** taslağı atar.
+- Aynı sekmede **Verileri indir (Excel)**, **Şablon indir** (başlıklar + örnek satır) ve **Verileri yükle (Excel)**. Yükleme:
+  doğrulama → önizleme (sayfa başına satır, hatalar, uyarılar) → kırmızı uyarı ve onay → tek kayıt. Hatalı dosyada kayıt yapılmaz.
+  Sayfa/sütun düzeni: `VERI-BICIMI.md` → “Excel sayfa/sütun eşlemesi”. Panel → Veriler'deki eski düğme aynı dosyayı indirir.
+- **Yazdır / PDF**: kişi, bölüm, derslik ve tüm program pencerelerinde; o anki liste ya da takvim (takvim A4 yatay) başlıklı bir
+  yazdırma sayfası olarak açılır; tarayıcının “PDF olarak kaydet” seçeneğiyle PDF olur. Gözetmenler sekmesinde
+  **Gözetmen görev çizelgesi**: her gözetmen ayrı sayfada (gün, saat, ders, derslik, toplam görev).
+- Demoda “Örnek veriyle doldur” ile hepsi denenebilir.
 
 ## Demo modu (`meta.mode: "demo"`)
 

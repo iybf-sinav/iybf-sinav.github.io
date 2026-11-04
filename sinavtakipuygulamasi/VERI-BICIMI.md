@@ -3,7 +3,7 @@
 Bu belge uygulamanın (`index.html`) okuduğu ve yazdığı **`veri.json`** dosyasının tam biçimidir. Aynı belge “Uygulama
 Oluştur” ile açılan her dönem klasörüne kopyalanır. Kökteki `VERI-BICIMI.md` eski (v2) sürümün belgesidir; bu belge
 onu temel alır ve 2. aşamada eklenen alanları (`teacherList`, `rooms`, `departments[].classes`, `settings`,
-`proctorAvailability[].email`) da anlatır. Yapay zekâ oturumları için ayrıca `YZ-REHBERI.md`'ye bakın.
+`proctorAvailability[].email`) ile 3. aşamadaki Excel sayfa/sütun eşlemesini de anlatır. Yapay zekâ oturumları için ayrıca `YZ-REHBERI.md`'ye bakın.
 
 - Dosya UTF-8'dir; Türkçe harfler olduğu gibi yazılır. Python: `json.dumps(veri, ensure_ascii=False, indent=1) + "\n"`.
   Sitedeki düzenlemeler de dosyayı aynı biçimde (girinti 1, sonda satır sonu) geri yazar; GitHub farkında yalnız değişen satırlar görünür.
@@ -239,6 +239,47 @@ Metin `<Ders adı> sınavına|sınavında|sınavının|sınavı (<Gün> <SS:DD>,
 
 `{"<examId>": {"teslim": {"tarih": ISO, "kim": login} | null, "dolap": "7D1" | "7D2" | "4D2" | null, "bolumOnay": ..., "komisyonOnay": ..., "not": ""}}`.
 Kaydı olmayan sınavın zarfı öğretim üyesindedir. Silinen sınavın zarf kaydı da silinir.
+
+## Excel sayfa/sütun eşlemesi (iki yönlü, 3. aşama)
+
+Panel → Veriler'deki “Excel olarak indir” ve Panel → Veri Tablosu'ndaki “Verileri indir / Şablon indir / Verileri yükle”
+aynı sayfaları ve **aynı sütun adlarını** kullanır; Veri Tablosu da bu sayfaları gösterir. Yükleme bütün veriyi dosyadakilerle
+değiştirir (tek kayıt). Sütun sırası önemsizdir, başlık adı önemlidir (büyük/küçük harf ve Türkçe karakter farkı tolere edilir).
+Başlıkta olmayan sütunlar yok sayılır. Boş satırlar atlanır. Hata satırları Excel satır numarasıyla (başlık = 1) gösterilir.
+
+| Sayfa | Sütunlar | veri.json karşılığı |
+|---|---|---|
+| **Sınavlar** | Sınav no, Tarih, Gün, Başlangıç, Bitiş, Ders kodu, Ders adı, Öğretim elemanı, Bölüm-sınıf, Toplam öğrenci, Derslik, Kapasite, Derslikteki öğrenci, Gözetmen, Derslikteki bölümler, Notlar | `exams` (her sınav-derslik bir satır) |
+| **Derslikler** | Kod, Kat, Sınav kapasitesi, Tam kapasite, Not | `rooms` |
+| **Öğretim Elemanları** | Ad Soyad, Unvan, Bölüm, E-posta, İzinler | `teacherList` |
+| **Gözetmenler** | Ad Soyad, E-posta, İzinler | `proctorAvailability` |
+| **Bölümler** | Kod, Ad, Dil, Sınıflar | `departments` |
+| **Duyurular** | Tarih, Tür, Metin, Sınav no | `updates` (en yeni üstte) |
+| **Program bilgileri** | Alan, Değer (satırlar: Üniversite, Fakülte, Program adı, Dönem) | `meta` (sayfa isteğe bağlı) |
+
+Ayrıntılar:
+
+- **Sınavlar**: “Sınav no” = `id` (`exam-12` ya da `12`). Aynı sınav no'lu satırlar tek sınavın derslikleridir; sınav düzeyindeki
+  sütunlar (Tarih, Başlangıç, Bitiş, Ders kodu, Ders adı, Öğretim elemanı, Bölüm-sınıf, Toplam öğrenci, Notlar) bu satırlarda
+  aynı olmalı (sonraki satırlarda boş bırakılabilir). **Yeni sınavda Sınav no boş** bırakılır: tarih + saat + ders kodu + ders adı aynı
+  olan satırlar birleşir, numara en büyük numaranın bir fazlasından verilir. Tarih `GG.AA.YYYY` (ya da `YYYY-AA-GG`, ya da Excel tarih hücresi);
+  saat `SS:DD` (ya da Excel saat hücresi). “Gün” tarihten hesaplanır (yüklemede okunmaz). Bölüm-sınıf virgülle (`YBS-1, İŞL-1`; `YBS1` de kabul edilir);
+  Notlar noktalı virgülle. Gözetmen sütunu `proctor` yazımıyla aynı (`Gerekmiyor`, `A, B`, `Ad (dersin hocası)`).
+- **İzinler** (Öğretim Elemanları, Gözetmenler): noktalı virgülle ayrılmış maddeler; her madde gün adı ya da tarih (`YYYY-AA-GG`),
+  isteğe bağlı saat aralığı ve parantez içinde neden: `Pazartesi; 2027-01-05 09:00-12:00 (toplantı)`. Neden yazılmazsa `"izin"`.
+- **E-posta**: yalnız düzenleme yetkisi olanın indirdiği dosyada vardır. Yüklenen dosyada E-posta sütunu hiç yoksa mevcut adresler korunur;
+  sütun varsa boş hücre adresi siler.
+- Bölümler → Sınıflar virgülle (`1, 2, 3, 4`); Dil `Türkçe` ya da `English`. Duyurular → Tür `Sınav`, `Saat`, `Derslik`, `Gözetmen`.
+- Sayılar (kapasite, öğrenci, kat) tam sayı ya da boş.
+
+Doğrulama (yüklemede ve Veri Tablosu kaydında): zorunlu alanlar, tarih/saat biçimi, bitiş > başlangıç, sayılar, tekrarlar;
+sınavdaki **öğretim elemanı Öğretim Elemanları sayfasında**, **derslik (birleşik salon parçaları dahil) Derslikler sayfasında**,
+**bölüm-sınıf Bölümler sayfasında** (kod ve sınıf) bulunmalı; duyurudaki sınav no Sınavlar'da olmalı. Hata varsa kayıt yapılmaz.
+Ardından Kontrol kuralları çalışır: yalnız **bu değişiklikle ortaya çıkan** sorunlar değerlendirilir (engel → kaydedilmez;
+uyarı → `warnOnly` açıkken onayla, kapalıyken kaydedilmez). Dosyada olmayan alanlar (`settings`, `envelopes`, bilinmeyen ek alanlar)
+mevcut veriden korunur; silinen sınavların zarf kaydı silinir; türetilen alanlar yeniden hesaplanır.
+
+İndirilen dosyadaki **Gözetmen görevleri**, **Gözetmen yükü** ve **Sınav zarfları** sayfaları yalnız bilgi içindir; yüklemede okunmaz.
 
 ## `epostalar.json`
 

@@ -130,3 +130,20 @@ Yazdıktan sonra siteyi açıp **Panel → Kontrol**'e bakmak, bütün programı
 
 Boş e-postayı (`""`) yazmak yerine alanı hiç yazmamak tercih edilir. Kayıt eklendikten sonra `teachers` / `proctors`
 türetilen listelerini ve `meta` sayımlarını güncelleyin.
+
+## 9. Toplu yükleme için Excel üretme
+
+`veri.json`'u doğrudan yazmak yerine (ör. depoya yazma izni yoksa ya da kullanıcı sonucu görüp kendisi yüklemek istiyorsa)
+yerleştirme sonucunu **uygulamanın Excel biçiminde** verin; kullanıcı Panel → Veri Tablosu → **Verileri yükle** ile yükler.
+Site dosyayı doğrular, önizleme ve uyarı özeti gösterir, onaydan sonra tek kayıtta yazar (türetilen alanları kendisi hesaplar).
+
+1. Biçim: `VERI-BICIMI.md` → “Excel sayfa/sütun eşlemesi”. En kolayı sitedeki **Şablon indir** dosyasından ya da mevcut verinin
+   **Verileri indir** dosyasından başlamaktır (aynı sayfa ve sütun adları). Python: `openpyxl`; sayfa adları ve başlıklar birebir.
+2. Yükleme **bütün veriyi değiştirir**: dosyada bütün sayfalar (Sınavlar, Derslikler, Öğretim Elemanları, Gözetmenler, Bölümler,
+   Duyurular; isteğe bağlı Program bilgileri) eksiksiz olmalı. Var olan sınavların “Sınav no”su korunur (zarf kayıtları ona bağlı);
+   yeni sınavda Sınav no boş bırakılır.
+3. Her sınav-derslik bir satır; tarih `GG.AA.YYYY`, saat `SS:DD`, Bölüm-sınıf `KOD-sınıf` virgülle. Sınavda geçen her öğretim elemanı,
+   derslik ve bölüm-sınıf ilgili sayfada bulunmalı (yoksa dosya reddedilir; hata listesi satır/sütun verir).
+4. Kişisel öğrenci verisi bu dosyaya da yazılmaz (4. bölüm). E-posta sütunları kurumsal adres içindir; bilinmiyorsa boş bırakın
+   ya da sütunu hiç koymayın (sütun yoksa mevcut adresler korunur).
+5. Dosyayı kullanıcıya verin; depoya `.xlsx` commit etmeyin.

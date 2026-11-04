@@ -975,6 +975,67 @@
     .png-sheet { position: fixed; top: 0; left: -10000px; width: 1000px; padding: 24px; background: #fff; }
     .png-sheet h3 { margin: 0 0 14px; color: var(--navy); }
     .png-sheet .week-wrap { overflow: visible; }
+    /* ---- Veri Tablosu, Excel yükleme ve yazdırma (3. aşama) ---- */
+    #page-table { --accent: #475569; }
+    .dt-files, .dt-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
+    .dt-files .excel-status { flex: 1 1 100%; }
+    .dt-light, .dt-tools button:not(.row-add):not(.edit-save) { padding: 9px 14px; border: 1px solid var(--line); border-radius: 10px; color: var(--navy); background: #fff; font: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; }
+    .dt-upload { display: inline-block; }
+    .dt-upload:focus-within { outline: 2px solid var(--blue); }
+    .dt-sheets { flex-wrap: wrap; margin-bottom: 12px; }
+    .dt-sheets small { color: var(--muted); font-weight: 600; }
+    .dt-sheets .has-error { border-color: #f4b4ae; color: #b42318; }
+    .dt-tools .search-input { flex: 1 1 220px; width: auto; }
+    .dt-dirty { color: var(--muted); font-size: .86rem; }
+    .dt-tools button:disabled { opacity: .55; cursor: default; }
+    .dt-note { margin: 0 0 12px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: .9rem; }
+    .dt-wrap { max-width: 100%; max-height: 70vh; overflow: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .dt { border-collapse: collapse; font-size: .85rem; }
+    .dt th { position: sticky; top: 0; z-index: 1; padding: 0; background: var(--canvas); text-align: left; white-space: nowrap; }
+    .dt th button { width: 100%; padding: 7px 8px; border: 0; color: var(--navy); background: none; font: inherit; font-weight: 800; text-align: left; cursor: pointer; }
+    .dt td { padding: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .dt input { display: block; min-width: 100%; padding: 6px 8px; border: 0; color: var(--ink); background: transparent; font: inherit; }
+    .dt input:focus { outline: 2px solid var(--blue); outline-offset: -2px; background: #fff; }
+    .dt input[readonly] { color: var(--muted); }
+    .dt td.is-error input { background: #fee4e2; color: #b42318; }
+    .dt .dt-n { padding: 0 6px; color: var(--muted); font-size: .76rem; text-align: right; }
+    .dt-del { padding: 2px 7px; border: 1px solid transparent; border-radius: 7px; color: #b42318; background: none; font: inherit; font-size: 1rem; cursor: pointer; }
+    .dt-del:hover { border-color: #f4b4ae; }
+    .dt-empty { padding: 12px; }
+    .bulk-head, .bulk-ok { margin: 10px 0 6px; font-weight: 700; }
+    .bulk-ok { color: #0f7a4f; }
+    .bulk-stop { margin: 10px 0 6px; color: #b42318; font-weight: 800; }
+    .bulk-list { max-height: 260px; margin: 0 0 8px; padding-left: 20px; overflow: auto; font-size: .88rem; }
+    .bulk-list li { margin: 3px 0; overflow-wrap: anywhere; }
+    .bulk-list .is-block { color: #b42318; }
+    .bulk-list .is-warn { color: var(--warning); }
+    .dt-goto { padding: 0; border: 0; color: #b42318; background: none; font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; }
+    .bulk-counts { margin-bottom: 8px; }
+    .bulk-danger { margin: 12px 0; padding: 12px 14px; border: 2px solid #d92d20; border-radius: 12px; color: #7a1a12; background: #fee4e2; font-weight: 700; }
+    .dt-tools .edit-save, #bulk-modal .edit-actions button { padding: 9px 14px; border: 1px solid var(--line); border-radius: 10px; color: var(--navy); background: #fff; font: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; }
+    .dt-tools .edit-save, #bulk-modal .edit-actions .edit-save { border-color: var(--navy); color: #fff; background: var(--navy); }
+    #bulk-modal .edit-actions .edit-save.is-danger { border-color: #d92d20; background: #d92d20; }
+    .print-duty { margin: 0; }
+    #print-root { display: none; }
+    @media print {
+      body.has-print > *:not(#print-root) { display: none !important; }
+      body.has-print { background: #fff; }
+      body.has-print #print-root { display: block; color: #000; font-size: 10pt; }
+      #print-root .print-head { margin: 0 0 8px; padding-bottom: 6px; border-bottom: 1px solid #999; }
+      #print-root .print-head p { margin: 0; font-size: 9pt; }
+      #print-root .print-head h1 { margin: 4px 0 0; font-size: 14pt; }
+      #print-root .print-head small { font-size: 9pt; font-weight: 600; color: #444; }
+      #print-root .print-break { break-after: page; }
+      #print-root .print-break:last-of-type { break-after: auto; }
+      #print-root .week-wrap { overflow: visible; border: 1px solid #999; border-radius: 0; }
+      #print-root .week-table { min-width: 0; font-size: 7.5pt; }
+      #print-root .week-table td { height: auto; }
+      #print-root table { width: 100%; border-collapse: collapse; }
+      #print-root tr { break-inside: avoid; }
+      #print-root .cal-item { display: block; width: 100%; margin: 0 0 2px; padding: 2px 3px; border: 1px solid #bbb; border-radius: 3px; color: #000; background: #fff; font: inherit; text-align: left; }
+      #print-root .print-table th, #print-root .print-table td, #print-root .course-table th, #print-root .course-table td { padding: 3px 5px; border: 1px solid #999; text-align: left; }
+      #print-root .print-foot { margin-top: 8px; color: #555; font-size: 8pt; }
+    }
     /* Takvimde yakınlaştırma (Değişiklik 17) */
     .zoom-bar { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; }
     .zoom-bar button { min-width: 36px; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--navy); background: #fff; font: inherit; font-size: .9rem; font-weight: 800; cursor: pointer; }
@@ -1493,6 +1554,7 @@
         <input class="search-input" id="proctor-search" type="search" placeholder="İsim ara…" autocomplete="off">
         <label class="sr-only" for="proctor-dept">Bölüm</label>
         <select class="filter-select" id="proctor-dept"></select>
+        <button class="png-button print-duty" type="button" id="proctor-print">Gözetmen görev çizelgesi (yazdır)</button>
       </div>
       <div class="name-grid" id="proctor-grid"></div>
     </section>
@@ -1518,6 +1580,7 @@
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
         <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+        <button type="button" data-subpage="table" aria-pressed="false" hidden>Veri Tablosu</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1525,7 +1588,7 @@
           <p>Sitenin verisini Excel (.xlsx) dosyası olarak indirin. Dosya sitenin o anki güncel hâlini içerir (sitede yapılan düzenlemeler dahil).</p>
         </div>
       </div>
-      <p class="data-info">İndirilen dosyadaki sayfalar: <strong>Sınavlar</strong> (her sınav-derslik bir satır), <strong>Gözetmen görevleri</strong>, <strong>Gözetmen yükü</strong> (görev sayısı ve izin günleri), <strong>Son değişiklikler</strong> ve <strong>Sınav zarfları</strong>. E-posta adresleri dosyaya yazılmaz.</p>
+      <p class="data-info">İndirilen dosyadaki sayfalar: <strong>Sınavlar</strong> (her sınav-derslik bir satır), <strong>Derslikler</strong>, <strong>Öğretim Elemanları</strong>, <strong>Gözetmenler</strong>, <strong>Bölümler</strong>, <strong>Duyurular</strong> ve <strong>Program bilgileri</strong>; bunlar Panel → Veri Tablosu'ndaki “Verileri yükle” ile geri yüklenebilir. Ek olarak yalnız bilgi amaçlı <strong>Gözetmen görevleri</strong>, <strong>Gözetmen yükü</strong> ve <strong>Sınav zarfları</strong> (yüklemede okunmaz). E-posta adresleri yalnız düzenleme yetkisi olanların indirdiği dosyaya yazılır.</p>
       <div class="excel-bar"><button class="excel-button" type="button" id="excel-download">Excel olarak indir</button><span class="excel-status" id="excel-status" role="status" aria-live="polite"></span></div>
       <div id="data-admin" hidden></div>
     </section>
@@ -1535,6 +1598,7 @@
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
         <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+        <button type="button" data-subpage="table" aria-pressed="false" hidden>Veri Tablosu</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1573,6 +1637,7 @@
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
         <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+        <button type="button" data-subpage="table" aria-pressed="false" hidden>Veri Tablosu</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1588,6 +1653,7 @@
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
         <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+        <button type="button" data-subpage="table" aria-pressed="false" hidden>Veri Tablosu</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1598,6 +1664,22 @@
       </div>
       <div class="rules-filters"><label class="sr-only" for="check-type">Sorun türü</label><select class="filter-select" id="check-type"></select></div>
       <div id="check-list"></div>
+    </section>
+    <section class="page" id="page-table" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
+        <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
+        <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+        <button type="button" data-subpage="table" aria-pressed="false" hidden>Veri Tablosu</button>
+      </div>
+      <div class="page-heading">
+        <div>
+          <h2>Veri Tablosu</h2>
+          <p>Bütün veriyi Excel gibi tablolarda düzenleyin: hücreye tıklayıp yazın; Enter, Tab ve ok tuşlarıyla hücreler arasında gezinin. Değişiklikler önce taslakta tutulur, “Değişiklikleri kaydet” ile denetlenip tek kayıtta yazılır. Aynı sütunlarla Excel dosyası indirilip yüklenebilir.</p>
+        </div>
+      </div>
+      <div id="table-box"></div>
     </section>
   </main>
 
@@ -1625,6 +1707,7 @@
         <button type="button" data-view="calendar" aria-pressed="false">Takvim görünümü</button>
       </div>
       <button class="png-button" type="button" data-png>PNG indir</button>
+      <button class="png-button" type="button" data-print>Yazdır / PDF</button>
       <div id="person-modal-content"></div>
     </div>
   </dialog>
@@ -1666,6 +1749,17 @@
       <button class="modal-close" type="button" data-close aria-label="Kapat">×</button>
     </div>
     <div class="modal-body" id="envcard-modal-content"></div>
+  </dialog>
+
+  <dialog class="modal modal-narrow" id="bulk-modal" aria-labelledby="bulk-modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="modal-kicker">Verileri yükle</p>
+        <h3 id="bulk-modal-title">Excel dosyası</h3>
+      </div>
+      <button class="modal-close" type="button" data-close aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body" id="bulk-modal-content"></div>
   </dialog>
 
   <dialog class="modal modal-narrow" id="editor-modal" aria-labelledby="editor-modal-title">
@@ -2038,7 +2132,7 @@
       });
     }
 
-    const PANEL_PAGES = ["features", "data", "rules", "settings", "check"];   // Panel alt sekmeleri: Veriler | Kurallar | Ayarlar | Kontrol
+    const PANEL_PAGES = ["features", "data", "rules", "settings", "check", "table"];   // Panel alt sekmeleri: Veriler | Kurallar | Ayarlar | Kontrol | Veri Tablosu
     function activatePage(pageName, updateHash) {
       // İki uygulama (Değişiklik 2): Sınav Zarfları sekmesi "Sınav Zarfı Takip Uygulaması"nda, diğerleri "Sınav Takip Uygulaması"nda
       if (pageName === "panel" || pageName === "features") pageName = "data";   // şablonda Panel sekmesi Veriler ile açılır
@@ -2056,8 +2150,9 @@
       if (pageName === "rules") openRules();
       if (pageName === "settings" && DATA) renderSettings();
       if (pageName === "check" && DATA) renderCheck();
+      if (pageName === "table" && DATA) renderTable();
       if (updateHash) {
-        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler", rules: "kurallar", settings: "ayarlar", check: "kontrol" };
+        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler", rules: "kurallar", settings: "ayarlar", check: "kontrol", table: "veri-tablosu" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2950,6 +3045,7 @@
         });
       });
       $("#person-modal").addEventListener("click", function (event) {
+        if (event.target.closest("[data-print]")) { printPerson(); return; }
         const pngButton = event.target.closest("[data-png]");
         if (pngButton) {
           downloadCalendarPng(pngButton);
@@ -4105,21 +4201,386 @@
       return sheet;
     }
 
-    function excelWorkbook(XLSX) {
-      const book = XLSX.utils.book_new();
-      const exams = DATA.exams.slice().sort(examOrder);
+    // ---- 3. aşama: iki yönlü sayfa düzeni (Excel indir/yükle ve Veri Tablosu aynı sayfaları ve sütun adlarını kullanır) ----
+    // Bir "sayfa": { cols: [başlık…], rows: [[metin…]…] }. dataToSheets veri → sayfalar, sheetsToData sayfalar → veri (+ hatalar).
+    // Sınavlar: her sınav-derslik bir satır; aynı "Sınav no"lu satırlar tek sınavdır (sınav no boşsa tarih+saat+ders aynı olan satırlar).
+    const SHEETS = [
+      { name: "Sınavlar", cols: ["Sınav no", "Tarih", "Gün", "Başlangıç", "Bitiş", "Ders kodu", "Ders adı", "Öğretim elemanı", "Bölüm-sınıf",
+        "Toplam öğrenci", "Derslik", "Kapasite", "Derslikteki öğrenci", "Gözetmen", "Derslikteki bölümler", "Notlar"] },
+      { name: "Derslikler", cols: ["Kod", "Kat", "Sınav kapasitesi", "Tam kapasite", "Not"] },
+      { name: "Öğretim Elemanları", cols: ["Ad Soyad", "Unvan", "Bölüm", "E-posta", "İzinler"] },
+      { name: "Gözetmenler", cols: ["Ad Soyad", "E-posta", "İzinler"] },
+      { name: "Bölümler", cols: ["Kod", "Ad", "Dil", "Sınıflar"] },
+      { name: "Duyurular", cols: ["Tarih", "Tür", "Metin", "Sınav no"] },
+      { name: "Program bilgileri", cols: ["Alan", "Değer"], fileOnly: true }
+    ];
+    const SHEET_OPTIONAL_COLS = ["Gün", "E-posta", "Not", "Unvan", "Derslikteki bölümler", "Notlar"];   // yoksa hata değil
+    const SHEET_NUMBER_COLS = ["Toplam öğrenci", "Kapasite", "Derslikteki öğrenci", "Kat", "Sınav kapasitesi", "Tam kapasite"];
+    const META_FIELDS = [["Üniversite", "university"], ["Fakülte", "faculty"], ["Program adı", "programName"], ["Dönem", "period"]];
+    const EXAM_FIELDS = ["Tarih", "Başlangıç", "Bitiş", "Ders kodu", "Ders adı", "Öğretim elemanı", "Bölüm-sınıf", "Toplam öğrenci", "Notlar"];
+
+    function sheetDef(name) { return SHEETS.find(function (def) { return def.name === name; }); }
+    function sheetCols(name, withEmail) {
+      return sheetDef(name).cols.filter(function (col) { return withEmail || col !== "E-posta"; });
+    }
+    function leaveToText(list) {
+      return (Array.isArray(list) ? list : []).map(function (item) {
+        const when = item.date || item.day || "";
+        const time = item.start || item.end ? " " + (item.start || "00:00") + "-" + (item.end || "24:00") : "";
+        const reason = item.reason && item.reason !== "izin" ? " (" + item.reason + ")" : "";
+        return when + time + reason;
+      }).filter(Boolean).join("; ");
+    }
+    function parseClock(text) {
+      const match = /^(\d{1,2})[:.](\d{2})$/.exec(String(text || "").trim());
+      if (!match || Number(match[1]) > 24 || Number(match[2]) > 59) return null;
+      return ("0" + match[1]).slice(-2) + ":" + match[2];
+    }
+    function parseDateText(text) {   // "04.01.2027", "4.1.2027", "2027-01-04" → dayFromIso nesnesi
+      text = String(text || "").trim();
+      let match = /^(\d{1,2})[./](\d{1,2})[./](\d{4})$/.exec(text);
+      if (match) text = match[3] + "-" + ("0" + match[2]).slice(-2) + "-" + ("0" + match[1]).slice(-2);
+      return dayFromIso(text);
+    }
+    function parseLeave(text) {   // "Pazartesi; 2027-01-05 09:00-12:00 (toplantı)" → unavailable listesi (hata fırlatır)
+      return String(text || "").split(";").map(function (part) { return part.trim(); }).filter(Boolean).map(function (part) {
+        const match = /^(\S+)(?:\s+(\d{1,2}[:.]\d{2})\s*[-–]\s*(\d{1,2}[:.]\d{2}))?(?:\s*\(([^)]*)\))?$/.exec(part);
+        const item = {};
+        if (match) {
+          const day = DAY_NAMES.find(function (name) { return trLower(name) === trLower(match[1]); });
+          const date = !day && parseDateText(match[1]);
+          if (day) item.day = day; else if (date) item.date = date.date;
+          if (match[2]) { item.start = parseClock(match[2]); item.end = parseClock(match[3]); }
+          item.reason = (match[4] || "").trim() || "izin";
+        }
+        if (!match || !(item.day || item.date) || (match[2] && (!item.start || !item.end || item.start >= item.end))) {
+          throw new Error("İzin anlaşılamadı: “" + part + "” (örnek: Pazartesi; 2027-01-05 09:00-12:00 (toplantı))");
+        }
+        return item;
+      });
+    }
+
+    function dataToSheets(data, withEmail) {
+      const sheets = {};
+      const put = function (name, rows) { sheets[name] = { cols: sheetCols(name, withEmail), rows: rows }; };
+      const exams = data.exams.slice().sort(examOrder);
       const sinavlar = [];
       exams.forEach(function (exam) {
-        (exam.rooms || []).forEach(function (room) {
-          sinavlar.push([excelText(exam.dateLabel), excelText(exam.day), excelText(exam.start), excelText(exam.end),
-            excelText(exam.courseCode), excelText(exam.course), excelText(exam.teacher), excelText((exam.programs || []).join(", ")),
-            excelNumber(exam.totalStudents), excelText(room.room), excelNumber(room.capacity), excelNumber(room.students),
-            excelText(room.proctor), excelText(room.departments), excelText((exam.notes || []).join("; ")), excelText(exam.id)]);
+        const head = [exam.id, exam.dateLabel || "", exam.day || "", exam.start || "", exam.end || "", exam.courseCode || "", exam.course || "",
+          exam.teacher || "", (exam.programs || []).join(", "), exam.totalStudents || ""];
+        const notes = (exam.notes || []).join("; ");
+        const rooms = exam.rooms && exam.rooms.length ? exam.rooms : [{}];
+        rooms.forEach(function (room) {
+          sinavlar.push(head.concat([room.room || "", room.capacity || "", room.students || "", room.proctor || "", room.departments || "", notes]).map(String));
         });
       });
-      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Tarih", "Gün", "Başlangıç", "Bitiş", "Ders kodu", "Ders adı", "Öğretim elemanı",
-        "Programlar", "Toplam öğrenci", "Derslik", "Kapasite", "Derslikteki öğrenci", "Gözetmen", "Bölümler", "Notlar", "Sınav no"], sinavlar), "Sınavlar");
+      put("Sınavlar", sinavlar);
+      const rooms = roomList(data).map(function (room) {
+        return [room.code || "", room.floor == null ? "" : room.floor, room.examCapacity == null ? "" : room.examCapacity,
+          room.fullCapacity == null ? "" : room.fullCapacity, room.note || ""].map(String);
+      });
+      const extra = [];
+      data.exams.forEach(function (exam) {
+        (exam.rooms || []).forEach(function (room) {
+          roomParts(room.room).forEach(function (part) {
+            if (part && !roomRecord(data, part) && !extra.some(function (item) { return roomKey(item) === roomKey(part); })) extra.push(part);
+          });
+        });
+      });
+      extra.sort(function (a, b) { return a.localeCompare(b, "tr", { numeric: true }); }).forEach(function (code) { rooms.push([code, "", "", "", ""]); });
+      put("Derslikler", rooms);
+      put("Öğretim Elemanları", teacherPeople(data).map(function (name) {
+        const rec = teacherRecord(data, name) || {};
+        const row = [name, rec.title || "", rec.department || ""];
+        if (withEmail) row.push(rec.email || "");
+        return row.concat([leaveToText(rec.unavailable)]);
+      }));
+      put("Gözetmenler", proctorListOf(data).map(function (name) {
+        const rec = (data.proctorAvailability || []).find(function (item) { return nameKey(item.name) === nameKey(name); }) || {};
+        return [name].concat(withEmail ? [rec.email || ""] : [], [leaveToText(rec.unavailable)]);
+      }));
+      put("Bölümler", data.departments.map(function (dept) {
+        return [dept.code || "", dept.name || "", dept.language || "", deptClasses(data, dept).join(", ")];
+      }));
+      put("Duyurular", (data.updates || []).map(function (item) { return [item.tarih || "", item.tur || "", item.metin || "", item.examId || ""]; }));
+      put("Program bilgileri", META_FIELDS.map(function (field) {
+        const value = data.meta && typeof data.meta[field[1]] === "string" ? data.meta[field[1]] : "";
+        return [field[0], value];
+      }));
+      return sheets;
+    }
 
+    // Sayfalar → veri.json. base: korunan alanlar (settings, envelopes, bilinmeyen ek alanlar) bu veriden alınır.
+    // Dönüş: { data, errors: [{ sheet, row (veri satırı, 0'dan; -1 sayfa geneli), col, msg, ref }], counts }
+    function sheetsToData(sheets, base) {
+      const errors = [];
+      const counts = {};
+      const data = JSON.parse(JSON.stringify(base));
+      const err = function (sheet, row, col, msg) {
+        errors.push({ sheet: sheet, row: row, col: col || "", msg: msg, ref: row >= 0 && sheets[sheet] ? sheets[sheet].rows[row] : null });
+      };
+      const readers = {};
+      SHEETS.forEach(function (def) {
+        const sheet = sheets[def.name];
+        if (!sheet) { if (!def.fileOnly) err(def.name, -1, "", "Sayfa bulunamadı."); return; }
+        const index = {};
+        (sheet.cols || []).forEach(function (col, i) { const key = nameKey(col); if (key && !(key in index)) index[key] = i; });
+        const missing = def.cols.filter(function (col) { return !(nameKey(col) in index) && SHEET_OPTIONAL_COLS.indexOf(col) === -1; });
+        missing.forEach(function (col) { err(def.name, -1, col, "Sütun bulunamadı (başlık satırı: " + def.cols.join(", ") + ")."); });
+        const has = function (col) { return nameKey(col) in index; };
+        const rows = [];
+        sheet.rows.forEach(function (row, i) {
+          const get = function (col) { const at = index[nameKey(col)]; return at === undefined ? "" : String(row[at] == null ? "" : row[at]).trim(); };
+          if (row.some(function (cell) { return String(cell == null ? "" : cell).trim(); })) rows.push({ i: i, get: get });
+        });
+        counts[def.name] = rows.length;
+        readers[def.name] = { rows: rows, has: has, ok: !missing.length };
+      });
+      if (errors.length) return { data: null, errors: errors, counts: counts };
+      const intText = function (sheet, row, col, value) {
+        if (value === "" || /^\d+$/.test(value)) return value;
+        err(sheet, row, col, "Sayı olmalı (ör. 30): “" + value + "”.");
+        return value;
+      };
+      const intOrNull = function (sheet, row, col, value) {
+        if (value === "") return null;
+        if (/^\d+$/.test(value)) return Number(value);
+        err(sheet, row, col, "Sayı olmalı ya da boş: “" + value + "”.");
+        return null;
+      };
+
+      // Bölümler
+      const deptBase = {};
+      (base.departments || []).forEach(function (dept) { deptBase[dept.code] = dept; });
+      const departments = [];
+      readers["Bölümler"].rows.forEach(function (r) {
+        const S = "Bölümler";
+        const code = r.get("Kod");
+        if (!code) err(S, r.i, "Kod", "Bölüm kodu boş.");
+        else if (/[\s,\-()]/.test(code)) err(S, r.i, "Kod", "Kodda boşluk, virgül, tire ya da parantez olamaz.");
+        else if (departments.some(function (dept) { return trLower(dept.code) === trLower(code); })) err(S, r.i, "Kod", "Bu kod listede iki kez var: " + code + ".");
+        const name = r.get("Ad");
+        if (!name) err(S, r.i, "Ad", "Bölüm adı boş.");
+        let language = r.get("Dil");
+        if (!language || trLower(language) === "türkçe") language = "Türkçe";
+        else if (["english", "ingilizce", "i̇ngilizce"].indexOf(trLower(language)) !== -1) language = "English";
+        else err(S, r.i, "Dil", "Dil “Türkçe” ya da “English” olmalı.");
+        const classes = r.get("Sınıflar").split(",").map(function (item) { return item.trim(); }).filter(Boolean);
+        classes.forEach(function (item) { if (/[\s\-?()]/.test(item)) err(S, r.i, "Sınıflar", "Sınıf değeri geçersiz: “" + item + "” (ör. 1, 2, 3, 4)."); });
+        departments.push(Object.assign({}, deptBase[code] || {}, { code: code, name: name, language: language, classes: classes }));
+      });
+      const deptByCode = {};
+      departments.forEach(function (dept) { if (dept.code) deptByCode[dept.code] = dept; });
+
+      // Derslikler
+      const roomBase = {};
+      roomList(base).forEach(function (room) { roomBase[roomKey(room.code)] = room; });
+      const rooms = [];
+      readers["Derslikler"].rows.forEach(function (r) {
+        const S = "Derslikler";
+        const code = r.get("Kod");
+        if (!code) err(S, r.i, "Kod", "Derslik kodu boş.");
+        else if (/,/.test(code)) err(S, r.i, "Kod", "Derslik kodunda virgül olamaz.");
+        else if (rooms.some(function (room) { return roomKey(room.code) === roomKey(code); })) err(S, r.i, "Kod", "Bu derslik listede iki kez var: " + code + ".");
+        const room = Object.assign({}, roomBase[roomKey(code)] || {}, { code: code, floor: intOrNull(S, r.i, "Kat", r.get("Kat")),
+          examCapacity: intOrNull(S, r.i, "Sınav kapasitesi", r.get("Sınav kapasitesi")), fullCapacity: intOrNull(S, r.i, "Tam kapasite", r.get("Tam kapasite")) });
+        if (room.examCapacity != null && room.fullCapacity != null && room.fullCapacity < room.examCapacity) err(S, r.i, "Tam kapasite", "Tam kapasite sınav kapasitesinden küçük olamaz.");
+        if (readers[S].has("Not")) { if (r.get("Not")) room.note = r.get("Not"); else delete room.note; }
+        rooms.push(room);
+      });
+
+      // Öğretim elemanları ve gözetmenler (e-posta sütunu yoksa mevcut adresler korunur)
+      const people = function (S, list, withTitle) {
+        const out = [];
+        readers[S].rows.forEach(function (r) {
+          const name = r.get("Ad Soyad");
+          if (!name) err(S, r.i, "Ad Soyad", "Ad boş.");
+          else if (/,/.test(name)) err(S, r.i, "Ad Soyad", "Bir satıra tek kişi yazılır (virgül olamaz).");
+          else if (out.some(function (item) { return nameKey(item.name) === nameKey(name); })) err(S, r.i, "Ad Soyad", "Bu kişi listede iki kez var: " + name + ".");
+          const old = (list || []).find(function (item) { return nameKey(item.name) === nameKey(name); }) || {};
+          const rec = Object.assign({}, old, { name: name });
+          if (withTitle) {
+            rec.title = r.get("Unvan");
+            rec.department = r.get("Bölüm");
+            if (rec.department && !deptByCode[rec.department]) err(S, r.i, "Bölüm", "Bölümler sayfasında yok: " + rec.department + ".");
+          }
+          if (readers[S].has("E-posta")) {
+            const email = r.get("E-posta");
+            if (email && !validEmail(email)) err(S, r.i, "E-posta", "E-posta adresi geçersiz: “" + email + "”.");
+            if (email) rec.email = email; else delete rec.email;
+          }
+          try { rec.unavailable = parseLeave(r.get("İzinler")); } catch (error) { err(S, r.i, "İzinler", error.message); rec.unavailable = []; }
+          out.push(rec);
+        });
+        return out;
+      };
+      const teacherList = people("Öğretim Elemanları", teacherListOf(base), true);
+      const proctorAvailability = people("Gözetmenler", base.proctorAvailability, false);
+
+      // Sınavlar
+      const S = "Sınavlar";
+      const groups = [];
+      const byKey = {};
+      readers[S].rows.forEach(function (r) {
+        const raw = r.get("Sınav no");
+        let id = "";
+        if (raw) {
+          const match = /^(?:exam-)?(\d+)$/i.exec(raw);
+          if (match) id = "exam-" + Number(match[1]);
+          else err(S, r.i, "Sınav no", "Sınav no “exam-12” ya da “12” biçiminde olmalı (yeni sınavda boş bırakın).");
+        }
+        const key = id || "yeni|" + ["Tarih", "Başlangıç", "Bitiş", "Ders kodu", "Ders adı"].map(r.get).join("|");
+        if (!byKey[key]) { byKey[key] = { id: id, rows: [] }; groups.push(byKey[key]); }
+        byKey[key].rows.push(r);
+      });
+      const examBase = {};
+      (base.exams || []).forEach(function (exam) { examBase[exam.id] = exam; });
+      const exams = [];
+      groups.forEach(function (group) {
+        const first = group.rows[0];
+        const value = {};
+        EXAM_FIELDS.forEach(function (col) {
+          group.rows.forEach(function (r) {
+            const v = r.get(col);
+            if (!v) return;
+            if (!(col in value)) value[col] = { v: v, r: r };
+            else if (value[col].v !== v) err(S, r.i, col, "Aynı sınavın satırlarında farklı değer (ilk satırda: “" + value[col].v + "”).");
+          });
+        });
+        const pick = function (col) { return value[col] ? value[col].v : ""; };
+        const at = function (col) { return value[col] ? value[col].r.i : first.i; };
+        const day = parseDateText(pick("Tarih"));
+        if (!pick("Tarih")) err(S, first.i, "Tarih", "Tarih boş (GG.AA.YYYY).");
+        else if (!day) err(S, at("Tarih"), "Tarih", "Tarih anlaşılamadı: “" + pick("Tarih") + "” (GG.AA.YYYY, ör. 04.01.2027).");
+        const start = parseClock(pick("Başlangıç")), end = parseClock(pick("Bitiş"));
+        if (!start) err(S, at("Başlangıç"), "Başlangıç", pick("Başlangıç") ? "Saat SS:DD olmalı (ör. 09:00): “" + pick("Başlangıç") + "”." : "Başlangıç saati boş.");
+        if (!end) err(S, at("Bitiş"), "Bitiş", pick("Bitiş") ? "Saat SS:DD olmalı (ör. 09:50): “" + pick("Bitiş") + "”." : "Bitiş saati boş.");
+        if (start && end && end <= start) err(S, at("Bitiş"), "Bitiş", "Bitiş saati başlangıçtan sonra olmalı.");
+        const course = pick("Ders adı");
+        if (!course) err(S, first.i, "Ders adı", "Ders adı boş.");
+        const teacher = pick("Öğretim elemanı");
+        splitTeachers(teacher).forEach(function (name) {
+          if (!teacherList.some(function (item) { return nameKey(item.name) === nameKey(name); })) err(S, at("Öğretim elemanı"), "Öğretim elemanı", "Öğretim Elemanları sayfasında yok: " + name + ".");
+        });
+        const programs = pick("Bölüm-sınıf").split(",").map(function (item) { return item.trim(); }).filter(Boolean).map(function (item) {
+          let match = /^(.+?)-(.+)$/.exec(item);
+          if (!match) {   // "YBS1" yazımı da kabul edilir
+            const dept = departments.filter(function (d) { return d.code && item.indexOf(d.code) === 0 && item.length > d.code.length; })
+              .sort(function (a, b) { return b.code.length - a.code.length; })[0];
+            if (dept) match = [item, dept.code, item.slice(dept.code.length)];
+          }
+          if (!match || !deptByCode[match[1]]) { err(S, at("Bölüm-sınıf"), "Bölüm-sınıf", "Bölüm bulunamadı: “" + item + "” (KOD-sınıf, ör. YBS-1; kod Bölümler sayfasında olmalı)."); return item; }
+          const classes = deptByCode[match[1]].classes;
+          if (match[2] !== "?" && classes.length && classes.indexOf(match[2]) === -1) err(S, at("Bölüm-sınıf"), "Bölüm-sınıf", match[1] + " bölümünde " + match[2] + ". sınıf yok (Bölümler → Sınıflar).");
+          return match[1] + "-" + match[2];
+        });
+        const examRooms = [];
+        group.rows.forEach(function (r) {
+          const code = r.get("Derslik");
+          if (!code) { err(S, r.i, "Derslik", "Derslik boş."); return; }
+          roomParts(code).forEach(function (part) {
+            if (!rooms.some(function (room) { return roomKey(room.code) === roomKey(part); })) err(S, r.i, "Derslik", "Derslikler sayfasında yok: " + part + ".");
+          });
+          examRooms.push({ room: code, capacity: intText(S, r.i, "Kapasite", r.get("Kapasite")), students: intText(S, r.i, "Derslikteki öğrenci", r.get("Derslikteki öğrenci")),
+            proctor: r.get("Gözetmen"), departments: r.get("Derslikteki bölümler") });
+        });
+        const exam = Object.assign({}, examBase[group.id] || {}, { id: group.id }, day || {}, { start: start || pick("Başlangıç"), end: end || pick("Bitiş"),
+          courseCode: pick("Ders kodu"), course: course, programs: programs, teacher: teacher,
+          totalStudents: intText(S, at("Toplam öğrenci"), "Toplam öğrenci", pick("Toplam öğrenci")),
+          notes: pick("Notlar").split(";").map(function (item) { return item.trim(); }).filter(Boolean), rooms: examRooms });
+        exams.push(exam);
+      });
+      let next = exams.reduce(function (max, exam) { return Math.max(max, examNumber(exam)); }, 0);
+      exams.forEach(function (exam) { if (!exam.id) exam.id = "exam-" + (++next); });
+      counts["Sınavlar (sınav)"] = exams.length;
+
+      // Duyurular
+      const updates = [];
+      readers["Duyurular"].rows.forEach(function (r) {
+        const D = "Duyurular";
+        const item = { tarih: r.get("Tarih"), tur: r.get("Tür") || "Sınav", metin: r.get("Metin") };
+        if (!item.metin) err(D, r.i, "Metin", "Duyuru metni boş.");
+        if (UPDATE_TYPES.indexOf(item.tur) === -1) err(D, r.i, "Tür", "Tür şunlardan biri olmalı: " + UPDATE_TYPES.join(", ") + ".");
+        const raw = r.get("Sınav no");
+        if (raw) {
+          const match = /^(?:exam-)?(\d+)$/i.exec(raw);
+          const id = match ? "exam-" + Number(match[1]) : raw;
+          if (!exams.some(function (exam) { return exam.id === id; })) err(D, r.i, "Sınav no", "Sınavlar sayfasında bu sınav no yok: " + raw + ".");
+          item.examId = id;
+        }
+        updates.push(item);
+      });
+
+      // Program bilgileri (isteğe bağlı sayfa)
+      if (readers["Program bilgileri"]) {
+        readers["Program bilgileri"].rows.forEach(function (r) {
+          const field = META_FIELDS.find(function (item) { return nameKey(item[0]) === nameKey(r.get("Alan")); });
+          if (!field) { err("Program bilgileri", r.i, "Alan", "Alan şunlardan biri olmalı: " + META_FIELDS.map(function (item) { return item[0]; }).join(", ") + "."); return; }
+          data.meta[field[1]] = r.get("Değer");
+        });
+      }
+      if (errors.length) return { data: null, errors: errors, counts: counts };
+      data.departments = departments;
+      data.rooms = rooms;
+      data.teacherList = teacherList;
+      data.proctorAvailability = proctorAvailability;
+      data.exams = exams;
+      data.updates = updates;
+      if (data.envelopes && typeof data.envelopes === "object") {   // silinen sınavların zarf kaydı da silinir
+        Object.keys(data.envelopes).forEach(function (id) { if (!exams.some(function (exam) { return exam.id === id; })) delete data.envelopes[id]; });
+      }
+      return { data: deriveData(data), errors: [], counts: counts };
+    }
+
+    // Excel dosyası → sayfalar (Excel tarih/saat sayıları metne çevrilir)
+    function workbookToSheets(XLSX, book) {
+      const sheets = {};
+      SHEETS.forEach(function (def) {
+        const realName = book.SheetNames.find(function (name) { return nameKey(name) === nameKey(def.name); });
+        if (!realName) return;
+        const grid = XLSX.utils.sheet_to_json(book.Sheets[realName], { header: 1, raw: true, defval: "" });
+        const cols = (grid[0] || []).map(function (cell) { return String(cell == null ? "" : cell).trim(); });
+        const rows = grid.slice(1).map(function (row) {
+          return cols.map(function (col, i) {
+            const cell = row[i];
+            if (typeof cell === "number") {
+              if (col === "Tarih" && def.name === "Sınavlar" && cell > 20000) {
+                const d = XLSX.SSF.parse_date_code(cell);
+                return ("0" + d.d).slice(-2) + "." + ("0" + d.m).slice(-2) + "." + d.y;
+              }
+              if ((col === "Başlangıç" || col === "Bitiş") && cell >= 0 && cell < 1) {
+                const minutes = Math.round(cell * 1440);
+                return ("0" + Math.floor(minutes / 60)).slice(-2) + ":" + ("0" + minutes % 60).slice(-2);
+              }
+              return String(cell);
+            }
+            return String(cell == null ? "" : cell);
+          });
+        });
+        sheets[def.name] = { cols: cols, rows: rows };
+      });
+      return sheets;
+    }
+
+    function excelWorkbook(XLSX, opts) {
+      opts = opts || {};
+      const book = XLSX.utils.book_new();
+      const withEmail = opts.template || !!editor;
+      const sheets = opts.template ? templateSheets() : dataToSheets(DATA, withEmail);
+      SHEETS.forEach(function (def) {
+        const sheet = sheets[def.name];
+        const rows = sheet.rows.map(function (row) {
+          return row.map(function (value, i) {
+            const col = sheet.cols[i];
+            const text = col === "E-posta" ? String(value) : excelText(value);
+            return SHEET_NUMBER_COLS.indexOf(col) !== -1 && /^\d+$/.test(text) ? Number(text) : text;
+          });
+        });
+        XLSX.utils.book_append_sheet(book, excelSheet(XLSX, sheet.cols, rows), def.name);
+      });
+      if (opts.template) return book;
+
+      // yalnız bilgi amaçlı sayfalar (yüklemede okunmaz)
       const gorevler = (DATA.assignments || []).slice().sort(function (a, b) {
         return String(a.proctor).localeCompare(String(b.proctor), "tr") || String(a.date).localeCompare(String(b.date)) || String(a.start).localeCompare(String(b.start));
       }).map(function (item) {
@@ -4127,24 +4588,14 @@
           excelText(item.courseCode), excelText(item.course), excelText(item.room)];
       });
       XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Tarih", "Gün", "Saat", "Ders kodu", "Ders", "Derslik"], gorevler), "Gözetmen görevleri");
-
       const counts = proctorTaskCounts();
-      const izin = {};
-      (DATA.proctorAvailability || []).forEach(function (item) {
-        izin[item.name] = (item.unavailable || []).map(function (u) { return excelText(u.day) + (u.reason ? " (" + excelText(u.reason) + ")" : ""); }).join(", ");
-      });
-      const names = {};
-      (DATA.proctors || []).concat(Object.keys(counts), Object.keys(izin)).forEach(function (name) { if (excelText(name)) names[name] = true; });
-      const yuk = Object.keys(names).sort(function (a, b) { return a.localeCompare(b, "tr"); }).map(function (name) {
+      const yuk = (DATA.proctors || []).filter(function (name) { return excelText(name); }).sort(function (a, b) { return a.localeCompare(b, "tr"); }).map(function (name) {
         const seen = {};
         (DATA.assignments || []).forEach(function (item) { if (item.proctor === name) seen[item.examId] = true; });
-        return [excelText(name), counts[name] || 0, Object.keys(seen).length, izin[name] || ""];
+        const rec = (DATA.proctorAvailability || []).find(function (item) { return nameKey(item.name) === nameKey(name); }) || {};
+        return [excelText(name), counts[name] || 0, Object.keys(seen).length, excelText(leaveToText(rec.unavailable))];
       });
-      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Toplam görev", "Sınav sayısı", "İzin günleri"], yuk), "Gözetmen yükü");
-
-      const degisiklikler = (DATA.updates || []).map(function (item) { return [excelText(item.tarih), excelText(item.tur), excelText(item.metin)]; });
-      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Tarih", "Tür", "Metin"], degisiklikler), "Son değişiklikler");
-
+      XLSX.utils.book_append_sheet(book, excelSheet(XLSX, ["Gözetmen", "Toplam görev", "Sınav sayısı", "İzinler"], yuk), "Gözetmen yükü");
       if (typeof envelopeExams === "function") {   // sınav zarfı takibi
         const zarflar = envelopeExams().map(function (exam) {
           const rec = envRecord(exam.id) || {};
@@ -4157,23 +4608,413 @@
       }
       return book;
     }
+    // Boş şablon: başlıklar + birbiriyle tutarlı birer örnek satır
+    function templateSheets() {
+      const rows = {
+        "Sınavlar": [["", "04.01.2027", "Pazartesi", "09:00", "09:50", "ORN101", "Örnek Ders", "Ayşe YILMAZ", "ORN-1", "30", "A101", "40", "30", "Ali Demir", "ORN 30", ""]],
+        "Derslikler": [["A101", "1", "40", "60", ""]],
+        "Öğretim Elemanları": [["Ayşe YILMAZ", "Dr. Öğr. Üyesi", "ORN", "ayse.yilmaz@ornek.edu.tr", "Salı 13:00-17:00"]],
+        "Gözetmenler": [["Ali Demir", "ali.demir@ornek.edu.tr", "Cuma; 2027-01-05 09:00-12:00 (toplantı)"]],
+        "Bölümler": [["ORN", "Örnek Bölüm", "Türkçe", "1, 2, 3, 4"]],
+        "Duyurular": [["4 Ocak", "Sınav", "Sınav programı yayımlandı.", ""]],
+        "Program bilgileri": [["Üniversite", "Örnek Üniversitesi"], ["Fakülte", "Örnek Fakültesi"], ["Program adı", "2026-2027 Güz Dönemi Final"], ["Dönem", "4–15 Ocak 2027"]]
+      };
+      const out = {};
+      SHEETS.forEach(function (def) { out[def.name] = { cols: def.cols.slice(), rows: rows[def.name] }; });
+      return out;
+    }
 
-    function downloadExcel() {
-      const button = $("#excel-download");
-      const status = $("#excel-status");
+    function downloadExcel(button, opts) {
+      opts = opts || {};
+      button = button || $("#excel-download");
+      const status = button.parentElement.querySelector(".excel-status") || $("#excel-status");
       if (!DATA) { status.textContent = "Veri henüz yüklenmedi; biraz sonra yeniden deneyin."; return; }
       button.disabled = true;
       status.textContent = "Excel dosyası hazırlanıyor…";
       loadXlsx().then(function (XLSX) {
         const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
-        XLSX.writeFile(excelWorkbook(XLSX), "IYBF Sinav Programi Verisi " + today + ".xlsx", { compression: true });
+        XLSX.writeFile(excelWorkbook(XLSX, opts), (opts.template ? "Sinav Takip Sablonu.xlsx" : "Sinav Takip Verisi " + today + ".xlsx"), { compression: true });
         status.textContent = "";
       }).catch(function () {
         status.textContent = "Excel dosyası hazırlanamadı: gerekli kütüphane yüklenemedi. İnternet bağlantınızı kontrol edip yeniden deneyin.";
       }).then(function () { button.disabled = false; });
     }
     document.addEventListener("click", function (event) {
-      if (event.target.closest("#excel-download")) downloadExcel();
+      const button = event.target.closest("#excel-download, [data-excel-download], [data-excel-template]");
+      if (button) downloadExcel(button, { template: button.hasAttribute("data-excel-template") });
+    });
+
+    // ---- Toplu kayıt: bütün veri tek seferde (Veri Tablosu ve Excel yükleme) ----
+    // GitHub'daki (demoda tarayıcıdaki) güncel veri okunur; sayfalar onun üzerine uygulanır (ayarlar, zarflar korunur) ve tek kayıtta yazılır.
+    function commitSheets(sheets, what) {
+      return loadDoc(EDIT_FILE).then(function (doc) {
+        let base;
+        try { base = JSON.parse(doc.text); } catch (error) { throw new Error("veri.json okunamadı (biçim bozuk); kaydedilmedi."); }
+        const result = sheetsToData(sheets, base);
+        if (result.errors.length) throw new Error("Kaydedilmedi: güncel veriyle denetimde " + result.errors.length + " hata çıktı. Sayfayı yenileyip yeniden deneyin.");
+        const text = JSON.stringify(result.data, null, 1) + "\n";
+        if (text === doc.text) return { unchanged: true, data: result.data };
+        return saveDoc(EDIT_FILE, text, EDIT_FOLDER + " düzenleme: " + what + " (" + editor.login + ")", doc.sha).then(function () { return { data: result.data }; });
+      }).then(function (result) {
+        tableDraft = null;
+        setData(result.data);
+        refreshAll();
+        return result;
+      });
+    }
+    // Kontrol kuralları: yalnız bu değişiklikle ortaya çıkan sorunlar kaydı durdurur (önceden var olanlar özetde sayılır)
+    function bulkIssues(data) {
+      const before = {};
+      programIssues(DATA).forEach(function (item) { before[item.key] = true; });
+      const all = programIssues(data);
+      const fresh = all.filter(function (item) { return !before[item.key]; });
+      return { all: all, fresh: fresh, blocks: fresh.filter(function (item) { return issueBlocks(item, data); }) };
+    }
+    function issueSummaryHtml(issues, data) {
+      if (!issues.all.length) return '<p class="bulk-ok">Kontrol: sorun yok.</p>';
+      const types = {};
+      issues.all.forEach(function (item) { types[item.type] = (types[item.type] || 0) + 1; });
+      return '<p class="bulk-head">Kontrol: ' + issues.all.length + ' sorun (' + Object.keys(types).map(function (type) { return esc(type) + " " + types[type]; }).join(", ") + ')' +
+        (issues.fresh.length ? ' · bu değişiklikle yeni: ' + issues.fresh.length : ' · hepsi önceden de vardı') + '</p>' +
+        (issues.fresh.length ? '<ul class="bulk-list">' + issues.fresh.slice(0, 30).map(function (item) {
+          const block = issueBlocks(item, data);
+          return '<li class="' + (block ? 'is-block' : 'is-warn') + '"><b>' + esc(item.type) + (block ? ' · engel' : '') + ':</b> ' + esc(item.text) + '</li>';
+        }).join("") + (issues.fresh.length > 30 ? '<li>… ve ' + (issues.fresh.length - 30) + ' sorun daha (Panel → Kontrol)</li>' : '') + '</ul>' : '') +
+        (issues.blocks.length ? '<p class="bulk-stop">' + (settingsOf(data).warnOnly ? 'Engel olan sorun var; kaydedilemez.' : 'Ayarlar’da “uyarılar kaydı durdurmasın” kapalı; yeni uyarı varken kaydedilemez.') + '</p>' : '');
+    }
+    function errorListHtml(errors, fileRows) {
+      return '<ul class="bulk-list dt-errors">' + errors.slice(0, 60).map(function (item, n) {
+        const where = esc(item.sheet) + (item.row >= 0 ? ' · satır ' + (item.row + (fileRows ? 2 : 1)) : '') + (item.col ? ' · ' + esc(item.col) : '');
+        return '<li class="is-block">' + (fileRows || item.row < 0 ? '<b>' + where + ':</b> ' : '<button type="button" class="dt-goto" data-dt-goto="' + n + '">' + where + '</button> ') + esc(item.msg) + '</li>';
+      }).join("") + (errors.length > 60 ? '<li>… ve ' + (errors.length - 60) + ' hata daha</li>' : '') + '</ul>';
+    }
+
+    // ---- Panel > Veri Tablosu ----
+    let tableDraft = null;   // { sheets, dirty, sheet: seçili sayfa, sort: { col, dir }, query, errors, note }
+    function tableSheetNames() { return SHEETS.filter(function (def) { return !def.fileOnly; }).map(function (def) { return def.name; }); }
+    function ensureDraft() {
+      if (!tableDraft) tableDraft = { sheets: dataToSheets(DATA, true), dirty: false, sheet: tableSheetNames()[0], sort: null, query: "", errors: [], note: "" };
+      return tableDraft;
+    }
+    function tableDataChanged() {
+      if (tableDraft && !tableDraft.dirty) {
+        const keep = { sheet: tableDraft.sheet, query: tableDraft.query, note: tableDraft.note };
+        tableDraft = null;
+        Object.assign(ensureDraft(), keep);
+      }
+      if ($("#page-table") && !$("#page-table").hidden) renderTable();
+    }
+    function renderTable() {
+      const box = $("#table-box");
+      if (!box || !DATA) return;
+      if (!editor) {
+        box.innerHTML = '<div class="placeholder"><div><strong>Düzenleme yetkisi gerekir</strong>Veri Tablosu yalnız düzenleyici girişi yapanlara açıktır. Verileri Excel olarak Panel → Veriler’den indirebilirsiniz.</div></div>';
+        return;
+      }
+      const draft = ensureDraft();
+      const sheet = draft.sheets[draft.sheet];
+      const errorsHere = draft.errors.filter(function (item) { return item.sheet === draft.sheet && item.ref; });
+      const cellError = function (row, col) {
+        const found = errorsHere.find(function (item) { return item.ref === row && item.col === col; });
+        return found ? found.msg : "";
+      };
+      const sizes = sheet.cols.map(function (col, c) {
+        return Math.min(28, Math.max(col.length + 1, 5, sheet.rows.reduce(function (max, row) { return Math.max(max, String(row[c] || "").length + 1); }, 0)));
+      });
+      box.innerHTML = '<div class="dt-files"><button type="button" class="excel-button" data-excel-download>Verileri indir (Excel)</button>' +
+          '<button type="button" class="dt-light" data-excel-template>Şablon indir</button>' +
+          '<label class="dt-light dt-upload">Verileri yükle (Excel)<input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-excel-upload hidden></label>' +
+          '<span class="excel-status" role="status" aria-live="polite"></span></div>' +
+        '<div class="view-toggle dt-sheets" role="group" aria-label="Sayfa">' + tableSheetNames().map(function (name) {
+          const count = draft.sheets[name].rows.length;
+          const bad = draft.errors.some(function (item) { return item.sheet === name; });
+          return '<button type="button" data-dt-sheet="' + esc(name) + '" aria-pressed="' + (name === draft.sheet) + '"' + (bad ? ' class="has-error"' : '') + '>' + esc(name) + ' <small>' + count + '</small></button>';
+        }).join("") + '</div>' +
+        '<div class="dt-tools"><label class="sr-only" for="dt-search">Tabloda ara</label>' +
+          '<input class="search-input" id="dt-search" type="search" placeholder="Bu sayfada ara…" autocomplete="off" value="' + esc(draft.query) + '">' +
+          '<button type="button" class="row-add" data-dt-add>+ Satır ekle</button>' +
+          '<span class="dt-dirty" data-dt-dirty>' + (draft.dirty ? 'Kaydedilmemiş değişiklik var' : 'Değişiklik yok') + '</span>' +
+          '<button type="button" class="edit-save" data-dt-save' + (draft.dirty ? '' : ' disabled') + '>Değişiklikleri kaydet</button>' +
+          '<button type="button" data-dt-cancel' + (draft.dirty ? '' : ' disabled') + '>Vazgeç</button></div>' +
+        '<div class="dt-note" data-dt-note' + (draft.note ? '' : ' hidden') + '>' + draft.note + '</div>' +
+        '<div class="dt-wrap"><table class="dt"><thead><tr><th class="dt-n">#</th>' + sheet.cols.map(function (col, c) {
+          const sorted = draft.sort && draft.sort.col === c ? (draft.sort.dir > 0 ? ' ▲' : ' ▼') : '';
+          return '<th><button type="button" data-dt-sort="' + c + '" title="Bu sütuna göre sırala">' + esc(col) + sorted + '</button></th>';
+        }).join("") + '<th class="dt-n"></th></tr></thead><tbody>' + sheet.rows.map(function (row, r) {
+          return '<tr data-r="' + r + '"><td class="dt-n">' + (r + 1) + '</td>' + sheet.cols.map(function (col, c) {
+            const msg = cellError(row, col);
+            const readonly = draft.sheet === "Sınavlar" && col === "Gün";
+            return '<td' + (msg ? ' class="is-error"' : '') + '><input data-c="' + c + '" size="' + sizes[c] + '" value="' + esc(row[c] == null ? "" : row[c]) + '"' +
+              (msg ? ' title="' + esc(msg) + '" aria-invalid="true"' : '') + (readonly ? ' readonly tabindex="-1" title="Tarihten hesaplanır"' : '') + ' aria-label="' + esc(col + ", satır " + (r + 1)) + '"></td>';
+          }).join("") + '<td class="dt-n"><button type="button" class="dt-del" data-dt-del="' + r + '" tabindex="-1" aria-label="Satırı sil" title="Satırı sil">×</button></td></tr>';
+        }).join("") + '</tbody></table>' + (sheet.rows.length ? '' : '<p class="editor-small dt-empty">Bu sayfada satır yok; “+ Satır ekle” ile ekleyin.</p>') + '</div>' +
+        '<p class="editor-small">' + (draft.sheet === "Sınavlar" ? 'Her sınav-derslik bir satır: aynı “Sınav no”lu satırlar tek sınavdır (yeni sınavda Sınav no boş kalır; tarih, saat ve ders aynı olan satırlar birleşir). Tarih GG.AA.YYYY, saat SS:DD; Bölüm-sınıf virgülle (YBS-1, İŞL-1); Notlar noktalı virgülle. ' :
+          draft.sheet === "Öğretim Elemanları" || draft.sheet === "Gözetmenler" ? 'İzinler noktalı virgülle: “Pazartesi; 2027-01-05 09:00-12:00 (toplantı)”. Parantezsiz izin “izin” sayılır. ' :
+          draft.sheet === "Bölümler" ? 'Sınıflar virgülle: 1, 2, 3, 4. Dil: Türkçe ya da English. ' : draft.sheet === "Duyurular" ? 'En yeni üstte. Tür: ' + UPDATE_TYPES.join(", ") + '. ' : '') +
+          'Türetilen alanlar (gözetmen görevleri, listeler, sayımlar) kayıtta yeniden hesaplanır.</p>';
+      filterTable();
+    }
+    function filterTable() {
+      const query = trLower(tableDraft ? tableDraft.query.trim() : "");
+      $$("#table-box tbody tr").forEach(function (tr) {
+        tr.hidden = !!query && !$$("input", tr).some(function (input) { return trLower(input.value).indexOf(query) !== -1; });
+      });
+    }
+    function markDirty() {
+      tableDraft.dirty = true;
+      const label = $("#table-box [data-dt-dirty]");
+      if (label) label.textContent = "Kaydedilmemiş değişiklik var";
+      $$("#table-box [data-dt-save], #table-box [data-dt-cancel]").forEach(function (button) { button.disabled = false; });
+    }
+    function tableNote(html) {
+      tableDraft.note = html;
+      const box = $("#table-box [data-dt-note]");
+      if (box) { box.innerHTML = html; box.hidden = !html; }
+    }
+    function focusCell(tr, c) {
+      const input = tr && $('input[data-c="' + c + '"]', tr);
+      if (input) { input.focus(); input.select(); }
+      return !!input;
+    }
+    function saveTable(force) {
+      const draft = tableDraft;
+      const result = sheetsToData(draft.sheets, DATA);
+      draft.errors = result.errors;
+      if (result.errors.length) {
+        const first = result.errors.find(function (item) { return item.ref; });
+        if (first) draft.sheet = first.sheet;
+        renderTable();
+        tableNote('<p class="bulk-stop">Kaydedilmedi: ' + result.errors.length + ' hata. Hatalı hücreler kırmızı; üzerine gelince açıklama görünür.</p>' + errorListHtml(result.errors, false));
+        return;
+      }
+      const issues = bulkIssues(result.data);
+      if (issues.blocks.length || (issues.fresh.length && !force)) {
+        renderTable();
+        tableNote(issueSummaryHtml(issues, result.data) + (issues.blocks.length ? '' : '<button type="button" class="force-save" data-dt-force>Yine de kaydet</button>'));
+        return;
+      }
+      $$("#table-box [data-dt-save], #table-box [data-dt-cancel], #table-box [data-dt-force]").forEach(function (button) { button.disabled = true; });
+      showToast(savingText());
+      commitSheets(draft.sheets, "veri tablosu").then(function (saved) {
+        showToast(savedText(saved, "Veri tablosu kaydedildi"));
+        if (tableDraft) tableNote("");
+      }).catch(function (error) {
+        showToast((error && error.message) || "Kaydedilemedi. Lütfen tekrar deneyin.", true);
+        if (tableDraft) { renderTable(); tableNote('<p class="bulk-stop">' + esc((error && error.message) || "Kaydedilemedi.") + '</p>'); }
+      });
+    }
+    function initTable() {
+      const box = $("#table-box");
+      box.addEventListener("input", function (event) {
+        const input = event.target;
+        if (input.id === "dt-search") { tableDraft.query = input.value; filterTable(); return; }
+        const tr = input.closest("tr[data-r]");
+        if (!tr || input.dataset.c === undefined) return;
+        const row = tableDraft.sheets[tableDraft.sheet].rows[Number(tr.dataset.r)];
+        row[Number(input.dataset.c)] = input.value;
+        if (tableDraft.sheet === "Sınavlar" && tableDraft.sheets["Sınavlar"].cols[Number(input.dataset.c)] === "Tarih") {   // Gün tarihten
+          const day = parseDateText(input.value);
+          const at = tableDraft.sheets["Sınavlar"].cols.indexOf("Gün");
+          row[at] = day ? day.day : "";
+          const cell = $('input[data-c="' + at + '"]', tr);
+          if (cell) cell.value = row[at];
+        }
+        markDirty();
+      });
+      box.addEventListener("keydown", function (event) {
+        const input = event.target;
+        const tr = input.closest && input.closest("tr[data-r]");
+        if (!tr || input.tagName !== "INPUT") return;
+        const c = Number(input.dataset.c);
+        const rows = $$("#table-box tbody tr:not([hidden])");
+        const at = rows.indexOf(tr);
+        let target = null, col = c;
+        if (event.key === "Enter" || event.key === "ArrowDown" || event.key === "ArrowUp") {
+          target = rows[at + ((event.key === "ArrowUp" || (event.key === "Enter" && event.shiftKey)) ? -1 : 1)];
+          if (!target) { if (event.key === "Enter") event.preventDefault(); return; }
+        } else if (event.key === "ArrowLeft" && input.selectionStart === 0 && input.selectionEnd === 0 && c > 0) {
+          target = tr; col = c - 1;
+        } else if (event.key === "ArrowRight" && input.selectionStart === input.value.length && input.selectionEnd === input.value.length) {
+          target = tr; col = c + 1;
+        } else return;
+        if (focusCell(target, col)) event.preventDefault();
+      });
+      box.addEventListener("change", function (event) {
+        if (event.target.matches("[data-excel-upload]")) {
+          const file = event.target.files && event.target.files[0];
+          event.target.value = "";
+          if (file) uploadExcel(file, event.target.closest(".dt-files").querySelector(".excel-status"));
+        }
+      });
+      box.addEventListener("click", function (event) {
+        const draft = tableDraft;
+        if (!draft) return;
+        const sheetButton = event.target.closest("[data-dt-sheet]");
+        if (sheetButton) { draft.sheet = sheetButton.dataset.dtSheet; draft.sort = null; draft.query = ""; renderTable(); return; }
+        const sortButton = event.target.closest("[data-dt-sort]");
+        if (sortButton) {
+          const c = Number(sortButton.dataset.dtSort);
+          const dir = draft.sort && draft.sort.col === c ? -draft.sort.dir : 1;
+          draft.sort = { col: c, dir: dir };
+          draft.sheets[draft.sheet].rows.sort(function (a, b) {
+            const x = String(a[c] || ""), y = String(b[c] || "");
+            const dx = parseDateText(x), dy = parseDateText(y);
+            return dir * (dx && dy ? plainOrder(dx.date, dy.date) : x.localeCompare(y, "tr", { numeric: true }));
+          });
+          markDirty();
+          renderTable();
+          return;
+        }
+        if (event.target.closest("[data-dt-add]")) {
+          const sheet = draft.sheets[draft.sheet];
+          sheet.rows.push(sheet.cols.map(function () { return ""; }));
+          draft.query = "";
+          markDirty();
+          renderTable();
+          const rows = $$("#table-box tbody tr");
+          focusCell(rows[rows.length - 1], 0);
+          return;
+        }
+        const del = event.target.closest("[data-dt-del]");
+        if (del) {
+          draft.sheets[draft.sheet].rows.splice(Number(del.dataset.dtDel), 1);
+          markDirty();
+          renderTable();
+          return;
+        }
+        if (event.target.closest("[data-dt-cancel]")) {
+          if (!confirm("Taslaktaki bütün değişiklikler atılsın mı?")) return;
+          const keep = draft.sheet;
+          tableDraft = null;
+          ensureDraft().sheet = keep;
+          renderTable();
+          return;
+        }
+        if (event.target.closest("[data-dt-save]")) { saveTable(false); return; }
+        if (event.target.closest("[data-dt-force]")) { saveTable(true); return; }
+        const go = event.target.closest("[data-dt-goto]");
+        if (go) {
+          const item = draft.errors[Number(go.dataset.dtGoto)];
+          if (!item) return;
+          draft.sheet = item.sheet;
+          draft.query = "";
+          const note = draft.note;
+          renderTable();
+          tableNote(note);
+          const r = draft.sheets[item.sheet].rows.indexOf(item.ref);
+          const c = draft.sheets[item.sheet].cols.indexOf(item.col);
+          focusCell($('#table-box tbody tr[data-r="' + r + '"]'), Math.max(c, 0));
+        }
+      });
+      // Excel yükleme penceresi
+      $("#bulk-modal").addEventListener("click", function (event) {
+        if (event.target.closest("[data-bulk-cancel]")) { $("#bulk-modal").close(); return; }
+        const ok = event.target.closest("[data-bulk-confirm]");
+        if (!ok || !bulkPending) return;
+        $$("#bulk-modal button").forEach(function (button) { button.disabled = true; });
+        const status = $("#bulk-modal [data-bulk-status]");
+        status.classList.remove("is-error");
+        status.textContent = savingText();
+        commitSheets(bulkPending, "Excel'den toplu yükleme").then(function (saved) {
+          bulkPending = null;
+          $("#bulk-modal").close();
+          showToast(savedText(saved, "Veriler yüklenen dosyayla değiştirildi"));
+        }).catch(function (error) {
+          $$("#bulk-modal button").forEach(function (button) { button.disabled = false; });
+          status.classList.add("is-error");
+          status.textContent = (error && error.message) || "Kaydedilemedi. Lütfen tekrar deneyin.";
+        });
+      });
+      $("#bulk-modal").addEventListener("close", function () { bulkPending = null; });
+    }
+
+    // ---- Verileri yükle (Excel) ----
+    let bulkPending = null;   // onay bekleyen sayfalar
+    function uploadExcel(file, status) {
+      if (status) status.textContent = "Dosya okunuyor…";
+      Promise.all([loadXlsx(), file.arrayBuffer()]).then(function (parts) {
+        const XLSX = parts[0];
+        let book;
+        try { book = XLSX.read(parts[1], { type: "array" }); } catch (error) { throw new Error("Dosya Excel (.xlsx) olarak okunamadı."); }
+        const sheets = workbookToSheets(XLSX, book);
+        const result = sheetsToData(sheets, DATA);
+        if (status) status.textContent = "";
+        openBulkModal(file.name, sheets, result);
+      }).catch(function (error) {
+        if (status) status.textContent = (error && error.message && !/kütüphane/.test(error.message)) ? error.message : "Excel kütüphanesi yüklenemedi. İnternet bağlantınızı kontrol edip yeniden deneyin.";
+      });
+    }
+    function openBulkModal(fileName, sheets, result) {
+      const issues = result.errors.length ? null : bulkIssues(result.data);
+      const canSave = !result.errors.length && !issues.blocks.length;
+      const countRows = SHEETS.filter(function (def) { return def.name in result.counts; }).map(function (def) {
+        return '<tr><td>' + esc(def.name) + '</td><td class="num">' + result.counts[def.name] + (def.name === "Sınavlar" && result.counts["Sınavlar (sınav)"] != null ? ' satır · ' + result.counts["Sınavlar (sınav)"] + ' sınav' : '') + '</td></tr>';
+      }).join("");
+      $("#bulk-modal-title").textContent = fileName;
+      $("#bulk-modal-content").innerHTML =
+        '<table class="admin-table bulk-counts"><thead><tr><th>Sayfa</th><th>Satır</th></tr></thead><tbody>' + countRows + '</tbody></table>' +
+        (result.errors.length
+          ? '<p class="bulk-stop">Dosyada ' + result.errors.length + ' hata var; kayıt yapılmadı. Düzeltip yeniden yükleyin (satır numaraları Excel’deki satırlardır).</p>' + errorListHtml(result.errors, true)
+          : issueSummaryHtml(issues, result.data)) +
+        (canSave ? '<div class="bulk-danger" role="alert"><strong>Dikkat!</strong> Bütün veriler yüklenen dosyadakilerle DEĞİŞECEK. Mevcut veriler silinir. Bu işlem geri alınamaz' +
+            (DEMO ? ' (demo: değişiklik yalnız bu tarayıcıda).' : ' (gerçek modda eski hâli GitHub geçmişinde kalır).') + '</div>' : '') +
+        '<p class="edit-status" data-bulk-status role="alert" aria-live="polite"></p>' +
+        '<div class="edit-actions">' + (canSave ? '<button type="button" class="edit-save is-danger" data-bulk-confirm>Evet, bütün verileri değiştir</button>' : '') +
+          '<button type="button" data-bulk-cancel>' + (canSave ? 'Vazgeç' : 'Kapat') + '</button></div>';
+      openModal($("#bulk-modal"));
+      bulkPending = canSave ? sheets : null;
+    }
+
+    // ---- Yazdırılabilir görünümler (tarayıcının "PDF olarak kaydet" seçeneğiyle PDF olur) ----
+    function printHeadHtml(title, kind) {
+      const university = metaText("university", "") || metaText("institution", "");
+      const faculty = metaText("faculty", "");
+      const program = metaText("programName", "") || DEFAULT_PROGRAM;
+      const period = metaText("period", DEFAULT_PERIOD);
+      return '<header class="print-head"><p>' + esc([university, faculty].filter(Boolean).join(" · ")) + '</p>' +
+        '<p>' + esc([program, period].filter(Boolean).join(" · ")) + '</p>' +
+        '<h1>' + esc(title) + (kind ? ' <small>' + esc(kind) + '</small>' : '') + '</h1></header>';
+    }
+    function printHtml(html, landscape) {
+      let root = $("#print-root");
+      if (!root) { root = document.createElement("div"); root.id = "print-root"; document.body.appendChild(root); }
+      let style = $("#print-page");
+      if (!style) { style = document.createElement("style"); style.id = "print-page"; document.head.appendChild(style); }
+      style.textContent = "@page { size: A4 " + (landscape ? "landscape" : "portrait") + "; margin: 10mm; }";
+      root.innerHTML = html + '<p class="print-foot">Yazdırma: ' + esc(turkeyNow()) + '. Güncel program için sitedeki sayfaya bakın.</p>';
+      document.body.classList.add("has-print");
+      setTimeout(function () { window.print(); }, 50);
+    }
+    function printPerson() {
+      if (!currentPerson) return;
+      const entries = personExams(currentPerson.type, currentPerson.name);
+      const showTeacher = currentPerson.type !== "teacher";
+      const body = personView === "list" ? courseListHtml(entries, showTeacher, currentPerson.type === "all", currentPerson.type === "room") : weekHtml(entries, showTeacher);
+      printHtml('<section class="print-sheet">' + printHeadHtml($("#person-modal-title").textContent, $("#person-modal-kind").textContent + (personView === "list" ? " · liste" : " · takvim")) + body + '</section>', personView !== "list");
+    }
+    function printProctorDuties() {
+      if (!DATA) return;
+      const counts = proctorTaskCounts();
+      const names = (DATA.proctors || []).slice().sort(function (a, b) { return a.localeCompare(b, "tr"); });
+      const sheets = names.map(function (name) {
+        const duties = DATA.assignments.filter(function (item) { return item.proctor === name; })
+          .sort(function (a, b) { return plainOrder(a.date, b.date) || plainOrder(a.start, b.start); });
+        const exams = {};
+        duties.forEach(function (item) { exams[item.examId] = true; });
+        return '<section class="print-sheet print-break">' + printHeadHtml(name, "Gözetmen görev çizelgesi") +
+          (duties.length ? '<table class="print-table"><thead><tr><th>Tarih</th><th>Gün</th><th>Saat</th><th>Ders</th><th>Derslik</th></tr></thead><tbody>' +
+            duties.map(function (item) {
+              return '<tr><td>' + esc(item.dateLabel) + '</td><td>' + esc(item.day) + '</td><td>' + esc(item.start + "–" + item.end) + '</td>' +
+                '<td>' + esc([item.courseCode, item.course].filter(Boolean).join(" ")) + '</td><td>' + esc(item.room) + '</td></tr>';
+            }).join("") + '</tbody></table>' : '<p>Görev yok.</p>') +
+          '<p class="print-total">Toplam görev: <strong>' + (counts[name] || 0) + '</strong> · sınav sayısı: ' + Object.keys(exams).length +
+            ' <small>(süresi ' + settingsOf(DATA).longExamMinutes + ' dakikadan uzun sınav 2 görev sayılır)</small></p></section>';
+      });
+      printHtml(sheets.join("") || '<section class="print-sheet">' + printHeadHtml("Gözetmen görev çizelgesi", "") + '<p>Gözetmen yok.</p></section>', false);
+    }
+    window.addEventListener("afterprint", function () { document.body.classList.remove("has-print"); });
+    document.addEventListener("click", function (event) {
+      if (event.target.closest("#proctor-print")) printProctorDuties();
     });
 
     function panelPeople() { return Promise.resolve([]); }   // adresler epostalar.json'dan alınır
@@ -4444,6 +5285,8 @@
       renderRoomAdmin();
       renderDataAdmin();
       renderSettings();
+      $$('[data-subpage="table"]').forEach(function (button) { button.hidden = !editor; });
+      tableDataChanged();
       if (rulesLoaded) renderRules();
     }
 
@@ -5552,6 +6395,7 @@
       renderRoomAdmin();
       renderSettings();
       renderCheck();
+      tableDataChanged();
       renderEnvelopes();
       if ($("#envelope-modal").open && envView) renderEnvelopeModal();
       if ($("#envcard-modal").open && envExam) { envExam = examById(envExam.id) || envExam; renderEnvelopeCard(); }
@@ -5584,6 +6428,7 @@
       });
       initDemo();
       initAppModal();
+      initTable();
       initEditor();
     }
 
@@ -6066,7 +6911,8 @@
       "veriler": "data",
       "kurallar": "rules",
       "ayarlar": "settings",
-      "kontrol": "check"
+      "kontrol": "check",
+      "veri-tablosu": "table"
     };
     activatePage(pageByHash[initialHash] || "home", false);
     // adres çubuğunda hash değişince (paylaşılan bağlantı aynı sekmede) ilgili uygulama ve sekme açılır
