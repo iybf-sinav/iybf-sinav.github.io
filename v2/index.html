@@ -837,7 +837,31 @@
     #tab-panel, #page-panel { --accent: #475569; }
     #page-features, #page-data { --accent: #475569; }
     .data-info { max-width: 760px; margin: 0 0 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: .92rem; line-height: 1.5; }
-    .panel-subnav { margin-bottom: 14px; }
+    .panel-subnav { margin-bottom: 14px; flex-wrap: wrap; max-width: 100%; }
+    #page-rules { --accent: #475569; }
+    .rules-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+    .rules-filters .search-input { flex: 1 1 220px; min-width: 0; max-width: 100%; }
+    .rules-filters .filter-select { flex: 0 1 auto; max-width: 100%; }
+    .rules-count { font-weight: 700; color: var(--accent); white-space: nowrap; }
+    .rules-group { margin: 0 0 10px; border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 12px; background: #fff; overflow: hidden; }
+    .rules-group.is-warn { border-left-color: #d97706; background: #fffbeb; }
+    .rules-group > summary { cursor: pointer; padding: 12px 16px; font-weight: 700; color: var(--accent); display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+    .rules-group.is-warn > summary { color: #b45309; }
+    .rules-group-count { font-weight: 600; font-size: .82rem; color: #64748b; }
+    .rules-items { margin: 0; padding: 0 16px 8px; list-style: none; }
+    .rule-item { padding: 10px 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+    .rule-item h4 { margin: 0 0 4px; font-size: .95rem; }
+    .rule-id { color: #64748b; font-weight: 600; margin-right: 4px; }
+    .rule-item p { margin: 0 0 6px; font-size: .9rem; line-height: 1.5; }
+    .rule-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .rule-tag { padding: 1px 8px; border-radius: 999px; font-size: .74rem; font-weight: 700; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+    .rule-tag.t-sert { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+    .rule-tag.t-yumusak { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+    .rule-tag.t-sayim { background: #dcfce7; color: #166534; border-color: #86efac; }
+    .rule-tag.k-donem { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .rule-source { font-size: .76rem; color: #94a3b8; }
+    .rules-empty { color: #64748b; }
+    .rules-doc { margin-top: 16px; font-size: .9rem; }
     .top-nav .tab-button { color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, white);
       border: 2px solid color-mix(in srgb, var(--accent) 22%, white); }
     .top-nav .tab-button:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 18%, white); }
@@ -1323,6 +1347,7 @@
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="panel" aria-pressed="true">Panel</button>
         <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
       </div>
       <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
@@ -1332,6 +1357,7 @@
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="panel" aria-pressed="false">Panel</button>
         <button type="button" data-subpage="data" aria-pressed="true">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
       </div>
       <div class="page-heading">
@@ -1343,10 +1369,46 @@
       <p class="data-info">İndirilen dosyadaki sayfalar: <strong>Sınavlar</strong> (her sınav-derslik bir satır), <strong>Gözetmen görevleri</strong>, <strong>Gözetmen yükü</strong> (görev sayısı ve izin günleri), <strong>Son değişiklikler</strong> ve <strong>Sınav zarfları</strong>. E-posta adresleri dosyaya yazılmaz.</p>
       <div class="excel-bar"><button class="excel-button" type="button" id="excel-download">Excel olarak indir</button><span class="excel-status" id="excel-status" role="status" aria-live="polite"></span></div>
     </section>
+    <section class="page" id="page-rules" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="panel" aria-pressed="false">Panel</button>
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="true">Kurallar</button>
+        <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
+      </div>
+      <div class="page-heading">
+        <div>
+          <h2>Kurallar</h2>
+          <p>Sınav programının hangi kurallarla kurulduğu. Kurallar komisyonun yerleştirme kodundan ve belgelerinden derlendi. “Genel” her dönem geçerli kuraldır; “Bu dönem” Kasım 2026 vizesine özel karardır. Liste finalde gözden geçirilecek.</p>
+        </div>
+      </div>
+      <div class="rules-filters">
+        <label class="sr-only" for="rules-search">Kurallarda ara</label>
+        <input class="search-input" id="rules-search" type="search" placeholder="Kurallarda ara…" autocomplete="off">
+        <label class="sr-only" for="rules-scope">Kapsam</label>
+        <select class="filter-select" id="rules-scope">
+          <option value="">Kapsam: Tümü</option>
+          <option value="genel">Genel</option>
+          <option value="donem">Bu dönem</option>
+        </select>
+        <label class="sr-only" for="rules-type">Tür</label>
+        <select class="filter-select" id="rules-type">
+          <option value="">Tür: Tümü</option>
+          <option value="sert">Sert</option>
+          <option value="yumusak">Yumuşak</option>
+          <option value="sayim">Sayım</option>
+          <option value="bilgi">Bilgi</option>
+        </select>
+        <span class="rules-count" id="rules-count" role="status" aria-live="polite"></span>
+      </div>
+      <div id="rules-list"><p class="rules-empty">Kurallar yükleniyor…</p></div>
+      <p class="rules-doc">Belgenin tamamı: <a href="https://github.com/iybf-sinav/iybf-sinav.github.io/blob/main/v2/KURALLAR.md" target="_blank" rel="noopener">KURALLAR.md</a></p>
+    </section>
     <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="panel" aria-pressed="false">Panel</button>
         <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
         <button type="button" data-subpage="features" aria-pressed="true">Yeni Özellikler</button>
       </div>
       <div class="page-heading">
@@ -1360,6 +1422,7 @@
         <li><strong>Değişiklik 2 · Sınav zarfları sekmesi.</strong> Site iki uygulamaya ayrıldı: “Sınav Takip Uygulaması” (bütün mevcut sekmeler) ve “Sınav Zarfı Takip Uygulaması” (şimdilik yalnız “Sınav Zarfları” sekmesi); başlıktaki düğmeyle geçilir, bağlantı #sinav-zarflari ile paylaşılabilir. Zarf sayfasında herkes zarfların öğretim üyesinde, bölüm zarf sorumlusunda ya da dolaplarda (7D1, 7D2, 4D2) kaçının olduğunu konum ve bölüm kartlarında görür; dolap penceresinde bölüm ve fakülte komisyonu onaylıları ayrı sekmelerdedir. Zarfa tıklayınca açılan zarf kartında sınavın özeti ve 3 adım bulunur; düzenleyici girişliyken adımlar sırayla işaretlenir (2. adımda dolap seçimi), not yazılır ve kaydedilir.</li>
         <li><strong>Değişiklik 3 · Veriyi Excel olarak indir.</strong> Panel'deki “Excel olarak indir” düğmesi sitenin o an okuduğu veriyi (düzenlemeler dahil) .xlsx dosyası olarak indirir: Sınavlar (her sınav-derslik bir satır), Gözetmen görevleri, Gözetmen yükü (komisyon kuralıyla görev sayısı ve izin günleri), Son değişiklikler ve Sınav zarfları sayfaları. E-posta adresleri dosyaya yazılmaz.</li>
         <li><strong>Değişiklik 4 · Başlıkta uygulama geçişi ve Panel'de Veriler sekmesi.</strong> Uygulama geçiş düğmesi menünün üstünden başlığa (Düzenleyici girişi düğmesinin yanına) taşındı; başlık metni, sekme başlığı ve başlık rengi uygulamaya göre değişir (Sınav Takip mavi-yeşil, Sınav Zarfı Takip bordo-mor). “Excel olarak indir” düğmesi Panel'in yeni “Veriler” alt sekmesine (#veriler) taşındı.</li>
+        <li><strong>Değişiklik 5 · Panel'de Kurallar sekmesi.</strong> Panel'in yeni “Kurallar” alt sekmesi (#kurallar) sınav programının kurulduğu kuralları bölüm bölüm gösterir (komisyonun yerleştirme kodundan ve belgelerinden derlenen 171 kural). Kurallar aranabilir; kapsama (Genel / Bu dönem) ve türe (Sert / Yumuşak / Sayım / Bilgi) göre süzülebilir. “Çelişkiler” ve “Finalde sorulacaklar” bölümleri vurgulanır.</li>
       </ol>
     </section>
   </main>
@@ -1591,10 +1654,63 @@
         '<p>' + count + ' ' + noun + '</p></div></div>';
     }
 
-    // Panel sayfasındaki alt sekmeler: Panel | Veriler | Yeni Özellikler
+    // Panel sayfasındaki alt sekmeler: Panel | Veriler | Kurallar | Yeni Özellikler
     document.addEventListener("click", function (event) {
       const button = event.target.closest("[data-subpage]");
       if (button) activatePage(button.dataset.subpage, true);
+    });
+
+    // Panel > Kurallar alt sekmesi (Değişiklik 5): kurallar.json (v2/ içinde) ilk açılışta okunur
+    let RULES = null;
+    const RULE_TYPE = { sert: "Sert", yumusak: "Yumuşak", sayim: "Sayım", bilgi: "Bilgi" };
+    const RULE_SCOPE = { genel: "Genel", donem: "Bu dönem" };
+    function openRules() {
+      if (RULES) return;
+      RULES = [];
+      fetch("kurallar.json?t=" + Date.now(), { cache: "no-store" }).then(function (response) {
+        if (!response.ok) throw new Error("Sunucu yanıtı: " + response.status);
+        return response.json();
+      }).then(function (data) {
+        if (!Array.isArray(data)) throw new Error("beklenen liste yok");
+        RULES = data;
+        renderRules();
+      }).catch(function (error) {
+        RULES = null;
+        $("#rules-list").innerHTML = '<p class="rules-empty">Kurallar yüklenemedi; sayfayı yenileyin. (' + esc(error.message) + ')</p>';
+      });
+    }
+    function renderRules() {
+      if (!RULES || !RULES.length) return;
+      const query = $("#rules-search").value.trim().toLocaleLowerCase("tr");
+      const scope = $("#rules-scope").value, type = $("#rules-type").value;
+      const shown = RULES.filter(function (rule) {
+        if (scope && rule.kapsam !== scope) return false;
+        if (type && rule.tur !== type) return false;
+        return !query || [rule.baslik, rule.aciklama, rule.kaynak].join(" ").toLocaleLowerCase("tr").indexOf(query) !== -1;
+      });
+      $("#rules-count").textContent = shown.length + " kural";
+      const order = [], groups = {};
+      shown.forEach(function (rule) {
+        if (!groups[rule.bolum]) { groups[rule.bolum] = []; order.push(rule.bolum); }
+        groups[rule.bolum].push(rule);
+      });
+      const filtering = Boolean(query || scope || type);
+      $("#rules-list").innerHTML = order.length ? order.map(function (name, index) {
+        const warn = /Çelişki|Finalde/.test(name);
+        // süzgeç yokken ilk iki bölüm ile vurgulu bölümler açık; süzgeç varken hepsi açık
+        return '<details class="rules-group' + (warn ? ' is-warn' : '') + '"' + (filtering || warn || index < 2 ? ' open' : '') + '>' +
+          '<summary>' + esc(name) + ' <span class="rules-group-count">' + groups[name].length + ' kural</span></summary>' +
+          '<ul class="rules-items">' + groups[name].map(function (rule) {
+            return '<li class="rule-item"><h4><span class="rule-id">' + esc(rule.id) + '</span>' + esc(rule.baslik) + '</h4>' +
+              '<p>' + esc(rule.aciklama) + '</p><div class="rule-tags">' +
+              '<span class="rule-tag t-' + esc(rule.tur) + '">' + esc(RULE_TYPE[rule.tur] || rule.tur) + '</span>' +
+              '<span class="rule-tag k-' + esc(rule.kapsam) + '">' + esc(RULE_SCOPE[rule.kapsam] || rule.kapsam) + '</span>' +
+              (rule.kaynak ? '<span class="rule-source">Kaynak: ' + esc(rule.kaynak) + '</span>' : '') + '</div></li>';
+          }).join("") + '</ul></details>';
+      }).join("") : '<p class="rules-empty">Bu süzgeçlere uyan kural yok.</p>';
+    }
+    ["#rules-search", "#rules-scope", "#rules-type"].forEach(function (selector) {
+      $(selector).addEventListener(selector === "#rules-search" ? "input" : "change", renderRules);
     });
 
     function activatePage(pageName, updateHash) {
@@ -1608,14 +1724,15 @@
       document.title = "[v2 Deneme] " + (envelopeApp ? "2026-2027 Güz Dönemi Sınav Zarfları" : "2026-2027 Güz Dönemi Vize Sınav Programı") + " | İşletme ve Yönetim Bilimleri Fakültesi";
       $("#app-switch").textContent = app === "envelope" ? "Sınav Takip Uygulamasına geç" : "Sınav Zarfı Takip Uygulamasına geç";
       $$(".tab-button").forEach(function (button) {
-        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" || pageName === "data" ? "panel" : pageName)));
+        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" || pageName === "data" || pageName === "rules" ? "panel" : pageName)));
       });
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
       if (pageName === "panel") openPanel();
+      if (pageName === "rules") openRules();
       if (updateHash) {
-        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler" };
+        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler", rules: "kurallar" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -3765,7 +3882,8 @@
       "sinav-zarflari": "envelopes",
       "ana-sayfa": "home",
       "yeni-ozellikler": "features",
-      "veriler": "data"
+      "veriler": "data",
+      "kurallar": "rules"
     };
     activatePage(pageByHash[initialHash] || "home", false);
     // adres çubuğunda hash değişince (paylaşılan bağlantı aynı sekmede) ilgili uygulama ve sekme açılır

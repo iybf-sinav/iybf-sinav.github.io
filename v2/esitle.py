@@ -3,6 +3,7 @@
   python3 v2/esitle.py --sadece-veri yalnız sınav verisini (veri.json) ve e-postaları canlıdan kopyalar
 Kopyada: deneme şeridi, sekme başlığında "[v2 Deneme]", düzenlemeler v2/veri.json'a yazılır, panel ../panel/ adresinden açılır,
 boş bir "Yeni Özellikler" sekmesi eklenir.
+v2/kurallar.json ve v2/KURALLAR.md silinmez; ama tam sıfırlamada Panel'in "Kurallar" alt sekmesi index.html'den gider (yeniden eklenmeli).
 Sınav zarfı kayıtları (v2/veri.json "envelopes" alanı, yalnız v2'de):
   --sadece-veri  canlı veri kopyalanır ama v2/veri.json'daki "envelopes" alanı korunur (yeni dosyanın sonuna yazılır).
   seçeneksiz     tam sıfırlamada "envelopes" de silinir (v2 canlının birebir kopyasına döner); bu beklenen davranıştır."""
