@@ -1,0 +1,70 @@
+{
+ "meta": {
+  "institution": "İstanbul Esenyurt Üniversitesi",
+  "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
+  "programName": "Sınav Programı Şablonu",
+  "period": "",
+  "examCount": 0,
+  "assignmentCount": 0,
+  "teacherCount": 0,
+  "proctorCount": 0
+ },
+ "departments": [
+  {
+   "code": "SBUİ",
+   "name": "Siyaset Bilimi ve Uluslararası İlişkiler",
+   "language": "Türkçe"
+  },
+  {
+   "code": "PSIR",
+   "name": "Political Science and International Relations",
+   "language": "English"
+  },
+  {
+   "code": "İŞL",
+   "name": "İşletme",
+   "language": "Türkçe"
+  },
+  {
+   "code": "BUS",
+   "name": "Business Administration",
+   "language": "English"
+  },
+  {
+   "code": "UTF",
+   "name": "Uluslararası Ticaret ve Finansman",
+   "language": "Türkçe"
+  },
+  {
+   "code": "LOJ",
+   "name": "Lojistik Yönetimi",
+   "language": "Türkçe"
+  },
+  {
+   "code": "HAV",
+   "name": "Havacılık Yönetimi",
+   "language": "Türkçe"
+  },
+  {
+   "code": "YBS",
+   "name": "Yönetim Bilişim Sistemleri",
+   "language": "Türkçe"
+  },
+  {
+   "code": "ECF",
+   "name": "Economics and Finance",
+   "language": "English"
+  },
+  {
+   "code": "ETİC",
+   "name": "Elektronik Ticaret ve Yönetimi",
+   "language": "Türkçe"
+  }
+ ],
+ "exams": [],
+ "assignments": [],
+ "teachers": [],
+ "proctors": [],
+ "updates": [],
+ "proctorAvailability": []
+}
