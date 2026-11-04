@@ -9,9 +9,28 @@ Bu klasör uygulamanın **kaynağıdır** ve aynı zamanda **demosudur**. Bütü
 
 - `index.html`: uygulamanın tamamı (Sınav Takip ve Sınav Zarfı Takip). Kod klasör adına bağlı değildir:
   düzenlemeler sayfanın bulunduğu klasörün `veri.json`, `epostalar.json`, `kurallar.json` dosyalarına yazılır.
-- `veri.json`: boş veri. `meta.mode` = `"demo"` bu klasörü demo yapar (aşağıda). Biçim: kökteki `VERI-BICIMI.md`.
+- `veri.json`: boş veri. `meta.mode` = `"demo"` bu klasörü demo yapar (aşağıda). Biçim: bu klasördeki `VERI-BICIMI.md`.
 - `epostalar.json`: boş e-posta listesi.
 - `kurallar.json`: genel kurallar (`"kapsam": "genel"`); yeni uygulamalara bunlar kopyalanır.
+- `VERI-BICIMI.md`: `veri.json`'un tam biçimi (2. aşama alanları ve uyarı kuralları dahil).
+- `YZ-REHBERI.md`: bir yapay zekâ oturumunun bu verisi nasıl okuyup yazacağı (kişisel öğrenci verisi yazılmaz).
+
+## Kayıtlar, uyarılar, Ayarlar ve Kontrol (2. aşama)
+
+- **Öğretim Üyeleri** sekmesi (düzenleyici): “+ Öğretim elemanı ekle”, düzenle/sil: ad, unvan, bölüm, e-posta, izinli gün/saatler
+  (`teacherList`). Sınavı olan öğretim elemanı silinemez.
+- **Gözetmenler** sekmesi: gözetmen ekle, izinli gün/saat (gün ya da tarih) ve e-posta (`proctorAvailability`).
+- **Derslikler** sekmesi: “+ Derslik ekle”, düzenle/sil: kod, kat, sınav kapasitesi, tam kapasite (`rooms`). Kartlar kat kat;
+  liste kayıtlar + sınavlardaki dersliklerin birleşimi. Sınav yapılan derslik silinemez.
+- **Bölümler** (Sınav Programları): bölüm formunda “Sınıflar” (ör. 1, 2, 3, 4) → bölüm-sınıf etiketleri YBS1, İŞL1 …
+- **Sınav formu**: tarih seçici, öğretim elemanı ve derslik listeden (yoksa “+ Yeni ekle” / “+ Listeye yeni derslik”),
+  bölüm-sınıf çoklu seçim, kapasite derslik yanında, gözetmen “Seç” penceresi.
+- **Uyarılar** (alan değiştikçe ve kaydetmeden önce): bölüm-sınıf, öğretim elemanı (çakışma, izin), derslik çakışması,
+  kapasite esnemesi, gözetmen eşiği, art arda sınav → uyarı (“Yine de kaydet”); tam kapasite aşımı ve gözetmen
+  çakışması/izni/kendi dersi → engel. `settings.warnOnly` kapalıysa uyarılar da kaydı durdurur.
+- **Panel → Ayarlar**: gözetmen eşiği, kapasite esnemesi, art arda sınav sınırı, uzun sınav süresi (görev sayımı), yalnız uyar.
+- **Panel → Kontrol**: bütün program aynı kurallarla taranır; sorun listesi (tür, ders, gün-saat, açıklama), tıklayınca sınav kartı.
+- Bütün bu kayıtlar `veri.json`'a `loadDoc`/`saveDoc` yoluyla yazılır (demoda tarayıcıya, gerçek dönemde GitHub'a).
 
 ## Demo modu (`meta.mode: "demo"`)
 
@@ -31,8 +50,9 @@ klasörlerle ve ayrılmış adlarla çakışamaz).
 
 Oluşan klasör (tek commit, Git Data API; olmazsa dosya dosya Contents API):
 - `index.html`: depodaki `sinavtakipuygulamasi/index.html` aynen,
-- `veri.json`: boş veri + `meta` (`university`, `faculty`, `programName`, `period`; `mode` yok → gerçek dönem),
-- `epostalar.json`: boş, `kurallar.json`: yalnız genel kurallar.
+- `veri.json`: boş veri + `meta` (`university`, `faculty`, `programName`, `period`; `mode` yok → gerçek dönem; boş `teacherList`, `rooms` ve varsayılan `settings`),
+- `epostalar.json`: boş, `kurallar.json`: yalnız genel kurallar,
+- `VERI-BICIMI.md` ve `YZ-REHBERI.md`: buradakiler aynen.
 
 Yeni dönemde demo şeridi yoktur; düzenleme yalnız düzenleyici girişliyken açıktır ve klasörün kendi dosyalarına commit edilir.
 
