@@ -4,7 +4,7 @@
   "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
   "period": "2–6 Kasım 2026",
   "examCount": 120,
-  "assignmentCount": 90,
+  "assignmentCount": 91,
   "teacherCount": 45,
   "proctorCount": 14
  },
@@ -2594,7 +2594,7 @@
      "room": "6D3",
      "capacity": "23",
      "students": "6",
-     "proctor": "Gerekmiyor",
+     "proctor": "Tunahan Başoğlu",
      "departments": "SBUİ 5, YBS 1"
     }
    ]
@@ -4687,6 +4687,26 @@
    "note": ""
   },
   {
+   "id": "exam-86",
+   "date": "2026-11-05",
+   "dateLabel": "05.11.2026",
+   "day": "Perşembe",
+   "start": "12:00",
+   "end": "12:50",
+   "courseCode": "2016B4036",
+   "course": "Politika ve Sanat",
+   "programs": [
+    "SBUİ-7"
+   ],
+   "teacher": "Ali Emre ELDEM",
+   "totalStudents": "6",
+   "examId": "exam-86",
+   "room": "6D3",
+   "roomStudents": "6",
+   "proctor": "Tunahan Başoğlu",
+   "note": ""
+  },
+  {
    "id": "exam-90",
    "date": "2026-11-05",
    "dateLabel": "05.11.2026",
@@ -5647,6 +5667,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "4 Kasım",
+   "tur": "Gözetmen",
+   "metin": "Politika ve Sanat sınavında (Perşembe 12:00, 6D3) gözetmen Gerekmiyor → Tunahan Başoğlu olarak değiştirildi.",
+   "examId": "exam-86"
+  },
   {
    "tarih": "4 Kasım",
    "tur": "Gözetmen",
