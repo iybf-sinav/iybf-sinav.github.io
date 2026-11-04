@@ -1319,6 +1319,48 @@
 .create-done{overflow-wrap:anywhere;font-weight:600}
 .edit-save-link{display:inline-block;padding:8px 14px;border-radius:10px;color:#fff!important;background:var(--navy);font-weight:700;text-decoration:none}
 @media (max-width:560px){.create-app-inner{padding:18px 16px}.create-app-button{width:100%}}
+/* 2. aşama: listeden seçim, bölüm-sınıf, uyarılar, Ayarlar ve Kontrol */
+.room-pick,.teacher-wrap{min-width:0}
+.teacher-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 6px;align-items:end}
+.teacher-wrap .room-info{grid-column:1/-1}
+.room-info{display:block;min-height:1em;margin-top:2px;color:var(--muted);font-size:.74rem;font-weight:600;overflow-wrap:anywhere}
+.room-info:empty{display:none}
+.edit-classes{min-width:0;margin:0;padding:8px 10px 10px;border:1px solid var(--line);border-radius:12px}
+.edit-classes legend{padding:0 6px;color:var(--navy);font-weight:800;font-size:.86rem}
+.edit-classes legend small{color:var(--muted);font-weight:600}
+.class-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 6px}
+.class-dept{min-width:44px;color:var(--muted);font-size:.74rem;font-weight:800}
+.edit-form .class-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid #cddae3;border-radius:999px;background:#fff;cursor:pointer;font-size:.84rem;font-weight:700;color:var(--navy)}
+.edit-form .class-chip input{width:auto;margin:0;padding:0}
+.edit-form .class-chip:has(input:checked){border-color:var(--navy);background:var(--blue-soft)}
+.class-other{display:block;margin-top:4px}
+.edit-row-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.edit-form .edit-row-buttons [data-add-room]{margin-top:0}
+.edit-issues{margin:14px 0 0;padding:10px 14px;border:1px solid #efdca8;border-radius:12px;background:#fff7df;font-size:.86rem}
+.edit-issues .issues-head{margin:0 0 6px;color:#79520c;font-weight:800}
+.edit-issues ul{margin:0;padding-left:18px}
+.edit-issues li{margin:3px 0;overflow-wrap:anywhere}
+.edit-issues li.is-block{color:#b42318}
+.edit-issues li.is-warn{color:#5c3d06}
+.edit-form .force-save{margin-top:8px;border-color:#b45309;color:#fff;background:#b45309}
+.leave-add .leave-reason{grid-column:span 2}
+.settings-list{display:grid;gap:10px}
+.setting-row{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:6px 16px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.setting-help{margin:0;color:var(--muted);font-size:.86rem}
+.setting-help small{display:block;margin-top:3px;color:#7a8c9b}
+.settings-form input[readonly],.settings-form select:disabled{background:#f4f7f9}
+.check-list{display:grid;gap:8px}
+.check-item{display:grid;gap:4px;width:100%;padding:10px 14px;border:1px solid var(--line);border-left:5px solid #d99a1e;border-radius:12px;background:#fff;color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+.check-item.is-block{border-left-color:#b42318}
+.check-item:hover{box-shadow:var(--shadow)}
+.check-top{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.check-top strong{color:var(--navy)}
+.check-when{color:var(--muted);font-size:.84rem}
+.check-tag{padding:1px 8px;border-radius:999px;background:var(--blue-soft);color:var(--blue);font-size:.72rem;font-weight:800}
+.check-tag.is-warn{background:#fff1dc;color:#8a4b00}
+.check-tag.is-block{background:#fdecea;color:#b42318}
+.check-text{font-size:.88rem;overflow-wrap:anywhere}
+@media (max-width:560px){.setting-row{grid-template-columns:1fr}.leave-add .leave-reason{grid-column:1/-1}}
 </style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
@@ -1415,6 +1457,7 @@
         </div>
         <span class="summary-pill" id="room-summary"></span>
       </div>
+      <div id="room-admin" hidden></div>
       <div class="floor-list" id="floor-list"></div>
     </section>
 
@@ -1426,6 +1469,7 @@
         </div>
         <span class="summary-pill" id="teacher-summary"></span>
       </div>
+      <div id="teacher-admin" hidden></div>
       <div class="name-filter">
         <label class="sr-only" for="teacher-search">Öğretim üyesi ara</label>
         <input class="search-input" id="teacher-search" type="search" placeholder="İsim ara…" autocomplete="off">
@@ -1470,8 +1514,10 @@
 
     <section class="page" id="page-data" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
-        <button type="button" data-subpage="data" aria-pressed="true">Veriler</button>
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
         <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
+        <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
+        <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1486,7 +1532,9 @@
     <section class="page" id="page-rules" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
-        <button type="button" data-subpage="rules" aria-pressed="true">Kurallar</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
+        <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
+        <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
       </div>
       <div class="page-heading">
         <div>
@@ -1518,6 +1566,38 @@
       <div id="proctor-limits" hidden></div>
       <div id="rules-list"><p class="rules-empty">Kurallar yükleniyor…</p></div>
       <p class="rules-doc">Kuralların derlendiği belge (2026-2027 Güz vizesi, döneme özel kararlar dahil): <a href="https://github.com/iybf-sinav/iybf-sinav.github.io/blob/main/2627vizeprogrami/v2/KURALLAR.md" target="_blank" rel="noopener">KURALLAR.md</a> <span class="rules-doc-note">(belge kendiliğinden güncellenmez; güncel liste bu sayfadır)</span></p>
+    </section>
+    <section class="page" id="page-settings" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
+        <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
+        <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+      </div>
+      <div class="page-heading">
+        <div>
+          <h2>Ayarlar</h2>
+          <p>Uyarıların ve görev sayımının kullandığı sayılar (veri.json → settings). Değişince sınav formundaki uyarılar ve Kontrol sayfası hemen bu değerlere göre çalışır.</p>
+        </div>
+      </div>
+      <div id="settings-box"></div>
+    </section>
+    <section class="page" id="page-check" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
+        <button type="button" data-subpage="rules" aria-pressed="false">Kurallar</button>
+        <button type="button" data-subpage="settings" aria-pressed="false">Ayarlar</button>
+        <button type="button" data-subpage="check" aria-pressed="false">Kontrol</button>
+      </div>
+      <div class="page-heading">
+        <div>
+          <h2>Kontrol</h2>
+          <p>Bütün program Ayarlar'daki sayılara ve uyarı kurallarına göre taranır: bölüm-sınıf, öğretim elemanı, gözetmen ve derslik çakışmaları, kapasite, gözetmen eşiği ve art arda sınavlar. Bir satıra tıklayınca sınav kartı açılır.</p>
+        </div>
+        <span class="summary-pill" id="check-summary"></span>
+      </div>
+      <div class="rules-filters"><label class="sr-only" for="check-type">Sorun türü</label><select class="filter-select" id="check-type"></select></div>
+      <div id="check-list"></div>
     </section>
   </main>
 
@@ -1867,7 +1947,7 @@
       return '<div class="proctor-limits">' +
         (withRules
           ? heading("Gözetmenlerin izin günleri ve görev yükü") +
-            '<p>Sitenin güncel verisinden (veri.json): izin günleri, toplam görev (90 dk ve üzeri sınav 2 görev sayılır), sınav sayısı ve adının geçtiği döneme özel kararlar.</p>'
+            '<p>Sitenin güncel verisinden (veri.json): izin günleri, toplam görev (' + settingsOf(DATA).longExamMinutes + ' dakikadan uzun sınav 2 görev sayılır; Panel → Ayarlar), sınav sayısı ve adının geçtiği döneme özel kararlar.</p>'
           : heading("Gözetmen listesi ve izin günleri") +
             '<p>Yalnız düzenleyiciye görünür. Gözetmen ekleyin, izin günlerini düzenleyin; görevi olan gözetmen silinemez (önce sınav kartlarından görevleri boşaltılmalı).</p>') +
         // Gözetmenler sekmesinde tablo katlanır (telefonda isim listesini aşağı itmesin); açık/kapalı durumu korunur
@@ -1958,6 +2038,7 @@
       });
     }
 
+    const PANEL_PAGES = ["features", "data", "rules", "settings", "check"];   // Panel alt sekmeleri: Veriler | Kurallar | Ayarlar | Kontrol
     function activatePage(pageName, updateHash) {
       // İki uygulama (Değişiklik 2): Sınav Zarfları sekmesi "Sınav Zarfı Takip Uygulaması"nda, diğerleri "Sınav Takip Uygulaması"nda
       if (pageName === "panel" || pageName === "features") pageName = "data";   // şablonda Panel sekmesi Veriler ile açılır
@@ -1966,14 +2047,17 @@
       $$(".tab-button[data-app]").forEach(function (button) { button.hidden = button.dataset.app !== app; });
       renderHeader();
       $$(".tab-button").forEach(function (button) {
-        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" || pageName === "data" || pageName === "rules" ? "panel" : pageName)));
+        button.setAttribute("aria-selected", String(button.dataset.page === (PANEL_PAGES.indexOf(pageName) !== -1 ? "panel" : pageName)));
       });
+      $$("[data-subpage]").forEach(function (button) { button.setAttribute("aria-pressed", String(button.dataset.subpage === pageName)); });
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
       if (pageName === "rules") openRules();
+      if (pageName === "settings" && DATA) renderSettings();
+      if (pageName === "check" && DATA) renderCheck();
       if (updateHash) {
-        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler", rules: "kurallar" };
+        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler", rules: "kurallar", settings: "ayarlar", check: "kontrol" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2057,7 +2141,7 @@
         return found ? found.entries.slice() : [];
       }
       if (type === "teacher") {
-        return DATA.exams.filter(function (exam) { return exam.teacher === name; }).map(function (exam) {
+        return DATA.exams.filter(function (exam) { return teachesExam(exam, name); }).map(function (exam) {
           return { exam: exam, rooms: exam.rooms.map(function (room) { return room.room; }).filter(Boolean) };
         }).sort(function (a, b) { return examOrder(a.exam, b.exam); });
       }
@@ -2119,13 +2203,25 @@
           });
         });
       });
+      // Derslik kayıtları (veri.json "rooms", 2. aşama): sınavı olmayan derslikler de listelenir; kat ve kapasite kayıttan gelir
+      roomList(DATA).forEach(function (entry) {
+        const code = String(entry.code || "").trim();
+        if (!code) return;
+        const found = Object.keys(map).find(function (key) { return roomKey(key) === roomKey(code); });
+        (map[found || code] = map[found || code] || { code: code, entries: [], capacities: [] }).record = entry;
+      });
       return Object.keys(map).map(function (code) {
         const item = map[code];
         const match = code.match(/^(\d+)\s*([^\d\s]*)\s*(\d*)/);
-        item.floor = match ? Number(match[1]) : null;
-        item.letter = match ? match[2].toLocaleUpperCase("tr-TR") : "";
-        item.number = match && match[3] ? Number(match[3]) : 0;
-        item.capacity = item.capacities.length ? Math.max.apply(null, item.capacities) : null;
+        const loose = code.match(/^([^\d\s]*)\s*(\d*)/);
+        const rec = item.record || null;
+        const floor = rec ? numberOrNull(rec.floor) : null;
+        item.floor = floor !== null ? floor : match ? Number(match[1]) : null;
+        item.letter = match ? match[2].toLocaleUpperCase("tr-TR") : loose ? loose[1].toLocaleUpperCase("tr-TR") : "";
+        item.number = match && match[3] ? Number(match[3]) : !match && loose && loose[2] ? Number(loose[2]) : 0;
+        const listed = rec ? numberOrNull(rec.examCapacity) : null;
+        item.capacity = listed !== null ? listed : item.capacities.length ? Math.max.apply(null, item.capacities) : null;
+        item.full = rec ? numberOrNull(rec.fullCapacity) : null;
         item.entries.sort(function (a, b) { return examOrder(a.exam, b.exam); });
         return item;
       });
@@ -2155,7 +2251,7 @@
             return '<button class="department-button" type="button" data-room="' + esc(room.code) + '">' +
               '<span class="room-code">' + esc(room.code) + '</span>' +
               '<span class="room-meta" data-room-count>' + room.entries.length + ' sınav</span>' +
-              (room.capacity !== null ? '<span class="room-meta">Kapasite ' + room.capacity + '</span>' : '') +
+              (room.capacity !== null ? '<span class="room-meta">Kapasite ' + room.capacity + (room.full !== null ? ' · tam ' + room.full : '') + '</span>' : '') +
             '</button>';
           }).join("") + '</div></div>';
       }).join("") : '<div class="empty-list">Programda derslik bilgisi yok; sınavlara derslik eklenince burada kat kat listelenir.</div>';
@@ -2902,6 +2998,30 @@
           const index = rows.indexOf(event.target.closest(".edit-room"));
           const names = splitProctor(rows[index].querySelector('[name="proctor"]').value);
           openPicker({ exam: exam, roomIndex: index, oldName: names.length === 1 ? names[0] : "" });
+        } else if (event.target.closest("[data-force-save]")) {
+          saveExamForm(form, true);
+        } else if (event.target.closest("[data-teacher-new]")) {
+          openTeacherForm("", { prefill: form.elements.teacher.value.trim(), after: function (name) {
+            const box = $("#exam-modal .edit-form");
+            if (!box) return;
+            $("#edit-teachers", box).innerHTML = teacherOptions();
+            const input = box.elements.teacher;
+            const names = splitTeachers(input.value).filter(function (item) { return teacherRecord(DATA, item); });
+            if (names.indexOf(name) === -1) names.push(name);
+            input.value = names.join(", ");
+            $("[data-teacher-info]", box).textContent = teacherInfoText(input.value);
+            liveCheck(box);
+          } });
+        } else if (event.target.closest("[data-room-new]")) {
+          openRoomForm("", { after: function (code) {
+            const box = $("#exam-modal .edit-form");
+            if (!box) return;
+            $("#edit-rooms-list", box).innerHTML = roomOptions();
+            const empty = $$('.edit-room [name="room"]', box).find(function (input) { return !input.value.trim(); });
+            if (empty) { empty.value = code; roomPicked(empty); }
+            else { $("[data-rooms]", box).insertAdjacentHTML("beforeend", roomEditHtml({ room: code, capacity: "", students: "", proctor: "Gerekmiyor", departments: "" })); roomPicked($$('.edit-room [name="room"]', box).pop()); }
+            liveCheck(box);
+          } });
         } else if (event.target.closest("[data-add-room]")) {
           $("[data-rooms]", form).insertAdjacentHTML("beforeend", roomEditHtml({ room: "", capacity: "", students: "", proctor: "Gerekmiyor", departments: "" }));
         } else if (event.target.closest("[data-remove-room]")) {
@@ -2924,10 +3044,16 @@
         const choice = event.target.closest("[data-pick]");
         if (choice && picker) applyPick(choice.dataset.pick);
       });
+      $("#exam-modal").addEventListener("change", function (event) {   // onay kutuları (bölüm-sınıf) ve tarih seçici
+        const form = event.target.closest(".edit-form");
+        if (form && /^(cls|date)$/.test(event.target.name)) liveCheck(form);
+      });
       $("#exam-modal").addEventListener("input", function (event) {
         const form = event.target.closest(".edit-form");
-        if (form && event.target.name === "date") $("[data-date-other]", form).hidden = event.target.value !== OTHER_DATE;
-        if (form && /^(proctor|date|dateOther|start|end)$/.test(event.target.name)) liveCheck(form);
+        if (!form) return;
+        if (event.target.name === "room") roomPicked(event.target);
+        if (event.target.name === "teacher") $("[data-teacher-info]", form).textContent = teacherInfoText(event.target.value);
+        if (/^(proctor|date|start|end|teacher|room|capacity|students|cls|programsOther)$/.test(event.target.name)) liveCheck(form);
       });
       $("#exam-modal").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -2945,8 +3071,9 @@
       function computeDepartments() {
         departmentsOf = {};
         config.names().forEach(function (name) {
+          const own = config.type === "teacher" ? (teacherRecord(DATA, name) || {}).department : "";   // kayıttaki bölüm (teacherList)
           departmentsOf[name] = DATA.departments.filter(function (department) {
-            return personExams(config.type, name).some(function (entry) { return inDepartment(entry.exam, department.code); });
+            return department.code === own || personExams(config.type, name).some(function (entry) { return inDepartment(entry.exam, department.code); });
           }).map(function (department) { return department.code; });
         });
       }
@@ -3091,6 +3218,12 @@
       }
       data.assignments = assignments;
       data.teachers = unique(data.exams.map(function (exam) { return exam.teacher; }));
+      // öğretim elemanı kayıtları (teacherList, 2. aşama): sınavı olmayanlar da listede; yazımı farklı tekrarlar eklenmez
+      teacherListOf(data).forEach(function (person) {
+        const name = String(person && person.name || "").trim();
+        if (name && !data.teachers.some(function (item) { return nameKey(item) === nameKey(name); })) data.teachers.push(name);
+      });
+      data.teachers.sort();
       data.proctors = proctorListOf(data);   // atamalardakiler + izin listesindeki görevsiz gözetmenler (Değişiklik 8)
       data.meta.examCount = data.exams.filter(function (exam) { return !EXTERNAL_COURSE.test(exam.course); }).length;
       data.meta.assignmentCount = assignments.length;
@@ -3110,6 +3243,7 @@
       if (change.type === "add") {
         const conflicts = proctorConflicts(data, change.exam, null);
         if (conflicts.length) throw conflictError(conflicts);
+        blockingCheck(data, change.exam);
         id = "exam-" + (data.exams.reduce(function (max, exam) { return Math.max(max, examNumber(exam)); }, 0) + 1);
         data.exams.push(Object.assign({}, change.exam, { id: id }));
       } else {
@@ -3126,6 +3260,7 @@
         else {
           const conflicts = proctorConflicts(data, change.exam, data.exams[index]);   // GitHub'daki güncel veriyle yeniden denetlenir
           if (conflicts.length) throw conflictError(conflicts);
+          blockingCheck(data, change.exam);
           data.exams[index] = change.exam;
         }
       }
@@ -3351,8 +3486,11 @@
     function unavailableFor(data, name, exam) {
       const key = nameKey(name);
       const person = (data.proctorAvailability || []).find(function (item) { return nameKey(item.name) === key; });
-      if (!person) return null;
-      return (person.unavailable || []).find(function (item) {
+      return person ? unavailableIn(person.unavailable, exam) : null;
+    }
+    // İzin listesinde ({day|date, start?, end?, reason}) sınavın zamanına denk gelen ilk kayıt
+    function unavailableIn(list, exam) {
+      return (list || []).find(function (item) {
         if (item.date ? item.date !== exam.date : nameKey(item.day) !== nameKey(exam.day)) return false;
         if (!item.start && !item.end) return true;
         return exam.start < (item.end || "24:00") && (item.start || "00:00") < exam.end;
@@ -3368,8 +3506,8 @@
         const when = off.start || off.end ? exam.day + " " + (off.start || "00:00") + "–" + (off.end || "24:00") : exam.day;
         const reason = off.reason || "izin";
         problems.push(reason === "izin"
-          ? { text: name + (off.start || off.end ? " bu saatte izinli (" : " o gün izinli (") + when + ").", short: when + " izinli" }
-          : { text: name + (off.start || off.end ? " bu saatte müsait değil (" : " o gün müsait değil (") + when + (reason ? ": " + reason : "") + ").", short: when + " müsait değil" });
+          ? { text: name + (off.start || off.end ? " bu saatte izinli (" : " o gün izinli (") + when + ").", short: when + " izinli", kind: "izin" }
+          : { text: name + (off.start || off.end ? " bu saatte müsait değil (" : " o gün müsait değil (") + when + (reason ? ": " + reason : "") + ").", short: when + " müsait değil", kind: "izin" });
       }
       data.exams.forEach(function (other) {
         if ((exam.id && other.id === exam.id) || !overlaps(exam, other)) return;
@@ -3378,13 +3516,13 @@
         });
         if (rooms.length) {
           problems.push({ text: name + " bu saatte müsait değil: " + slotText(other) + " " + other.course + " (" + rooms.join(", ") + ") sınavında gözetmen.",
-            short: "aynı saatte " + other.course + " sınavında" });
+            short: "aynı saatte " + other.course + " sınavında", kind: "cift", other: other.id });
         }
         const teaches = String(other.teacher || "").split(",").some(function (item) { return nameKey(item) === key; });
         if (teaches) {
           const all = examRoomsOf(other, function () { return true; });
           problems.push({ text: name + " bu saatte müsait değil: " + slotText(other) + " kendi dersi " + other.course + (all.length ? " (" + all.join(", ") + ")" : "") + " sınavı var.",
-            short: "aynı saatte kendi dersi " + other.course });
+            short: "aynı saatte kendi dersi " + other.course, kind: "hoca", other: other.id });
         }
       });
       return problems;
@@ -3424,7 +3562,6 @@
       return error;
     }
 
-    const OTHER_DATE = "__baska__";
     const DAY_NAMES = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
     function dayFromIso(iso) {   // "2026-11-02" → { date, dateLabel: "02.11.2026", day: "Pazartesi" }
       const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
@@ -3433,13 +3570,9 @@
       if (isNaN(date) || date.getUTCDate() !== Number(match[3])) return null;
       return { date: iso, dateLabel: match[3] + "." + match[2] + "." + match[1], day: DAY_NAMES[date.getUTCDay()] };
     }
-    // Formda seçilen gün: programdaki günlerden biri ya da "Başka tarih…" kutusu
-    function formDay(form, base) {
-      const value = form.elements.date.value;
-      if (value === OTHER_DATE) return dayFromIso(form.elements.dateOther.value.trim());
-      return examDays().concat([{ date: base.date, dateLabel: base.dateLabel, day: base.day }]).find(function (item) {
-        return item.date && item.date === value;
-      }) || null;
+    // Formda seçilen gün: tarih seçici (serbest tarih, 2. aşama); gün adı tarihten hesaplanır
+    function formDay(form) {
+      return dayFromIso(form.elements.date.value.trim());
     }
 
     function examDays() {
@@ -3457,7 +3590,8 @@
 
     function roomEditHtml(room) {
       return '<div class="edit-room">' +
-        inputHtml("Derslik", "room", room.room) +
+        '<div class="room-pick">' + inputHtml("Derslik", "room", room.room, ' list="edit-rooms-list" autocomplete="off"') +
+          '<small class="room-info" data-room-info>' + esc(roomInfoText(room.room)) + '</small></div>' +
         inputHtml("Kapasite", "capacity", room.capacity, ' inputmode="numeric"') +
         inputHtml("Öğrenci", "students", room.students, ' inputmode="numeric"') +
         '<div class="wide proctor-wrap">' + inputHtml("Gözetmen", "proctor", room.proctor, ' list="edit-proctors"') +
@@ -3473,10 +3607,9 @@
     let picker = null;   // { exam, roomIndex, oldName }: Düzenle sekmesindeki "Seç" düğmesinden
 
     // Sınavın görev değeri, komisyon kuralı (kod/Yöntem/kod/7_gozetmenlik_formati.py, satır 40 ve 79):
-    // süre 60 dakikadan uzunsa 2 görev (90 dk ve 2 saatlik sınav), değilse 1 görev.
+    // süre settings.longExamMinutes'ten (varsayılan 60 dakika) uzunsa 2 görev (90 dk ve 2 saatlik sınav), değilse 1 görev.
     function examSessions(exam) {
-      const minutes = function (time) { const part = String(time).split(":"); return Number(part[0]) * 60 + Number(part[1]); };
-      return minutes(exam.end) - minutes(exam.start) > 60 ? 2 : 1;
+      return timeMinutes(exam.end) - timeMinutes(exam.start) > settingsOf(DATA).longExamMinutes ? 2 : 1;
     }
 
     // Gözetmen görev sayısı: görevli olduğu her sınav, süresine göre (kendi dersindeki gözetmenlik dahil)
@@ -3579,11 +3712,14 @@
 
     // Form değiştikçe (gözetmen, tarih, saat) kayıttan önceki denetim anında gösterilir
     function draftExam(form, base) {
-      const day = formDay(form, base) || { date: "", dateLabel: "", day: "" };
+      const day = formDay(form) || { date: "", dateLabel: "", day: "" };
       return Object.assign({}, base, { date: day.date, dateLabel: day.dateLabel, day: day.day,
         start: form.elements.start.value.trim(), end: form.elements.end.value.trim(),
+        teacher: form.elements.teacher.value.trim(), programs: formPrograms(form, base), course: form.elements.course.value.trim() || base.course,
         rooms: $$(".edit-room", form).map(function (row) {
-          return { room: $('[name="room"]', row).value.trim(), proctor: $('[name="proctor"]', row).value.split(",").map(function (item) { return item.trim(); }).filter(Boolean).join(", ") };
+          const field = function (name) { return $('[name="' + name + '"]', row).value.trim(); };
+          return { room: field("room"), capacity: field("capacity"), students: field("students"),
+            proctor: field("proctor").split(",").map(function (item) { return item.trim(); }).filter(Boolean).join(", ") };
         }) });
     }
 
@@ -3604,37 +3740,35 @@
       if (messages.length) setEditStatus(form, messages.join("\n"), true);
       else if (status.dataset.conflict) setEditStatus(form, "", false);
       status.dataset.conflict = messages.length ? "1" : "";
+      showIssues(form, valid ? examIssues(DATA, exam, {}) : [], false);   // 2. aşama: bölüm-sınıf, öğretim elemanı, derslik, kapasite, eşik, art arda
       return messages;
     }
 
     function editFormHtml(exam) {
-      const days = examDays().filter(function (day) { return day.date; });
-      if (exam.date && !days.some(function (day) { return day.date === exam.date; })) days.push({ date: exam.date, dateLabel: exam.dateLabel, day: exam.day });
-      const options = function (values) {
-        return values.map(function (value) { return '<option value="' + esc(value) + '"></option>'; }).join("");
-      };
       return '<form class="edit-form" novalidate>' +
         '<div class="edit-grid">' +
-          '<label><span>Tarih</span><select name="date">' + days.map(function (day) {
-            return '<option value="' + esc(day.date) + '"' + (day.date === exam.date ? " selected" : "") + '>' + esc(day.dateLabel + " " + day.day) + '</option>';
-          }).join("") + '<option value="' + OTHER_DATE + '"' + (exam.date ? "" : " selected") + '>Başka tarih…</option></select></label>' +
-          '<label data-date-other' + (exam.date ? " hidden" : "") + '><span>Yeni tarih</span><input name="dateOther" type="date"></label>' +
+          inputHtml("Tarih", "date", exam.date, ' type="date"') +
           inputHtml("Başlangıç", "start", exam.start, ' type="time"') +
           inputHtml("Bitiş", "end", exam.end, ' type="time"') +
           inputHtml("Ders kodu", "courseCode", exam.courseCode) +
           inputHtml("Ders adı", "course", exam.course, "", "span2") +
-          inputHtml("Öğretim elemanı", "teacher", exam.teacher, ' list="edit-teachers"', "span2") +
+          '<div class="span2 teacher-wrap">' + inputHtml("Öğretim elemanı (birden çoksa virgülle)", "teacher", exam.teacher, ' list="edit-teachers" autocomplete="off" placeholder="Listeden seçin ya da yazarak arayın"') +
+            '<button type="button" data-teacher-new title="Listede olmayan öğretim elemanını kaydeder">+ Yeni ekle</button>' +
+            '<small class="room-info" data-teacher-info>' + esc(teacherInfoText(exam.teacher)) + '</small></div>' +
           inputHtml("Toplam öğrenci", "totalStudents", exam.totalStudents, ' inputmode="numeric"') +
-          inputHtml("Programlar (virgülle)", "programs", exam.programs.join(", "), ' placeholder="ör. BUS-1, ECF-3"', "wide") +
+          classPickerHtml(exam.programs) +
           '<label class="wide"><span>Notlar (her satıra bir not)</span><textarea name="notes" rows="2">' + esc(exam.notes.join("\n")) + '</textarea></label>' +
         '</div>' +
         '<fieldset class="edit-rooms"><legend>Derslikler</legend>' +
-          '<p class="edit-help">Birden çok gözetmen virgülle yazılır. Gözetmen gerekmiyorsa "Gerekmiyor" (boş bırakılırsa da öyle kaydedilir); dersin hocası gözetmense "Ad Soyad (dersin hocası)".</p>' +
+          '<p class="edit-help">Derslik listeden seçilir (Derslikler sekmesindeki kayıtlar); seçince sınav kapasitesi yazılır. Birden çok gözetmen virgülle yazılır. Gözetmen gerekmiyorsa "Gerekmiyor" (boş bırakılırsa da öyle kaydedilir); dersin hocası gözetmense "Ad Soyad (dersin hocası)".</p>' +
           '<div data-rooms>' + exam.rooms.map(roomEditHtml).join("") + '</div>' +
-          '<button type="button" data-add-room>+ Derslik ekle</button>' +
+          '<div class="edit-row-buttons"><button type="button" data-add-room>+ Derslik satırı</button>' +
+            '<button type="button" data-room-new title="Listede olmayan dersliği kaydeder">+ Listeye yeni derslik</button></div>' +
         '</fieldset>' +
-        '<datalist id="edit-teachers">' + options(DATA.teachers) + '</datalist>' +
+        '<datalist id="edit-teachers">' + teacherOptions() + '</datalist>' +
+        '<datalist id="edit-rooms-list">' + roomOptions() + '</datalist>' +
         '<datalist id="edit-proctors">' + proctorOptions(exam) + '</datalist>' +
+        '<div class="edit-issues" data-issues hidden></div>' +
         '<p class="edit-status" role="alert" aria-live="polite"></p>' +
         '<div class="edit-actions">' +
           '<button class="edit-save" type="submit">' + (exam.id ? "Kaydet" : "Sınavı ekle") + '</button>' +
@@ -3650,11 +3784,11 @@
       const list = function (text, separator) {
         return text.split(separator).map(function (item) { return item.trim(); }).filter(Boolean);
       };
-      const day = formDay(form, base);
-      if (!day) throw new Error("Sınav tarihini seçin (Başka tarih için gün/ay/yıl girin).");
+      const day = formDay(form);
+      if (!day) throw new Error("Sınav tarihini seçin.");
       const exam = {
         id: base.id, date: day.date, dateLabel: day.dateLabel, day: day.day, start: value("start"), end: value("end"),
-        courseCode: value("courseCode"), course: value("course"), programs: list(value("programs"), ","), teacher: value("teacher"),
+        courseCode: value("courseCode"), course: value("course"), programs: formPrograms(form, base), teacher: value("teacher"),
         totalStudents: value("totalStudents"), notes: list(form.elements.notes.value, "\n"),
         rooms: $$(".edit-room", form).map(function (row) {
           const field = function (name) { return $('[name="' + name + '"]', row).value.trim(); };
@@ -3751,7 +3885,7 @@
     function emailsFor(names) {
       return loadEmails().then(function (book) {
         const emails = {};
-        names.forEach(function (name) { emails[name] = lookupEmail(book.gozetmenler, name) || lookupEmail(book.hocalar, name); });
+        names.forEach(function (name) { emails[name] = proctorEmailOf(name) || lookupEmail(book.gozetmenler, name) || teacherEmailOf(name) || lookupEmail(book.hocalar, name); });
         return (editor && names.some(function (name) { return !emails[name]; }) ? panelPeople() : Promise.resolve([])).then(function (list) {
           const panelMap = {};
           list.forEach(function (person) { if (person && person.ad) panelMap[person.ad] = person.mail || ""; });
@@ -3821,8 +3955,9 @@
       loadEmails().then(function (book) {
         const hocalar = book.hocalar || {}, gozetmenler = book.gozetmenler || {};
         const emails = {};
-        people.teachers.forEach(function (name) { emails[name] = lookupEmail(hocalar, name); });
-        people.proctors.forEach(function (name) { emails[name] = lookupEmail(gozetmenler, name) || lookupEmail(hocalar, name); });
+        // önce veri.json kayıtları (teacherList / proctorAvailability e-postası), sonra epostalar.json
+        people.teachers.forEach(function (name) { emails[name] = teacherEmailOf(name) || lookupEmail(hocalar, name); });
+        people.proctors.forEach(function (name) { emails[name] = proctorEmailOf(name) || lookupEmail(gozetmenler, name) || lookupEmail(hocalar, name); });
         const needPanel = editor && people.proctors.some(function (name) { return !emails[name]; });
         return (needPanel ? panelPeople() : Promise.resolve([])).then(function (list) {
           const panelMap = {};
@@ -3874,7 +4009,7 @@
       });
     }
 
-    function saveExamForm(form) {
+    function saveExamForm(form, force) {
       let exam;
       try {
         exam = examFromForm(form, currentExam);
@@ -3889,7 +4024,24 @@
         $(".edit-status", form).scrollIntoView({ block: "nearest" });
         return;
       }
-      runSave(form, { type: currentExam.id ? "update" : "add", id: currentExam.id, exam: exam, course: exam.course });
+      // 2. aşama: uyarılar. Engel varsa (ya da settings.warnOnly = false iken herhangi bir uyarı) kaydedilmez;
+      // yalnız uyarı varsa liste gösterilir ve "Yine de kaydet" ile kaydedilir.
+      const issues = examIssues(DATA, exam, {});
+      const blocking = issues.filter(function (issue) { return issueBlocks(issue, DATA); });
+      if (blocking.length) {
+        showIssues(form, issues, false);
+        setEditStatus(form, "Kaydedilmedi: " + blocking.map(function (issue) { return issue.text; }).join("\n"), true);
+        $("[data-issues]", form).scrollIntoView({ block: "nearest" });
+        return;
+      }
+      const change = { type: currentExam.id ? "update" : "add", id: currentExam.id, exam: exam, course: exam.course };
+      if (issues.length && !force) {
+        showIssues(form, issues, true);
+        setEditStatus(form, "Uyarıları okuyun: düzeltin ya da “Yine de kaydet”e basın.", true);
+        $("[data-issues]", form).scrollIntoView({ block: "nearest" });
+        return;
+      }
+      runSave(form, change);
     }
 
     function deleteExam(form) {
@@ -4242,7 +4394,8 @@
         if (!editor || !DATA) return;
         const button = event.target.closest("[data-update-add], [data-update-edit], [data-update-delete], [data-dept-add], [data-dept-edit], [data-dept-delete], " +
           "[data-proctor-add], [data-proctor-edit], [data-proctor-delete], [data-email-add], [data-email-edit], [data-email-delete], " +
-          "[data-meta-edit], [data-rule-add], [data-rule-edit], [data-rule-delete]");
+          "[data-meta-edit], [data-rule-add], [data-rule-edit], [data-rule-delete], " +
+          "[data-teacher-add], [data-teacher-edit], [data-teacher-delete], [data-room-add], [data-room-edit], [data-room-delete], [data-settings-default]");
         if (!button || button.disabled) return;
         const d = button.dataset;
         if ("updateAdd" in d) openUpdateForm(null);
@@ -4261,9 +4414,24 @@
         else if ("ruleAdd" in d) openRuleForm("");
         else if ("ruleEdit" in d) openRuleForm(d.ruleEdit);
         else if ("ruleDelete" in d) deleteRule(d.ruleDelete, button);
+        else if ("teacherAdd" in d) openTeacherForm("");
+        else if ("teacherEdit" in d) openTeacherForm(d.teacherEdit);
+        else if ("teacherDelete" in d) deleteTeacher(d.teacherDelete, button);
+        else if ("roomAdd" in d) openRoomForm("");
+        else if ("roomEdit" in d) openRoomForm(d.roomEdit);
+        else if ("roomDelete" in d) deleteRoom(d.roomDelete, button);
+        else if ("settingsDefault" in d) SETTINGS_INFO.forEach(function (info) {
+          const field = $("#settings-form").elements[info.key];
+          if (field) field.value = String(SETTINGS_DEFAULT[info.key]);
+        });
       });
       document.addEventListener("input", function (event) {
         if (event.target.id === "email-search") filterEmails();
+      });
+      document.addEventListener("submit", function (event) {
+        if (event.target.id !== "settings-form") return;
+        event.preventDefault();
+        if (editor) saveSettings(event.target);
       });
     }
     // Giriş/çıkışta düzenleyici denetimleri çizilir ya da kalkar
@@ -4272,7 +4440,10 @@
       enrichChanges();
       renderDepartments();
       renderProctorAdmin();
+      renderTeacherAdmin();
+      renderRoomAdmin();
       renderDataAdmin();
+      renderSettings();
       if (rulesLoaded) renderRules();
     }
 
@@ -4371,7 +4542,11 @@
     }
     let proctorAdminOpen = false;
     document.addEventListener("toggle", function (event) {
-      if (event.target.classList && event.target.classList.contains("proctor-admin-list")) proctorAdminOpen = event.target.open;
+      if (!event.target.classList || !event.target.classList.contains("proctor-admin-list")) return;
+      const kind = event.target.dataset.admin;
+      if (kind === "teacher") teacherAdminOpen = event.target.open;
+      else if (kind === "room") roomAdminOpen = event.target.open;
+      else proctorAdminOpen = event.target.open;
     }, true);
     function renderProctorAdmin() {
       const box = $("#proctor-admin");
@@ -4393,56 +4568,46 @@
     function openProctorForm(name) {
       const person = name ? (DATA.proctorAvailability || []).find(function (item) { return nameKey(item.name) === nameKey(name); }) : null;
       const count = name ? (proctorTaskCounts()[name] || 0) : 0;
+      const submit = name ? "Kaydet" : "Gözetmeni ekle";
       openRecord({
-        kind: "Gözetmen", title: name || "Gözetmen ekle", file: "veri.json", submit: name ? "Kaydet" : "Gözetmeni ekle",
+        kind: "Gözetmen", title: name || "Gözetmen ekle", file: "veri.json", submit: submit,
         leave: person ? JSON.parse(JSON.stringify(person.unavailable || [])) : [],
         body: (name
           ? '<p><strong>' + esc(name) + '</strong> · ' + count + ' görev</p>'
           : '<div class="record-grid">' + inputHtml("Ad Soyad", "name", "", ' autocomplete="off"', "wide") + '</div>') +
-          '<fieldset class="edit-rooms"><legend>İzin günleri</legend><div class="leave-list" data-leave-list></div>' +
-            '<div class="leave-add">' + selectHtml("Gün", "leaveDay", LEAVE_DAYS.map(function (day) { return [day, day]; }), "Pazartesi") +
-              inputHtml("Neden", "leaveReason", "izin") + inputHtml("Başlangıç", "leaveStart", "", ' type="time"') + inputHtml("Bitiş", "leaveEnd", "", ' type="time"') +
-              '<button type="button" data-leave-add>+ İzin günü ekle</button></div>' +
-            '<p class="edit-help">Saat girilmezse bütün gün izinli sayılır. İzinli gözetmen o gün için Seç penceresinde “müsait değil” görünür. Değişiklikler “' + (name ? "Kaydet" : "Gözetmeni ekle") + '” ile yazılır.</p>' +
-          '</fieldset>',
+          '<div class="record-grid">' + inputHtml("E-posta (isteğe bağlı)", "email", person && person.email || "", ' type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false"', "wide") + '</div>' +
+          leaveFieldsetHtml(submit, "İzinli gözetmen o gün/saat için Seç penceresinde “müsait değil” görünür ve atanamaz."),
         init: renderLeaveList,
-        click: function (event) {
-          const form = $("#record-modal form");
-          const remove = event.target.closest("[data-leave-remove]");
-          if (remove) { record.leave.splice(Number(remove.dataset.leaveRemove), 1); renderLeaveList(); return; }
-          if (!event.target.closest("[data-leave-add]")) return;
-          const start = form.elements.leaveStart.value, end = form.elements.leaveEnd.value;
-          if ((start || end) && start && end && start >= end) { setEditStatus(form, "İzin bitiş saati başlangıçtan sonra olmalı.", true); return; }
-          const item = { day: form.elements.leaveDay.value, reason: form.elements.leaveReason.value.trim() || "izin" };
-          if (start) item.start = start;
-          if (end) item.end = end;
-          if (record.leave.some(function (other) { return JSON.stringify(other) === JSON.stringify(item); })) { setEditStatus(form, "Bu izin zaten listede.", true); return; }
-          record.leave.push(item);
-          form.elements.leaveStart.value = "";
-          form.elements.leaveEnd.value = "";
-          setEditStatus(form, "", false);
-          renderLeaveList();
-        },
+        click: leaveClick,
         save: function (form) {
           const newName = name || form.elements.name.value.trim().replace(/\s+/g, " ");
+          const email = form.elements.email.value.trim();
           if (!newName) throw new Error("Gözetmenin adını yazın.");
+          if (!validEmail(email)) throw new Error("E-posta adresi geçerli görünmüyor (ör. ad.soyad@ornek.edu.tr).");
           if (!name && Array.from(new Set((DATA.proctors || []).concat((DATA.proctorAvailability || []).map(function (item) { return item.name; }))))
             .some(function (other) { return nameKey(other) === nameKey(newName); })) throw new Error(newName + " zaten gözetmen listesinde.");
           const leave = record.leave.slice();
-          return commitVeri(name ? "gözetmen izin günleri: " + name : "gözetmen eklendi: " + newName, function (data) {
+          const build = function (old) {   // alan sırası: name, email (varsa), unavailable; bilinmeyen alanlar korunur
+            const fresh = { name: old ? old.name : newName };
+            if (email) fresh.email = email;
+            fresh.unavailable = leave;
+            if (old) Object.keys(old).forEach(function (key) { if (!(key in fresh) && key !== "email") fresh[key] = old[key]; });
+            return fresh;
+          };
+          return commitVeri(name ? "gözetmen kaydı: " + name : "gözetmen eklendi: " + newName, function (data) {
             const list = data.proctorAvailability || [];
             const at = list.findIndex(function (item) { return nameKey(item.name) === nameKey(newName); });
             if (!name) {
               if (at !== -1 || (data.proctors || []).some(function (other) { return nameKey(other) === nameKey(newName); })) {
                 throw new Error(newName + " zaten gözetmen listesinde (başka biri eklemiş olabilir).");
               }
-              list.push({ name: newName, unavailable: leave });
+              list.push(build(null));
             } else if (at !== -1) {
-              list[at].unavailable = leave;
-            } else if (leave.length) {
-              list.push({ name: name, unavailable: leave });
+              list[at] = build(list[at]);
+            } else if (leave.length || email) {
+              list.push(build(null));
             } else {
-              return;   // izin listesinde yoktu, izin de eklenmedi: değişiklik yok
+              return;   // izin listesinde yoktu, izin ve e-posta da eklenmedi: değişiklik yok
             }
             data.proctorAvailability = list;
             syncProctors(data);
@@ -4482,19 +4647,26 @@
           inputHtml("Kod", "code", dept ? dept.code : "", ' autocomplete="off" autocapitalize="characters"' + (used ? ' readonly' : '')) +
           inputHtml("Dil", "language", dept ? dept.language : "Türkçe", ' list="dept-languages" autocomplete="off"') +
           inputHtml("Bölüm adı", "name", dept ? dept.name : "", ' autocomplete="off"', "wide") +
+          inputHtml("Sınıflar (virgülle)", "classes", dept ? (Array.isArray(dept.classes) ? dept.classes.join(", ") : "") : "1, 2, 3, 4",
+            ' autocomplete="off" placeholder="' + esc(dept ? deptClasses(DATA, dept).join(", ") || "ör. 1, 2, 3, 4" : "ör. 1, 2, 3, 4") + '"', "wide") +
         '</div><datalist id="dept-languages"><option value="Türkçe"></option><option value="English"></option></datalist>' +
         '<p class="edit-help">' + (used
           ? "Bu bölümün " + used + " sınavı var; kodu değiştirilemez (sınavların “Programlar” alanı bu koda bağlı)."
-          : "Kod, sınavların “Programlar” alanındaki önektir (ör. BUS → BUS-1, BUS-3).") + '</p>',
+          : "Kod, sınavların “Programlar” alanındaki önektir (ör. BUS → BUS-1, BUS-3).") +
+          ' Sınıflar sınav formundaki bölüm-sınıf seçeneklerini verir: kod + sınıf (YBS + 1 → YBS1, veride "YBS-1"). Boş bırakılırsa sınavlardaki değerlerden türetilir.</p>',
         save: function (form) {
           const next = { code: form.elements.code.value.trim(), name: form.elements.name.value.trim(), language: form.elements.language.value.trim() };
           if (!next.code) throw new Error("Bölüm kodunu yazın.");
           if (!/^[^\s,()\-]+$/.test(next.code)) throw new Error("Kodda boşluk, virgül, tire ya da parantez olamaz.");
           if (!next.name) throw new Error("Bölüm adını yazın.");
+          const classes = form.elements.classes.value.split(",").map(function (item) { return item.trim(); }).filter(Boolean);
+          if (classes.some(function (item) { return !/^[^\s,()\-?]+$/.test(item); })) throw new Error("Sınıflarda boşluk, tire, soru işareti ya da parantez olamaz (ör. 1, 2, 3, 4 ya da Hz).");
+          if (new Set(classes).size !== classes.length) throw new Error("Bir sınıf iki kez yazılmış.");
           return commitVeri((dept ? "bölüm düzenlendi: " : "bölüm eklendi: ") + next.code, function (data) {
             const list = data.departments = data.departments || [];
             const clash = list.find(function (item) { return trLower(item.code) === trLower(next.code) && (!dept || item.code !== dept.code); });
             if (clash) throw new Error(clash.code + " kodlu bölüm zaten var.");
+            if (classes.length) next.classes = classes;
             if (!dept) { list.push(next); return; }
             const target = list.find(function (item) { return item.code === dept.code; });
             if (!target) throw new Error(dept.code + " bölümü sitede artık yok (başka biri silmiş olabilir).");
@@ -4502,6 +4674,8 @@
             target.code = next.code;
             target.name = next.name;
             target.language = next.language;
+            if (classes.length) target.classes = classes;
+            else delete target.classes;
           }).then(function (result) { return savedText(result, next.code + (dept ? " kaydedildi" : " eklendi")); });
         }
       });
@@ -4733,6 +4907,606 @@
       }).then(function (result) { return afterRules(result, rule.bolum); }), "Kural " + id + " silindi");
     }
 
+    // ==== 2. aşama: temel kayıtlar, ayarlar ve uyarılar ====
+    // Yeni alanlar (hepsi isteğe bağlı; yoksa eski türetme davranışı sürer, biçim: VERI-BICIMI.md):
+    //   teacherList: [{ name, title, department, email, unavailable: [{day|date, start?, end?, reason}] }]
+    //   rooms:       [{ code, floor, examCapacity, fullCapacity, note }]   (sayılar gerçek sayı ya da null)
+    //   departments[].classes: ["1", "2", "3", "4"] → sınavda programs "<KOD>-<sınıf>" (ör. "YBS-1"), ekranda "YBS1"
+    //   settings:    { proctorThreshold, capacityStretch, maxConsecutiveExams, longExamMinutes, warnOnly }
+    //   proctorAvailability[].email: gözetmen e-postası (epostalar.json'dan önce bakılır)
+    const SETTINGS_DEFAULT = { proctorThreshold: 30, capacityStretch: 5, maxConsecutiveExams: 2, longExamMinutes: 60, warnOnly: true };
+    const SETTINGS_INFO = [
+      { key: "proctorThreshold", label: "Gözetmen eşiği (öğrenci)", min: 1,
+        text: "Bir derslikte bu sayıda ya da daha çok öğrenci varsa ve gözetmen yazılmamışsa (“Gerekmiyor”) uyarı verilir." },
+      { key: "capacityStretch", label: "Kapasite esnemesi (öğrenci)", min: 0,
+        text: "Dersliğin sınav kapasitesi en çok bu kadar aşılabilir: öğrenci > sınav kapasitesi + esneme ise uyarı verilir. Derslik kaydındaki tam kapasite hiçbir zaman aşılamaz (kayıt engellenir)." },
+      { key: "maxConsecutiveExams", label: "Art arda sınav sınırı", min: 1,
+        text: "Aynı bölüm-sınıfın (ör. YBS1) aynı gün art arda en çok kaç sınavı olabilir. Bir sınavın bitişiyle sonrakinin başlangıcı arasında 10 dakika ya da daha az varsa art arda sayılır." },
+      { key: "longExamMinutes", label: "Uzun sınav süresi (dakika)", min: 1,
+        text: "Bundan uzun süren sınav gözetmen görev sayımında 2 görev sayılır (60 → 90 dakikalık sınav 2 görev, 50 dakikalık 1 görev)." },
+      { key: "warnOnly", label: "Yalnız uyar", bool: true,
+        text: "Açıkken uyarılar kaydı durdurmaz: sınav formunda uyarı listesi ve “Yine de kaydet” düğmesi çıkar. Kapalıyken uyarı varken kayıt yapılmaz. Gözetmen çakışması, gözetmen izni, gözetmenin kendi dersi ve tam kapasite aşımı her durumda engeldir." }
+    ];
+    const CONSECUTIVE_GAP = 10;   // dakika: bundan kısa ara "art arda" sayılır
+    const TEACHER_TITLES = ["Prof. Dr.", "Doç. Dr.", "Dr. Öğr. Üyesi", "Öğr. Gör. Dr.", "Öğr. Gör.", "Arş. Gör. Dr.", "Arş. Gör."];
+
+    function settingsOf(data) {
+      const raw = data && data.settings && typeof data.settings === "object" ? data.settings : {};
+      const out = {};
+      Object.keys(SETTINGS_DEFAULT).forEach(function (key) {
+        const value = raw[key];
+        if (key === "warnOnly") out[key] = typeof value === "boolean" ? value : SETTINGS_DEFAULT[key];
+        else out[key] = value !== "" && value !== null && value !== undefined && isFinite(Number(value)) ? Number(value) : SETTINGS_DEFAULT[key];
+      });
+      return out;
+    }
+    function timeMinutes(time) {
+      const part = String(time || "").split(":");
+      return Number(part[0]) * 60 + Number(part[1]);
+    }
+    function numberOrNull(value) {
+      if (value === "" || value === null || value === undefined) return null;
+      const number = Number(value);
+      return isFinite(number) ? number : null;
+    }
+    function roomList(data) { return data && Array.isArray(data.rooms) ? data.rooms : []; }
+    function roomKey(code) { return String(code || "").trim().toLocaleUpperCase("tr-TR").replace(/\s+/g, ""); }
+    function roomRecord(data, code) {
+      const key = roomKey(code);
+      return key ? roomList(data).find(function (item) { return roomKey(item.code) === key; }) || null : null;
+    }
+    function teacherListOf(data) { return data && Array.isArray(data.teacherList) ? data.teacherList : []; }
+    function teacherRecord(data, name) {
+      const key = nameKey(name);
+      return key ? teacherListOf(data).find(function (item) { return nameKey(item.name) === key; }) || null : null;
+    }
+    function teachesExam(exam, name) {
+      return exam.teacher === name || splitTeachers(exam.teacher).some(function (item) { return nameKey(item) === nameKey(name); });
+    }
+    // Tek tek öğretim elemanları: sınavlardaki adlar (virgülle ayrılmış) + teacherList
+    function teacherPeople(data) {
+      const names = [];
+      const add = function (name) { if (name && !names.some(function (item) { return nameKey(item) === nameKey(name); })) names.push(name); };
+      teacherListOf(data).forEach(function (item) { add(String(item.name || "").trim()); });
+      data.exams.forEach(function (exam) { splitTeachers(exam.teacher).forEach(add); });
+      return names.sort(function (a, b) { return a.localeCompare(b, "tr"); });
+    }
+    function syncTeachers(data) {
+      const names = Array.from(new Set(data.exams.map(function (exam) { return exam.teacher; }).filter(Boolean))).sort();
+      teacherListOf(data).forEach(function (person) {
+        const name = String(person && person.name || "").trim();
+        if (name && !names.some(function (item) { return nameKey(item) === nameKey(name); })) names.push(name);
+      });
+      data.teachers = names.sort();
+      if (data.meta) data.meta.teacherCount = data.teachers.length;
+    }
+    function validEmailOrEmpty(value) { return /^[^\s@,;<>]+@[^\s@,;<>]+$/.test(String(value || "").trim()) ? String(value).trim() : ""; }
+    function teacherEmailOf(name) { const rec = teacherRecord(DATA, name); return rec ? validEmailOrEmpty(rec.email) : ""; }
+    function proctorEmailOf(name) {
+      const rec = (DATA.proctorAvailability || []).find(function (item) { return nameKey(item.name) === nameKey(name); });
+      return rec ? validEmailOrEmpty(rec.email) : "";
+    }
+
+    // ---- Bölüm-sınıf (departments[].classes) ----
+    // classes yoksa sınavlardaki değerlerden türetilir (eski veride yarıyıl: "BUS-5" → BUS5). "?" (bilinmiyor) denetime girmez.
+    function deptClasses(data, dept) {
+      if (Array.isArray(dept.classes) && dept.classes.length) return dept.classes.map(String);
+      const found = [];
+      data.exams.forEach(function (exam) {
+        (exam.programs || []).forEach(function (program) {
+          if (program.indexOf(dept.code + "-") !== 0) return;
+          const value = program.slice(dept.code.length + 1);
+          if (value && value !== "?" && found.indexOf(value) === -1) found.push(value);
+        });
+      });
+      return found.sort(function (a, b) { return (Number(a) - Number(b)) || a.localeCompare(b, "tr"); });
+    }
+    function classLabel(program) {
+      const match = /^([^-]+)-(.+)$/.exec(program);
+      return match ? match[1] + match[2] : program;
+    }
+    function classGroups(exam) {
+      return (exam.programs || []).filter(function (program) { return /^[^-]+-.+$/.test(program) && !/-\?$/.test(program); });
+    }
+    function classPickerHtml(programs) {
+      const chosen = programs || [];
+      const covered = [];
+      const rows = DATA.departments.map(function (dept) {
+        const classes = deptClasses(DATA, dept);
+        if (!classes.length) return "";
+        return '<div class="class-row"><span class="class-dept">' + esc(dept.code) + '</span>' + classes.map(function (value) {
+          const program = dept.code + "-" + value;
+          const on = chosen.indexOf(program) !== -1;
+          if (on) covered.push(program);
+          return '<label class="class-chip"><input type="checkbox" name="cls" value="' + esc(program) + '"' + (on ? ' checked' : '') + '><span>' + esc(classLabel(program)) + '</span></label>';
+        }).join("") + '</div>';
+      }).join("");
+      const other = chosen.filter(function (program) { return covered.indexOf(program) === -1; });
+      return '<fieldset class="wide edit-classes"><legend>Bölüm-sınıf <small>(ortak ve ÇAP derslerinde birden çok seçin)</small></legend>' +
+        (rows || '<p class="edit-help">Bölümlerin sınıfları tanımlı değil: Sınav Programları sekmesinde bölümü düzenleyip “Sınıflar”ı yazın (ör. 1, 2, 3, 4).</p>') +
+        inputHtml("Listede olmayanlar (virgülle, ör. YBS-?)", "programsOther", other.join(", "), ' autocomplete="off"', "class-other") + '</fieldset>';
+    }
+    function formPrograms(form, base) {
+      const list = $$('[name="cls"]', form).filter(function (input) { return input.checked; }).map(function (input) { return input.value; });
+      const other = form.elements.programsOther ? form.elements.programsOther.value : "";
+      other.split(",").map(function (item) { return item.trim(); }).filter(Boolean).forEach(function (program) {
+        if (list.indexOf(program) === -1) list.push(program);
+      });
+      const old = (base && base.programs) || [];
+      if (old.length === list.length && old.every(function (program) { return list.indexOf(program) !== -1; })) return old.slice();   // sıra korunur
+      return list;
+    }
+
+    // ---- Sınav formunda listeden seçim ----
+    function teacherOptions() {
+      return teacherPeople(DATA).map(function (name) {
+        const rec = teacherRecord(DATA, name);
+        const label = rec ? [rec.title, rec.department].filter(Boolean).join(" · ") : "";
+        return '<option value="' + esc(name) + '"' + (label ? ' label="' + esc(label) + '"' : '') + '></option>';
+      }).join("");
+    }
+    function teacherInfoText(value) {
+      if (!teacherListOf(DATA).length) return "";
+      const missing = splitTeachers(value).filter(function (name) { return !teacherRecord(DATA, name); });
+      return missing.length ? "Öğretim elemanı listesinde yok: " + missing.join(", ") + " (“+ Yeni ekle” ile kaydedin)." : "";
+    }
+    function roomOptions() {
+      return roomIndex().sort(function (a, b) { return a.code.localeCompare(b.code, "tr"); }).map(function (item) {
+        return '<option value="' + esc(item.code) + '"' + (item.capacity !== null ? ' label="Sınav kapasitesi ' + item.capacity + (item.full !== null ? ', tam ' + item.full : '') + '"' : '') + '></option>';
+      }).join("");
+    }
+    // Derslik (birleşik salonda parçaların toplamı) kapasiteleri; derslik kaydı yoksa listed = false
+    function roomCaps(data, name) {
+      const parts = roomParts(name).filter(Boolean);
+      const records = parts.map(function (part) { return roomRecord(data, part); });
+      if (!parts.length || !records.every(Boolean)) return { exam: null, full: null, listed: false };
+      const sum = function (key) {
+        return records.reduce(function (total, record) { const n = numberOrNull(record[key]); return total === null || n === null ? null : total + n; }, 0);
+      };
+      return { exam: sum("examCapacity"), full: sum("fullCapacity"), listed: true };
+    }
+    function roomInfoText(name) {
+      name = String(name || "").trim();
+      if (!name) return "";
+      const caps = roomCaps(DATA, name);
+      if (caps.listed) return "Sınav kapasitesi " + (caps.exam !== null ? caps.exam : "?") + (caps.full !== null ? " · tam " + caps.full : "");
+      return roomList(DATA).length ? "Derslik listesinde yok" : "";
+    }
+    function roomPicked(input) {
+      const row = input.closest(".edit-room");
+      if (!row) return;
+      const info = $("[data-room-info]", row);
+      if (info) info.textContent = roomInfoText(input.value);
+      const caps = roomCaps(DATA, input.value.trim());
+      const capacity = $('[name="capacity"]', row);
+      if (caps.listed && caps.exam !== null && capacity) capacity.value = String(caps.exam);
+    }
+
+    // ---- Uyarılar ----
+    // Her sorun: { type, level: "block" | "warn", text, exam, other, key }. Engel (block) hiçbir zaman kaydedilmez;
+    // uyarı (warn) settings.warnOnly açıkken "Yine de kaydet" ile kaydedilir, kapalıyken engel gibi davranır.
+    function issueBlocks(item, data) {
+      return item.level === "block" || !settingsOf(data).warnOnly;
+    }
+    function examRef(exam) {
+      const rooms = roomNames(exam);
+      return exam.course + " (" + exam.day + " " + exam.dateLabel + " " + exam.start + "–" + exam.end + (rooms.length ? ", " + rooms.join(", ") : "") + ")";
+    }
+    function pairKey(a, b) { return [a || "yeni", b || "yeni"].sort().join("~"); }
+    // opts.proctors: gözetmen denetimleri de (Kontrol sayfası); sınav formunda gözetmenler proctorConflicts ile ayrıca denetlenir
+    function examIssues(data, exam, opts) {
+      opts = opts || {};
+      const settings = settingsOf(data);
+      const out = [];
+      const add = function (type, level, text, other, key) { out.push({ type: type, level: level, text: text, exam: exam.id || "", other: other || "", key: key }); };
+      if (!exam.date || !/^\d{2}:\d{2}$/.test(exam.start || "") || !/^\d{2}:\d{2}$/.test(exam.end || "") || exam.start >= exam.end) return out;
+      const groups = classGroups(exam);
+      const teachers = splitTeachers(exam.teacher);
+      const parts = [];
+      exam.rooms.forEach(function (room) { roomParts(room.room).forEach(function (part) { if (part && parts.indexOf(roomKey(part)) === -1) parts.push(roomKey(part)); }); });
+      data.exams.forEach(function (other) {
+        if ((exam.id && other.id === exam.id) || !overlaps(exam, other)) return;
+        const pair = pairKey(exam.id, other.id);
+        const shared = classGroups(other).filter(function (program) { return groups.indexOf(program) !== -1; });
+        if (shared.length) add("Bölüm-sınıf", "warn", shared.map(classLabel).join(", ") + " aynı saatte iki sınava giriyor: " + examRef(other) + " ile çakışıyor.", other.id, "sinif|" + shared.join(",") + "|" + pair);
+        const both = splitTeachers(other.teacher).filter(function (name) { return teachers.some(function (item) { return nameKey(item) === nameKey(name); }); });
+        if (both.length) add("Öğretim elemanı", "warn", both.join(", ") + " aynı saatte iki sınavın öğretim elemanı: " + examRef(other) + ".", other.id, "hoca|" + both.map(nameKey).join(",") + "|" + pair);
+        const rooms = [];
+        other.rooms.forEach(function (room) {
+          roomParts(room.room).forEach(function (part) { if (parts.indexOf(roomKey(part)) !== -1 && rooms.indexOf(part) === -1) rooms.push(part); });
+        });
+        if (rooms.length) add("Derslik", "warn", "Derslik " + rooms.join(", ") + " aynı saatte başka bir sınavda: " + examRef(other) + ".", other.id, "derslik|" + rooms.map(roomKey).join(",") + "|" + pair);
+      });
+      teachers.forEach(function (name) {
+        const rec = teacherRecord(data, name);
+        const off = rec ? unavailableIn(rec.unavailable, exam) : null;
+        if (off) add("Öğretim elemanı", "warn", name + (off.reason && off.reason !== "izin" ? " bu sınavın zamanında müsait değil (" + leaveWhen(off) + ": " + off.reason + ")." : " bu sınavın zamanında izinli (" + leaveWhen(off) + ")."),
+          "", "hocaizin|" + nameKey(name) + "|" + (exam.id || "yeni"));
+      });
+      exam.rooms.forEach(function (room) {
+        const students = numberOrNull(room.students);
+        if (students === null || (!room.room && !students)) return;
+        const label = room.room || "Adı yazılmamış derslik";
+        const caps = roomCaps(data, room.room);
+        const examCap = caps.exam !== null ? caps.exam : numberOrNull(room.capacity);
+        const key = (exam.id || "yeni") + "|" + roomKey(label);
+        if (caps.full !== null && students > caps.full) add("Kapasite", "block", label + ": " + students + " öğrenci tam kapasiteyi (" + caps.full + ") aşıyor; tam kapasite aşılamaz.", "", "tam|" + key);
+        else if (examCap !== null && students > examCap + settings.capacityStretch) {
+          add("Kapasite", "warn", label + ": " + students + " öğrenci, sınav kapasitesi " + examCap + " + esneme " + settings.capacityStretch + " = " + (examCap + settings.capacityStretch) + " sınırını aşıyor.", "", "kap|" + key);
+        }
+        if (students >= settings.proctorThreshold && !proctorNames(room.proctor).length) {
+          add("Gözetmen eşiği", "warn", label + ": " + students + " öğrenci var (eşik " + settings.proctorThreshold + ") ama gözetmen yazılmamış.", "", "esik|" + key);
+        }
+      });
+      groups.forEach(function (program) {
+        const day = data.exams.filter(function (other) {
+          return other.date === exam.date && !(exam.id && other.id === exam.id) && classGroups(other).indexOf(program) !== -1;
+        }).concat([exam]).sort(function (a, b) { return plainOrder(a.start, b.start) || plainOrder(a.end, b.end); });
+        let chain = [], found = null, lastEnd = 0;
+        day.forEach(function (item) {
+          if (chain.length && timeMinutes(item.start) - lastEnd > CONSECUTIVE_GAP) {
+            if (chain.indexOf(exam) !== -1) found = chain;
+            chain = [];
+            lastEnd = 0;
+          }
+          chain.push(item);
+          lastEnd = Math.max(lastEnd, timeMinutes(item.end));
+        });
+        if (chain.indexOf(exam) !== -1) found = chain;
+        if (found && found.length > settings.maxConsecutiveExams) {
+          add("Art arda sınav", "warn", classLabel(program) + " " + exam.day + " " + exam.dateLabel + " günü art arda " + found.length + " sınava giriyor (en çok " + settings.maxConsecutiveExams + "): " +
+            found.map(function (item) { return (item.course || "bu sınav") + " " + item.start; }).join(", ") + ".", "",
+            "ardisik|" + program + "|" + exam.date + "|" + found.map(function (item) { return item.id || "yeni"; }).join(","));
+        }
+      });
+      if (opts.proctors) {
+        const seen = {};
+        exam.rooms.forEach(function (room) {
+          proctorNames(room.proctor).forEach(function (name) { (seen[nameKey(name)] = seen[nameKey(name)] || { name: name, rooms: [] }).rooms.push(room.room || "derslik"); });
+        });
+        Object.keys(seen).forEach(function (key) {
+          const item = seen[key];
+          if (item.rooms.length > 1) add("Gözetmen", "block", item.name + " bu sınavda aynı anda iki derslikte yazılı (" + item.rooms.join(", ") + ").", "", "gozikili|" + exam.id + "|" + key);
+          proctorProblems(data, exam, item.name).forEach(function (problem) {
+            add("Gözetmen", "block", problem.text, problem.other || "", "goz" + problem.kind + "|" + key + "|" + (problem.other ? pairKey(exam.id, problem.other) : exam.id));
+          });
+        });
+      }
+      return out;
+    }
+    // Bütün program: her sorun bir kez (iki sınav arasındaki çakışma tek satır)
+    function programIssues(data) {
+      const seen = {};
+      const out = [];
+      data.exams.slice().sort(examOrder).forEach(function (exam) {
+        examIssues(data, exam, { proctors: true }).forEach(function (item) {
+          if (seen[item.key]) return;
+          seen[item.key] = true;
+          out.push(item);
+        });
+      });
+      return out;
+    }
+    // Kayıt anında GitHub'daki (ya da demodaki) güncel veriyle: engelleyen sorun varsa kaydedilmez
+    function blockingCheck(data, exam) {
+      const blocking = examIssues(data, exam, {}).filter(function (item) { return issueBlocks(item, data); });
+      if (blocking.length) {
+        const error = new Error("Kaydedilmedi:\n" + blocking.map(function (item) { return item.text; }).join("\n"));
+        error.conflict = true;
+        throw error;
+      }
+    }
+    function showIssues(form, issues, offerForce) {
+      const box = $("[data-issues]", form);
+      if (!box) return;
+      box.hidden = !issues.length;
+      if (!issues.length) { box.innerHTML = ""; return; }
+      const blocks = issues.filter(function (item) { return issueBlocks(item, DATA); });
+      box.innerHTML = '<p class="issues-head">' + (blocks.length ? "Kaydı engelleyen sorun var" : "Uyarılar") + ' (' + issues.length + ')</p><ul>' +
+        issues.map(function (item) {
+          const block = issueBlocks(item, DATA);
+          return '<li class="' + (block ? 'is-block' : 'is-warn') + '" data-issue-type="' + esc(item.type) + '"><b>' + esc(item.type) + (block ? ' · engel' : '') + ':</b> ' + esc(item.text) + '</li>';
+        }).join("") + '</ul>' +
+        (offerForce && !blocks.length ? '<button type="button" class="force-save" data-force-save>Yine de kaydet</button>' : '');
+    }
+
+    // ---- Panel > Ayarlar ----
+    function renderSettings() {
+      const box = $("#settings-box");
+      if (!box || !DATA) return;
+      const settings = settingsOf(DATA);
+      const can = !!editor;
+      box.innerHTML = '<form class="edit-form settings-form" id="settings-form" novalidate><div class="settings-list">' +
+        SETTINGS_INFO.map(function (info) {
+          const value = settings[info.key];
+          const control = info.bool
+            ? '<select name="' + info.key + '"' + (can ? '' : ' disabled') + '><option value="true"' + (value ? ' selected' : '') + '>Açık: uyar, “Yine de kaydet” sor</option>' +
+                '<option value="false"' + (value ? '' : ' selected') + '>Kapalı: uyarı varken kaydetme</option></select>'
+            : '<input name="' + info.key + '" type="number" min="' + info.min + '" step="1" inputmode="numeric" value="' + esc(value) + '"' + (can ? '' : ' readonly') + '>';
+          const fallback = SETTINGS_DEFAULT[info.key];
+          return '<div class="setting-row"><label><span>' + esc(info.label) + '</span>' + control + '</label>' +
+            '<p class="setting-help">' + esc(info.text) + ' <small>Varsayılan: ' + esc(info.bool ? (fallback ? "açık" : "kapalı") : fallback) + ' · alan: settings.' + info.key + '</small></p></div>';
+        }).join("") + '</div>' +
+        (can
+          ? '<p class="edit-status" role="alert" aria-live="polite"></p><div class="edit-actions"><button class="edit-save" type="submit">Ayarları kaydet</button>' +
+            '<button type="button" data-settings-default>Varsayılan değerleri yaz</button></div>' +
+            '<p class="editor-small">' + (DEMO ? 'Demo: ayarlar yalnız bu tarayıcıda saklanır.' : 'Kaydedince veri.json → settings GitHub\'a ' + esc(editor.login) + ' adıyla commit edilir.') + '</p>'
+          : '<p class="editor-small">Ayarları değiştirmek için düzenleyici girişi yapın.</p>') +
+        '</form>';
+    }
+    function saveSettings(form) {
+      const next = {};
+      try {
+        SETTINGS_INFO.forEach(function (info) {
+          const raw = form.elements[info.key].value.trim();
+          if (info.bool) { next[info.key] = raw === "true"; return; }
+          if (!/^\d+$/.test(raw) || Number(raw) < info.min) throw new Error(info.label + ": en az " + info.min + " olan bir tam sayı yazın.");
+          next[info.key] = Number(raw);
+        });
+      } catch (error) { setEditStatus(form, error.message, true); return; }
+      const buttons = $$("button", form);
+      buttons.forEach(function (button) { button.disabled = true; });
+      setEditStatus(form, savingText(), false);
+      commitVeri("ayarlar", function (data) { data.settings = next; }).then(function (result) {
+        showToast(savedText(result, "Ayarlar kaydedildi"));
+      }).catch(function (error) {
+        buttons.forEach(function (button) { button.disabled = false; });
+        setEditStatus(form, (error && error.message) || "Kaydedilemedi. Lütfen tekrar deneyin.", true);
+      });
+    }
+
+    // ---- Panel > Kontrol ----
+    let checkType = "";
+    function renderCheck() {
+      if (!DATA || !$("#check-list")) return;
+      const all = programIssues(DATA);
+      const types = [];
+      all.forEach(function (item) { if (types.indexOf(item.type) === -1) types.push(item.type); });
+      if (checkType && types.indexOf(checkType) === -1) checkType = "";
+      $("#check-type").innerHTML = '<option value="">Tür: Tümü (' + all.length + ')</option>' + types.map(function (type) {
+        return '<option value="' + esc(type) + '"' + (type === checkType ? ' selected' : '') + '>' + esc(type) + ' (' + all.filter(function (item) { return item.type === type; }).length + ')</option>';
+      }).join("");
+      $("#check-type").hidden = !all.length;
+      const blocks = all.filter(function (item) { return issueBlocks(item, DATA); }).length;
+      $("#check-summary").textContent = all.length ? all.length + " sorun" + (blocks ? " · " + blocks + " engel" : "") : "Sorun yok";
+      const shown = all.filter(function (item) { return !checkType || item.type === checkType; });
+      $("#check-list").innerHTML = all.length ? '<div class="check-list">' + shown.map(function (item) {
+        const exam = examById(item.exam);
+        if (!exam) return "";
+        const block = issueBlocks(item, DATA);
+        return '<button type="button" class="check-item' + (block ? ' is-block' : '') + '" data-exam-id="' + esc(exam.id) + '">' +
+          '<span class="check-top"><span class="check-tag">' + esc(item.type) + '</span>' + (block ? '<span class="check-tag is-block">engel</span>' : '<span class="check-tag is-warn">uyarı</span>') +
+            '<strong>' + esc(exam.course) + '</strong><span class="check-when">' + esc(exam.day + " " + exam.dateLabel + " " + exam.start + "–" + exam.end) + '</span></span>' +
+          '<span class="check-text">' + esc(item.text) + '</span></button>';
+      }).join("") + '</div>'
+        : '<div class="placeholder" data-check-empty><div><strong>Sorun bulunmadı</strong>Program Ayarlar’daki sayılara ve uyarı kurallarına göre tarandı.</div></div>';
+    }
+
+    // ---- İzin listesi (gözetmen ve öğretim elemanı formlarında ortak) ----
+    function leaveWhen(item) {
+      const date = item.date && dayFromIso(item.date);
+      return [date ? date.dateLabel + " " + date.day : item.date, item.date ? "" : item.day,
+        item.start || item.end ? (item.start || "00:00") + "–" + (item.end || "24:00") : ""].filter(Boolean).join(" ");
+    }
+    function leaveFieldsetHtml(saveLabel, help) {
+      return '<fieldset class="edit-rooms"><legend>İzinli gün ve saatler</legend><div class="leave-list" data-leave-list></div>' +
+        '<div class="leave-add">' + selectHtml("Gün", "leaveDay", LEAVE_DAYS.map(function (day) { return [day, day]; }), "Pazartesi") +
+          inputHtml("ya da tarih", "leaveDate", "", ' type="date"') +
+          inputHtml("Başlangıç", "leaveStart", "", ' type="time"') + inputHtml("Bitiş", "leaveEnd", "", ' type="time"') +
+          inputHtml("Neden", "leaveReason", "izin", "", "leave-reason") +
+          '<button type="button" data-leave-add>+ İzin ekle</button></div>' +
+        '<p class="edit-help">Tarih girilirse yalnız o tarih, girilmezse her hafta seçilen gün. Saat girilmezse bütün gün izinli sayılır. ' + help + ' Değişiklikler “' + saveLabel + '” ile yazılır.</p></fieldset>';
+    }
+    function leaveClick(event) {
+      const form = $("#record-modal form");
+      const remove = event.target.closest("[data-leave-remove]");
+      if (remove) { record.leave.splice(Number(remove.dataset.leaveRemove), 1); renderLeaveList(); return; }
+      if (!event.target.closest("[data-leave-add]")) return;
+      const start = form.elements.leaveStart.value, end = form.elements.leaveEnd.value;
+      if (start && end && start >= end) { setEditStatus(form, "İzin bitiş saati başlangıçtan sonra olmalı.", true); return; }
+      const date = form.elements.leaveDate.value;
+      if (date && !dayFromIso(date)) { setEditStatus(form, "İzin tarihi geçerli değil.", true); return; }
+      const item = date ? { date: date } : { day: form.elements.leaveDay.value };
+      if (start) item.start = start;
+      if (end) item.end = end;
+      item.reason = form.elements.leaveReason.value.trim() || "izin";
+      if (record.leave.some(function (other) { return JSON.stringify(other) === JSON.stringify(item); })) { setEditStatus(form, "Bu izin zaten listede.", true); return; }
+      record.leave.push(item);
+      form.elements.leaveStart.value = "";
+      form.elements.leaveEnd.value = "";
+      form.elements.leaveDate.value = "";
+      setEditStatus(form, "", false);
+      renderLeaveList();
+    }
+
+    // ---- Öğretim Üyeleri sekmesi: öğretim elemanı kayıtları (teacherList) ----
+    let teacherAdminOpen = false;
+    let roomAdminOpen = false;
+    function renderTeacherAdmin() {
+      const box = $("#teacher-admin");
+      if (!box) return;
+      box.hidden = !editor || !DATA;
+      if (box.hidden) { box.innerHTML = ""; return; }
+      const names = teacherPeople(DATA);
+      const deptName = function (code) { const dept = DATA.departments.find(function (item) { return item.code === code; }); return dept ? dept.code : code; };
+      const rows = names.map(function (name) {
+        const rec = teacherRecord(DATA, name);
+        const count = DATA.exams.filter(function (exam) { return teachesExam(exam, name); }).length;
+        return '<tr data-teacher-row="' + esc(name) + '"><td><strong>' + esc(name) + '</strong>' + (rec ? '' : ' <small class="editor-small">(kaydı yok; yalnız sınavlarda)</small>') + '</td>' +
+          '<td data-label="Unvan">' + esc(rec && rec.title || "—") + '</td>' +
+          '<td data-label="Bölüm">' + esc(rec && rec.department ? deptName(rec.department) : "—") + '</td>' +
+          '<td data-label="E-posta">' + esc(rec && rec.email || "—") + '</td>' +
+          '<td data-label="İzinler">' + esc(rec && (rec.unavailable || []).length ? rec.unavailable.map(leaveText).join(", ") : "—") + '</td>' +
+          '<td class="num" data-label="Sınav">' + count + '</td>' +
+          '<td class="acts"><span class="row-actions"><button type="button" data-teacher-edit="' + esc(name) + '">' + (rec ? "Düzenle" : "Kaydet") + '</button>' +
+            (rec ? '<button type="button" class="is-del" data-teacher-delete="' + esc(name) + '">Sil</button>' : '') + '</span></td></tr>';
+      }).join("");
+      box.innerHTML = '<div class="proctor-limits"><div class="admin-head"><h3>Öğretim elemanı listesi</h3><button type="button" class="row-add" data-teacher-add>+ Öğretim elemanı ekle</button></div>' +
+        '<p>Yalnız düzenleyiciye görünür. Unvan, bölüm, e-posta ve izinli gün/saatler veri.json → teacherList’e yazılır; sınav formunda öğretim elemanı bu listeden seçilir. Sınavı olan öğretim elemanı silinemez.</p>' +
+        '<details class="proctor-admin-list" data-admin="teacher"' + (teacherAdminOpen ? ' open' : '') + '><summary>Liste (' + names.length + ')</summary>' +
+        (names.length ? '<div class="proctor-limits-wrap"><table><thead><tr><th>Ad</th><th>Unvan</th><th>Bölüm</th><th>E-posta</th><th>İzinler</th><th>Sınav</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+          : '<p class="editor-small">Henüz öğretim elemanı yok.</p>') + '</details></div>';
+    }
+    function openTeacherForm(name, opts) {
+      opts = opts || {};
+      const rec = name ? teacherRecord(DATA, name) : null;
+      const used = name ? DATA.exams.filter(function (exam) { return teachesExam(exam, name); }).length : 0;
+      const prefill = !name && opts.prefill && splitTeachers(opts.prefill).length === 1 && !teacherRecord(DATA, opts.prefill) ? opts.prefill : "";
+      const submit = rec ? "Kaydet" : "Öğretim elemanını ekle";
+      openRecord({
+        kind: "Öğretim elemanı", title: name || "Öğretim elemanı ekle", file: "veri.json", submit: submit,
+        leave: rec ? JSON.parse(JSON.stringify(rec.unavailable || [])) : [],
+        body: '<div class="record-grid">' +
+          inputHtml("Ad SOYAD", "name", name || prefill, ' autocomplete="off"' + (used ? ' readonly' : ''), "wide") +
+          inputHtml("Unvan", "title", rec ? rec.title || "" : "", ' list="teacher-titles" autocomplete="off"') +
+          selectHtml("Bölüm", "department", [["", "—"]].concat(DATA.departments.map(function (dept) { return [dept.code, dept.code + " · " + dept.name]; })), rec ? rec.department || "" : "") +
+          inputHtml("E-posta", "email", rec ? rec.email || "" : "", ' type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false"', "wide") +
+        '</div><datalist id="teacher-titles">' + TEACHER_TITLES.map(function (title) { return '<option value="' + esc(title) + '"></option>'; }).join("") + '</datalist>' +
+        '<p class="edit-help">' + (used ? "Bu öğretim elemanının " + used + " sınavı var; adı değiştirilemez (sınavların “öğretim elemanı” alanı bu ada bağlı). " : "") +
+          'Ad, sınavlardaki yazımla aynı olmalı (okul listesindeki gibi soyadı büyük harfle). E-posta “Değişikliği bildir” taslaklarında kullanılır; sayfada gösterilmez.</p>' +
+        leaveFieldsetHtml(submit, "Öğretim elemanının izinli olduğu zamana sınav konursa uyarı verilir."),
+        init: renderLeaveList,
+        click: leaveClick,
+        save: function (form) {
+          const newName = form.elements.name.value.trim().replace(/\s+/g, " ");
+          const entry = { name: newName, title: form.elements.title.value.trim(), department: form.elements.department.value, email: form.elements.email.value.trim(), unavailable: record.leave.slice() };
+          if (!newName) throw new Error("Öğretim elemanının adını yazın.");
+          if (/,/.test(newName)) throw new Error("Tek bir ad yazın (virgül olmadan); ortak dersin hocalarını ayrı ayrı ekleyin.");
+          if (!validEmail(entry.email)) throw new Error("E-posta adresi geçerli görünmüyor (ör. ad.soyad@ornek.edu.tr).");
+          return commitVeri((rec ? "öğretim elemanı düzenlendi: " : "öğretim elemanı eklendi: ") + newName, function (data) {
+            const list = Array.isArray(data.teacherList) ? data.teacherList : [];
+            const at = rec ? list.findIndex(function (item) { return nameKey(item.name) === nameKey(rec.name); }) : -1;
+            if (rec && at === -1) throw new Error(rec.name + " listede artık yok (başka biri silmiş olabilir).");
+            const clash = list.find(function (item, index) { return index !== at && nameKey(item.name) === nameKey(newName); });
+            if (clash) throw new Error(clash.name + " zaten öğretim elemanı listesinde.");
+            if (name && nameKey(newName) !== nameKey(name) && data.exams.some(function (exam) { return teachesExam(exam, name); })) throw new Error(name + " öğretim elemanının sınavları var; adı değiştirilemez.");
+            const fresh = { name: newName };
+            if (entry.title) fresh.title = entry.title;
+            fresh.department = entry.department;
+            if (entry.email) fresh.email = entry.email;
+            fresh.unavailable = entry.unavailable;
+            if (at !== -1) {
+              Object.keys(list[at]).forEach(function (key) { if (!(key in fresh) && ["title", "email"].indexOf(key) === -1) fresh[key] = list[at][key]; });   // bilinmeyen alanlar korunur
+              list[at] = fresh;
+            } else list.push(fresh);
+            data.teacherList = list;
+            syncTeachers(data);
+          }).then(function (result) {
+            if (opts.after) opts.after(newName);
+            return savedText(result, newName + (rec ? " kaydedildi" : " eklendi"));
+          });
+        }
+      });
+    }
+    function deleteTeacher(name, button) {
+      const exams = DATA.exams.filter(function (exam) { return teachesExam(exam, name); });
+      if (exams.length) {
+        alert(name + " silinemez: sınavları var.\n\n• " + exams.map(examRef).join("\n• ") + "\n\nÖnce bu sınavların öğretim elemanını değiştirin ya da sınavları silin.");
+        return;
+      }
+      if (!confirm(name + " öğretim elemanı listesinden silinsin mi? Unvan, e-posta ve izinler de silinir.")) return;
+      quickRun(button, commitVeri("öğretim elemanı silindi: " + name, function (data) {
+        if (data.exams.some(function (exam) { return teachesExam(exam, name); })) throw new Error(name + " silinemez: sınavı var.");
+        const list = Array.isArray(data.teacherList) ? data.teacherList : [];
+        const at = list.findIndex(function (item) { return nameKey(item.name) === nameKey(name); });
+        if (at === -1) throw new Error(name + " listede artık yok (başka biri silmiş olabilir).");
+        list.splice(at, 1);
+        syncTeachers(data);
+      }), name + " silindi");
+    }
+
+    // ---- Derslikler sekmesi: derslik kayıtları (rooms) ----
+    function renderRoomAdmin() {
+      const box = $("#room-admin");
+      if (!box) return;
+      box.hidden = !editor || !DATA;
+      if (box.hidden) { box.innerHTML = ""; return; }
+      const rooms = roomIndex().sort(function (a, b) { return a.code.localeCompare(b.code, "tr"); });
+      const shownNumber = function (value) { return value === null || value === undefined ? "—" : String(value); };
+      const rows = rooms.map(function (item) {
+        const rec = item.record || null;
+        return '<tr data-room-row="' + esc(item.code) + '"><td><strong>' + esc(item.code) + '</strong>' + (rec ? '' : ' <small class="editor-small">(kaydı yok; yalnız sınavlarda)</small>') + '</td>' +
+          '<td class="num" data-label="Kat">' + shownNumber(item.floor) + (rec && numberOrNull(rec.floor) === null && item.floor !== null ? ' <small class="editor-small">(koddan)</small>' : '') + '</td>' +
+          '<td class="num" data-label="Sınav kapasitesi">' + shownNumber(item.capacity) + '</td>' +
+          '<td class="num" data-label="Tam kapasite">' + shownNumber(item.full) + '</td>' +
+          '<td data-label="Not">' + esc(rec && rec.note || "—") + '</td>' +
+          '<td class="num" data-label="Sınav">' + item.entries.length + '</td>' +
+          '<td class="acts"><span class="row-actions"><button type="button" data-room-edit="' + esc(item.code) + '">' + (rec ? "Düzenle" : "Kaydet") + '</button>' +
+            (rec ? '<button type="button" class="is-del" data-room-delete="' + esc(item.code) + '">Sil</button>' : '') + '</span></td></tr>';
+      }).join("");
+      box.innerHTML = '<div class="proctor-limits"><div class="admin-head"><h3>Derslik listesi</h3><button type="button" class="row-add" data-room-add>+ Derslik ekle</button></div>' +
+        '<p>Yalnız düzenleyiciye görünür. Kod, kat, sınav kapasitesi ve tam kapasite veri.json → rooms’a yazılır; sınav formunda derslik bu listeden seçilir. Sınav yapılan derslik silinemez.</p>' +
+        '<details class="proctor-admin-list" data-admin="room"' + (roomAdminOpen ? ' open' : '') + '><summary>Liste (' + rooms.length + ')</summary>' +
+        (rooms.length ? '<div class="proctor-limits-wrap"><table><thead><tr><th>Derslik</th><th>Kat</th><th>Sınav kap.</th><th>Tam kap.</th><th>Not</th><th>Sınav</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+          : '<p class="editor-small">Henüz derslik yok.</p>') + '</details></div>';
+    }
+    function roomUsage(data, code) {
+      const key = roomKey(code);
+      return data.exams.filter(function (exam) { return exam.rooms.some(function (room) { return roomParts(room.room).some(function (part) { return roomKey(part) === key; }); }); });
+    }
+    function openRoomForm(code, opts) {
+      opts = opts || {};
+      const item = code ? roomIndex().find(function (entry) { return entry.code === code; }) : null;
+      const rec = item ? item.record || null : null;
+      const used = code ? roomUsage(DATA, code).length : 0;
+      const value = function (key, fallback) { const n = rec ? numberOrNull(rec[key]) : null; return n !== null ? String(n) : fallback; };
+      openRecord({
+        kind: "Derslik", title: code || "Derslik ekle", file: "veri.json", submit: rec ? "Kaydet" : "Dersliği ekle",
+        body: '<div class="record-grid">' +
+          inputHtml("Kod", "code", code || "", ' autocomplete="off" autocapitalize="characters"' + (used ? ' readonly' : '')) +
+          inputHtml("Kat (boşsa koddan)", "floor", value("floor", ""), ' type="number" step="1" inputmode="numeric"') +
+          inputHtml("Sınav kapasitesi", "examCapacity", value("examCapacity", item && item.capacity !== null ? String(item.capacity) : ""), ' type="number" min="0" step="1" inputmode="numeric"') +
+          inputHtml("Tam kapasite", "fullCapacity", value("fullCapacity", ""), ' type="number" min="0" step="1" inputmode="numeric"') +
+          inputHtml("Not (isteğe bağlı)", "note", rec ? rec.note || "" : "", ' autocomplete="off"', "wide") +
+        '</div><p class="edit-help">' + (used ? "Bu derslikte " + used + " sınav var; kodu değiştirilemez. " : "") +
+          'Sınav kapasitesi: sınav düzeninde (aralıklı) oturulabilecek öğrenci; tam kapasite: yan yana oturma, hiçbir zaman aşılamaz. Kat boş bırakılırsa koddaki baştaki sayıdan (7D1 → 7) türetilir.</p>',
+        save: function (form) {
+          const next = { code: form.elements.code.value.trim().replace(/\s+/g, "") };
+          if (!next.code) throw new Error("Derslik kodunu yazın.");
+          if (/[,;]/.test(next.code)) throw new Error("Kodda virgül ya da noktalı virgül olamaz.");
+          ["floor", "examCapacity", "fullCapacity"].forEach(function (key) {
+            const raw = form.elements[key].value.trim();
+            if (raw && !(key === "floor" ? /^-?\d+$/ : /^\d+$/).test(raw)) throw new Error("Kat ve kapasite alanlarına yalnız tam sayı yazın.");
+            next[key] = raw === "" ? null : Number(raw);
+          });
+          if (next.examCapacity !== null && next.fullCapacity !== null && next.examCapacity > next.fullCapacity) throw new Error("Sınav kapasitesi tam kapasiteden büyük olamaz.");
+          const note = form.elements.note.value.trim();
+          if (note) next.note = note;
+          return commitVeri((rec ? "derslik düzenlendi: " : "derslik eklendi: ") + next.code, function (data) {
+            const list = Array.isArray(data.rooms) ? data.rooms : [];
+            const at = rec ? list.findIndex(function (entry) { return roomKey(entry.code) === roomKey(rec.code); }) : -1;
+            if (rec && at === -1) throw new Error(rec.code + " listede artık yok (başka biri silmiş olabilir).");
+            const clash = list.find(function (entry, index) { return index !== at && roomKey(entry.code) === roomKey(next.code); });
+            if (clash) throw new Error(clash.code + " zaten derslik listesinde.");
+            if (code && roomKey(next.code) !== roomKey(code) && roomUsage(data, code).length) throw new Error(code + " dersliğinde sınav var; kodu değiştirilemez.");
+            if (at !== -1) {
+              Object.keys(list[at]).forEach(function (key) { if (!(key in next) && key !== "note") next[key] = list[at][key]; });
+              list[at] = next;
+            } else list.push(next);
+            data.rooms = list;
+          }).then(function (result) {
+            if (opts.after) opts.after(next.code);
+            return savedText(result, next.code + (rec ? " kaydedildi" : " eklendi"));
+          });
+        }
+      });
+    }
+    function deleteRoom(code, button) {
+      const exams = roomUsage(DATA, code);
+      if (exams.length) {
+        alert(code + " silinemez: bu derslikte sınav var.\n\n• " + exams.map(examRef).join("\n• ") + "\n\nÖnce bu sınavların dersliğini değiştirin.");
+        return;
+      }
+      if (!confirm(code + " derslik listesinden silinsin mi?")) return;
+      quickRun(button, commitVeri("derslik silindi: " + code, function (data) {
+        if (roomUsage(data, code).length) throw new Error(code + " silinemez: bu derslikte sınav var.");
+        const list = Array.isArray(data.rooms) ? data.rooms : [];
+        const at = list.findIndex(function (entry) { return roomKey(entry.code) === roomKey(code); });
+        if (at === -1) throw new Error(code + " listede artık yok (başka biri silmiş olabilir).");
+        list.splice(at, 1);
+      }), code + " silindi");
+    }
+
     // ---- Sınav zarfı: kaydı tümden sıfırla (envelopes[examId] silinir) ----
     function clearEnvelope() {
       const id = envExam.id, course = envExam.course;
@@ -4774,6 +5548,10 @@
       enrichChanges();
       peopleRefreshers.forEach(function (refresh) { refresh(); });
       renderRooms();
+      renderTeacherAdmin();
+      renderRoomAdmin();
+      renderSettings();
+      renderCheck();
       renderEnvelopes();
       if ($("#envelope-modal").open && envView) renderEnvelopeModal();
       if ($("#envcard-modal").open && envExam) { envExam = examById(envExam.id) || envExam; renderEnvelopeCard(); }
@@ -4797,6 +5575,13 @@
       initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept", empty: "Henüz öğretim üyesi yok; sınavlar eklenince burada listelenir." });
       initPeople({ type: "proctor", names: function () { return DATA.proctors; }, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept", empty: "Henüz gözetmen yok; sınavlara gözetmen atanınca burada listelenir." });
       initRecords();
+      renderSettings();
+      renderCheck();
+      $("#check-type").addEventListener("change", function (event) { checkType = event.target.value; renderCheck(); });
+      $("#check-list").addEventListener("click", function (event) {
+        const item = event.target.closest("[data-exam-id]");
+        if (item) openExam(item.dataset.examId);
+      });
       initDemo();
       initAppModal();
       initEditor();
@@ -4856,13 +5641,16 @@
       $("#demo-store-note").hidden = !DEMO || demoPersistent;
     }
 
-    // "Örnek veriyle doldur": uydurma olduğu açıkça belli kısa bir örnek dönem
+    // "Örnek veriyle doldur": uydurma olduğu açıkça belli kısa bir örnek dönem. Kayıtlar (öğretim elemanları, derslikler,
+    // bölüm-sınıflar, ayarlar) da doldurulur; Kontrol sayfasında ve sınav formunda görünsün diye birkaç uyarı bilerek bırakıldı:
+    // ORN1 Pazartesi art arda 3 sınav, C303'te kapasite ve gözetmen eşiği, Örnek Hoca 2'nin izinli günündeki sınav.
     function sampleData(base) {
       const meta = Object.assign({}, base.meta || {});
+      const classes = ["1", "2", "3", "4"];
       const departments = [
-        { code: "ORN", name: "Örnek Bölüm", language: "Türkçe" },
-        { code: "DEN", name: "Deneme Bölümü", language: "Türkçe" },
-        { code: "SMP", name: "Sample Department", language: "English" }
+        { code: "ORN", name: "Örnek Bölüm", language: "Türkçe", classes: classes.slice() },
+        { code: "DEN", name: "Deneme Bölümü", language: "Türkçe", classes: classes.slice() },
+        { code: "SMP", name: "Sample Department", language: "English", classes: classes.slice() }
       ];
       const day = function (date, label, name) { return { date: date, dateLabel: label, day: name }; };
       const mon = day("2027-01-04", "04.01.2027", "Pazartesi");
@@ -4872,21 +5660,40 @@
         return Object.assign({ id: "exam-" + n }, when, { start: start, end: end, courseCode: code, course: course, programs: programs, teacher: teacher,
           totalStudents: String(rooms.reduce(function (sum, room) { return sum + Number(room.students); }, 0)), notes: notes || [], rooms: rooms });
       };
-      const room = function (name, students, proctor, departments) { return { room: name, capacity: "40", students: String(students), proctor: proctor, departments: departments }; };
+      const capacity = { A101: 40, B202: 30, C303: 30 };
+      const room = function (name, students, proctor, departments) { return { room: name, capacity: String(capacity[name]), students: String(students), proctor: proctor, departments: departments }; };
       const data = {
         meta: meta,
         departments: departments,
         exams: [
-          exam(1, mon, "09:00", "09:50", "ORN101", "Örnek Ders 1", ["ORN-1"], "Örnek Hoca 1", [room("A101", 30, "Örnek Gözetmen 1", "ORN 30")]),
-          exam(2, mon, "11:00", "11:50", "DEN201", "Deneme Dersi 2", ["DEN-2"], "Örnek Hoca 2", [room("A101", 25, "Örnek Gözetmen 2", "DEN 25")]),
-          exam(3, tue, "10:00", "11:30", "ORN102", "Örnek Ders 3", ["ORN-1", "DEN-1"], "Örnek Hoca 1",
+          exam(1, mon, "09:00", "09:50", "ORN101", "Örnek Ders 1", ["ORN-1"], "Örnek HOCA 1", [room("A101", 30, "Örnek Gözetmen 1", "ORN 30")]),
+          exam(2, mon, "10:00", "10:50", "ORN103", "Örnek Ders 6", ["ORN-1"], "Örnek HOCA 3", [room("B202", 20, "Gerekmiyor", "ORN 20")]),
+          exam(3, mon, "11:00", "11:50", "DEN201", "Deneme Dersi 2", ["DEN-2", "ORN-1"], "Örnek HOCA 2", [room("A101", 25, "Örnek Gözetmen 2", "DEN 15, ORN 10")]),
+          exam(4, tue, "10:00", "11:30", "ORN102", "Örnek Ders 3", ["ORN-1", "DEN-1"], "Örnek HOCA 1",
             [room("A101", 35, "Örnek Gözetmen 1", "ORN 20, DEN 15"), room("B202", 28, "Örnek Gözetmen 3", "ORN 10, DEN 18")], ["2 dersliğe bölündü", "90 dakika"]),
-          exam(4, wed, "13:00", "13:50", "SMP101", "Sample Course 4", ["SMP-1"], "Örnek Hoca 3", [room("B202", 22, "Örnek Gözetmen 2", "SMP 22")]),
-          exam(5, wed, "15:00", "15:50", "DEN105", "Deneme Dersi 5", ["DEN-1", "SMP-1"], "Örnek Hoca 2", [room("A101", 18, "Gerekmiyor", "DEN 10, SMP 8")])
+          exam(5, wed, "13:00", "13:50", "SMP101", "Sample Course 4", ["SMP-1"], "Örnek HOCA 3", [room("B202", 22, "Örnek Gözetmen 2", "SMP 22")]),
+          exam(6, wed, "15:00", "15:50", "DEN105", "Deneme Dersi 5", ["DEN-1", "SMP-1"], "Örnek HOCA 2", [room("A101", 18, "Gerekmiyor", "DEN 10, SMP 8")]),
+          exam(7, wed, "15:00", "15:50", "SMP205", "Sample Course 7", ["SMP-2"], "Örnek HOCA 3", [room("C303", 38, "Gerekmiyor", "SMP 38")])
         ],
         assignments: [], teachers: [], proctors: [],
-        updates: [{ tarih: "04.01.2027", tur: "Sınav", metin: "Örnek duyuru: bu dönem demo verisidir; isimler uydurmadır." }],
-        proctorAvailability: [{ name: "Örnek Gözetmen 3", unavailable: [{ day: "Pazartesi", reason: "izin" }] }]
+        updates: [{ tarih: "4 Ocak", tur: "Sınav", metin: "Örnek duyuru: bu dönem demo verisidir; isimler uydurmadır. Panel → Kontrol örnek uyarıları gösterir." }],
+        proctorAvailability: [
+          { name: "Örnek Gözetmen 1", email: "gozetmen1@example.org", unavailable: [] },
+          { name: "Örnek Gözetmen 3", unavailable: [{ day: "Pazartesi", reason: "izin" }] }
+        ],
+        teacherList: [
+          { name: "Örnek HOCA 1", title: "Dr. Öğr. Üyesi", department: "ORN", email: "hoca1@example.org", unavailable: [] },
+          { name: "Örnek HOCA 2", title: "Doç. Dr.", department: "DEN", email: "hoca2@example.org", unavailable: [{ day: "Çarşamba", start: "14:00", end: "17:00", reason: "izin" }] },
+          { name: "Örnek HOCA 3", title: "Öğr. Gör.", department: "SMP", unavailable: [] },
+          { name: "Örnek HOCA 4", title: "Prof. Dr.", department: "ORN", unavailable: [{ date: "2027-01-05", reason: "toplantı" }] }
+        ],
+        rooms: [
+          { code: "A101", floor: 1, examCapacity: 40, fullCapacity: 60 },
+          { code: "B202", floor: 2, examCapacity: 30, fullCapacity: 45 },
+          { code: "C303", floor: 3, examCapacity: 30, fullCapacity: 50, note: "Projeksiyonlu" },
+          { code: "C304", floor: 3, examCapacity: 24, fullCapacity: 36 }
+        ],
+        settings: Object.assign({}, SETTINGS_DEFAULT)
       };
       return deriveData(data);
     }
@@ -4944,6 +5751,7 @@
 
     // ---- Uygulama Oluştur (yalnız demoda görünür; GitHub girişi gerekir) ----
     const APP_SOURCE = "sinavtakipuygulamasi";
+    const DOC_FILES = ["VERI-BICIMI.md", "YZ-REHBERI.md"];   // yeni uygulamaya aynen kopyalanan belgeler
     const RESERVED_NAMES = ["panel", "kod", "sinavtakipuygulamasi", "2627vizeprogrami", "bossablon", "v2", "index.html", "eski-surum"];
     let appModalRefresh = null;
     let createDraft = { university: "", faculty: "", programName: "", period: "", slug: "", slugTouched: false };
@@ -5023,7 +5831,8 @@
       return JSON.stringify({
         meta: { university: info.university, faculty: info.faculty, programName: info.programName, period: info.period,
           examCount: 0, assignmentCount: 0, teacherCount: 0, proctorCount: 0 },
-        departments: [], exams: [], assignments: [], teachers: [], proctors: [], updates: [], proctorAvailability: []
+        departments: [], exams: [], assignments: [], teachers: [], proctors: [], updates: [], proctorAvailability: [],
+        teacherList: [], rooms: [], settings: Object.assign({}, SETTINGS_DEFAULT)
       }, null, 1) + "\n";
     }
     function createApp(info) {
@@ -5033,9 +5842,14 @@
       return folderMissing(slug).then(function (free) {
         if (!free) throw new Error("“" + slug + "” zaten kullanılıyor; başka bir uzantı seçin.");
         // sayfa: sunucudaki (depodaki) sinavtakipuygulamasi/index.html aynen; kurallar: yalnız genel olanlar
+        // belgeler (VERI-BICIMI.md, YZ-REHBERI.md) de kopyalanır; kaynakta yoksa atlanır
+        const optional = function (name) {
+          return repoApi("GET", "/contents/" + APP_SOURCE + "/" + name + "?ref=main").catch(function (error) { if (error.status === 404) return null; throw error; });
+        };
         return Promise.all([
           repoApi("GET", "/contents/" + APP_SOURCE + "/index.html?ref=main"),
-          repoApi("GET", "/contents/" + APP_SOURCE + "/kurallar.json?ref=main")
+          repoApi("GET", "/contents/" + APP_SOURCE + "/kurallar.json?ref=main"),
+          optional(DOC_FILES[0]), optional(DOC_FILES[1])
         ]);
       }).then(function (sources) {
         let rules = [];
@@ -5047,6 +5861,10 @@
           { path: slug + "/epostalar.json", content: JSON.stringify({ hocalar: {}, gozetmenler: {} }, null, 1) + "\n" },
           { path: slug + "/kurallar.json", content: JSON.stringify(rules, null, 1) + "\n" }
         ];
+        DOC_FILES.forEach(function (name, index) {
+          const source = sources[2 + index];
+          if (source && source.sha) files.push({ path: slug + "/" + name, sha: source.sha, base64: source.content });
+        });
         return commitTree(files.map(function (file) { return file.sha ? { path: file.path, sha: file.sha } : { path: file.path, content: file.content }; }), message)
           .catch(function (error) {
             if (error.status === 401) throw error;
@@ -5246,7 +6064,9 @@
       "ana-sayfa": "home",
       "yeni-ozellikler": "features",
       "veriler": "data",
-      "kurallar": "rules"
+      "kurallar": "rules",
+      "ayarlar": "settings",
+      "kontrol": "check"
     };
     activatePage(pageByHash[initialHash] || "home", false);
     // adres çubuğunda hash değişince (paylaşılan bağlantı aynı sekmede) ilgili uygulama ve sekme açılır
