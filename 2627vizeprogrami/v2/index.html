@@ -990,21 +990,26 @@
     /* Başlıkta uygulama geçişi (Değişiklik 4): başlık rengi ve metni uygulamaya göre değişir */
     .header-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; margin-left: auto; max-width: 100%; }
     .header-actions .editor-button { margin-left: 0; }
-    .app-switch { max-width: 100%; padding: 8px 16px; border: 2px solid #fff; border-radius: 999px; color: #0d4f80; background: #fff;
-      font-size: .86rem; font-weight: 800; white-space: normal; text-align: center; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .22); }
-    .app-switch:hover { background: #fdf2f6; color: #6b1d3a; }
+    /* Başlıkta iki düğmeli uygulama seçici (Değişiklik 6): seçili olan beyaz zeminli */
+    .app-picker { display: inline-flex; max-width: 100%; padding: 3px; border: 1px solid rgba(255, 255, 255, .45); border-radius: 999px; background: rgba(255, 255, 255, .14); }
+    .app-picker button { padding: 7px 15px; border: 0; border-radius: 999px; color: #fff; background: transparent; font-size: .86rem; font-weight: 800; white-space: nowrap; cursor: pointer; }
+    .app-picker button:hover { background: rgba(255, 255, 255, .18); }
+    .app-picker button[aria-pressed="true"] { color: #0d4f80; background: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, .22); cursor: default; }
+    .app-picker button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
     body[data-app="envelope"] .site-header { background: linear-gradient(120deg, #2b0a1c 0%, #6b1d3a 55%, #6a2c74 100%); }
     body[data-app="envelope"] .site-header .eyebrow { color: #f3cfdc; }
     body[data-app="envelope"] .site-header .header-meta { color: #f5e3ea; }
-    body[data-app="envelope"] .app-switch { color: #6b1d3a; }
-    body[data-app="envelope"] .app-switch:hover { background: #e8f3fb; color: #0d4f80; }
+    body[data-app="envelope"] .app-picker button[aria-pressed="true"] { color: #6b1d3a; }
     .header-title { min-width: 0; }
     @media (max-width: 560px) {
       .header-actions { justify-content: flex-start; margin-left: 0; }
-      .app-switch { padding: 7px 12px; font-size: .8rem; }
+      .app-picker button { padding: 6px 12px; font-size: .8rem; }
     }
     /* Zarf kartı: sınavın özeti */
     .env-exam { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 18px; margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--canvas); font-size: .9rem; }
+    .empty-program { margin: 0 0 18px; padding: 22px 20px; border: 2px dashed var(--line); border-radius: 14px; background: var(--surface, #fff); text-align: center; }
+    .empty-program strong { display: block; color: var(--navy); font-size: 1.25rem; }
+    .empty-program span { display: block; margin-top: 6px; color: var(--muted); font-size: .92rem; }
     .env-exam > div { min-width: 0; overflow-wrap: anywhere; }
     .env-note-text { margin: 4px 0 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; white-space: pre-line; overflow-wrap: anywhere; }
     @media (max-width: 560px) { .env-exam { grid-template-columns: 1fr; } }
@@ -1223,11 +1228,14 @@
     <div class="header-inner">
       <div class="header-title">
         <p class="eyebrow">İstanbul Esenyurt Üniversitesi</p>
-        <h1 id="app-title">İşletme ve Yönetim Bilimleri Fakültesi - 26-27 Güz Dönemi Sınav Programı</h1>
-        <p class="header-meta" id="app-meta">2026-2027 Güz Dönemi Vize Sınav Programı · 2–6 Kasım 2026</p>
+        <h1 id="app-title">İşletme ve Yönetim Bilimleri Fakültesi</h1>
+        <p class="header-meta" id="app-meta">2026-2027 Güz Dönemi Vize Sınav Takip Uygulaması · 2–6 Kasım 2026</p>
       </div>
       <div class="header-actions">
-        <button class="app-switch" id="app-switch" type="button">Sınav Zarfı Takip Uygulamasına geç</button>
+        <div class="app-picker" role="group" aria-label="Uygulama">
+          <button type="button" data-app-pick="exam" aria-pressed="true">Sınav Programı</button>
+          <button type="button" data-app-pick="envelope" aria-pressed="false">Sınav Zarfları</button>
+        </div>
         <button class="editor-button" id="editor-button" type="button">Düzenleyici girişi</button>
       </div>
     </div>
@@ -1256,6 +1264,7 @@
           <p>Sınav programındaki güncellemeler burada duyurulur.</p>
         </div>
       </div>
+      <div class="empty-program" id="home-empty" hidden><strong>Hiç sınav eklenmemiştir.</strong><span>Sınavlar eklendiğinde program ve güncellemeler burada görünür.</span></div>
       <div id="son-degisiklikler"></div>
       <details class="about-box">
         <summary><span>Uygulama hakkında</span><span class="about-sign" aria-hidden="true"></span></summary>
@@ -1281,6 +1290,7 @@
         <span class="summary-pill" id="schedule-summary"></span>
         <button class="add-exam-button" id="add-exam-button" type="button" hidden>+ Yeni sınav ekle</button>
       </div>
+      <div class="empty-list" id="schedule-empty" hidden>Hiç sınav eklenmemiştir. Düzenleyiciler “Düzenleyici girişi” ile girip “Yeni sınav ekle” düğmesiyle ilk sınavı ekleyebilir.</div>
       <div class="department-grid" id="department-grid"></div>
     </section>
 
@@ -1337,6 +1347,7 @@
         </div>
       </div>
       <div class="env-summary" id="env-summary"></div>
+      <div class="empty-list" id="env-empty" hidden>Hiç sınav eklenmemiştir; sınavlar eklenince zarfları burada izlenir.</div>
       <h3 class="env-section-title">Konumlar</h3>
       <div class="department-grid env-grid" id="env-locations"></div>
       <h3 class="env-section-title">Bölümler</h3>
@@ -1423,6 +1434,7 @@
         <li><strong>Değişiklik 3 · Veriyi Excel olarak indir.</strong> Panel'deki “Excel olarak indir” düğmesi sitenin o an okuduğu veriyi (düzenlemeler dahil) .xlsx dosyası olarak indirir: Sınavlar (her sınav-derslik bir satır), Gözetmen görevleri, Gözetmen yükü (komisyon kuralıyla görev sayısı ve izin günleri), Son değişiklikler ve Sınav zarfları sayfaları. E-posta adresleri dosyaya yazılmaz.</li>
         <li><strong>Değişiklik 4 · Başlıkta uygulama geçişi ve Panel'de Veriler sekmesi.</strong> Uygulama geçiş düğmesi menünün üstünden başlığa (Düzenleyici girişi düğmesinin yanına) taşındı; başlık metni, sekme başlığı ve başlık rengi uygulamaya göre değişir (Sınav Takip mavi-yeşil, Sınav Zarfı Takip bordo-mor). “Excel olarak indir” düğmesi Panel'in yeni “Veriler” alt sekmesine (#veriler) taşındı.</li>
         <li><strong>Değişiklik 5 · Panel'de Kurallar sekmesi.</strong> Panel'in yeni “Kurallar” alt sekmesi (#kurallar) sınav programının kurulduğu kuralları bölüm bölüm gösterir (komisyonun yerleştirme kodundan ve belgelerinden derlenen 171 kural). Kurallar aranabilir; kapsama (Genel / Bu dönem) ve türe (Sert / Yumuşak / Sayım / Bilgi) göre süzülebilir. “Çelişkiler” ve “Finalde sorulacaklar” bölümleri vurgulanır.</li>
+        <li><strong>Değişiklik 6 · Yeni başlık ve uygulama seçici.</strong> Başlıkta yalnız fakültenin adı yazar; alt satır iki uygulamada da “2026-2027 Güz Dönemi Vize Sınav Takip Uygulaması · 2–6 Kasım 2026”dır. Başlığın sağındaki iki düğmeli seçiciyle (“Sınav Programı” | “Sınav Zarfları”, seçili olan beyaz) uygulamalar arasında geçilir; eski “…Uygulamasına geç” düğmesi kalktı. Başlık rengi uygulamaya göre değişmeye devam eder; telefonda düğmeler başlığın altına iner. Başlık metinleri ve sekme başlığı veri.json'daki meta alanlarından (programName, period) gelir; düzenlemelerin yazıldığı dosya sayfanın klasöründen bulunur. Böylece site klasörü kopyalanıp yeni dönem için kullanılabilir (bkz. /bossablon/). Sınav eklerken programda olmayan bir gün için “Başka tarih…” seçilebilir.</li>
       </ol>
     </section>
   </main>
@@ -1558,6 +1570,9 @@
     });
 
     let DATA = null;   // site verisi: veri.json (biçimi VERI-BICIMI.md), sayfa açılınca yüklenir
+    const TITLE_PREFIX = "[v2 Deneme] ";                  // sekme başlığı öneki
+    const DEFAULT_PROGRAM = "2026-2027 Güz Dönemi Vize";  // veri.json meta.programName yoksa
+    const DEFAULT_PERIOD = "2–6 Kasım 2026";              // veri.json meta.period yoksa
 
     const $ = (selector, root) => (root || document).querySelector(selector);
     const $$ = (selector, root) => Array.from((root || document).querySelectorAll(selector));
@@ -1713,16 +1728,32 @@
       $(selector).addEventListener(selector === "#rules-search" ? "input" : "change", renderRules);
     });
 
+    // Başlık (Değişiklik 6): fakülte adı, "<program adı> Sınav Takip Uygulaması · <dönem>", sağda Sınav Programı | Sınav Zarfları seçici.
+    // Metinler veri.json meta alanlarından gelir (faculty, programName, period); yoksa aşağıdaki varsayılanlar.
+    // Klasör başka adla kopyalanınca kod değişmez: yalnız veri.json meta doldurulur.
+    function metaText(key, fallback) {
+      const value = DATA && DATA.meta ? DATA.meta[key] : undefined;
+      return typeof value === "string" ? value.trim() : fallback;
+    }
+    function renderHeader() {
+      const envelopeApp = document.body.dataset.app === "envelope";
+      const faculty = metaText("faculty", "") || "İşletme ve Yönetim Bilimleri Fakültesi";
+      const program = metaText("programName", "") || DEFAULT_PROGRAM;
+      const period = metaText("period", DEFAULT_PERIOD);
+      $("#app-title").textContent = faculty;
+      $("#app-meta").textContent = (program ? program + " " : "") + "Sınav Takip Uygulaması" + (period ? " · " + period : "");
+      document.title = TITLE_PREFIX + (program ? program + " " : "") + (envelopeApp ? "Sınav Zarfları" : "Sınav Programı") + " | " + faculty;
+      $$("[data-app-pick]").forEach(function (button) {
+        button.setAttribute("aria-pressed", String(button.dataset.appPick === (envelopeApp ? "envelope" : "exam")));
+      });
+    }
+
     function activatePage(pageName, updateHash) {
       // İki uygulama (Değişiklik 2): Sınav Zarfları sekmesi "Sınav Zarfı Takip Uygulaması"nda, diğerleri "Sınav Takip Uygulaması"nda
       const app = pageName === "envelopes" ? "envelope" : "exam";
       document.body.dataset.app = app;
       $$(".tab-button[data-app]").forEach(function (button) { button.hidden = button.dataset.app !== app; });
-      const envelopeApp = app === "envelope";
-      $("#app-title").textContent = "İşletme ve Yönetim Bilimleri Fakültesi - 26-27 Güz Dönemi " + (envelopeApp ? "Sınav Zarfları" : "Sınav Programı");
-      $("#app-meta").textContent = envelopeApp ? "2–6 Kasım 2026 vize sınavlarının zarf takibi" : "2026-2027 Güz Dönemi Vize Sınav Programı · 2–6 Kasım 2026";
-      document.title = "[v2 Deneme] " + (envelopeApp ? "2026-2027 Güz Dönemi Sınav Zarfları" : "2026-2027 Güz Dönemi Vize Sınav Programı") + " | İşletme ve Yönetim Bilimleri Fakültesi";
-      $("#app-switch").textContent = app === "envelope" ? "Sınav Takip Uygulamasına geç" : "Sınav Zarfı Takip Uygulamasına geç";
+      renderHeader();
       $$(".tab-button").forEach(function (button) {
         button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" || pageName === "data" || pageName === "rules" ? "panel" : pageName)));
       });
@@ -1743,9 +1774,12 @@
         activatePage(button.dataset.page, true);
       });
     });
-    // geçişte öbür uygulamanın ilk sekmesi açılır
-    $("#app-switch").addEventListener("click", function () {
-      activatePage(document.body.dataset.app === "envelope" ? "home" : "envelopes", true);
+    // başlıktaki seçici: öbür uygulamaya geçince onun ilk sekmesi açılır (seçili olana basınca bir şey olmaz)
+    $$("[data-app-pick]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        if (button.dataset.appPick === document.body.dataset.app) return;
+        activatePage(button.dataset.appPick === "envelope" ? "envelopes" : "home", true);
+      });
     });
 
     const ALL_CODE = "__TUMU__";   // İYBF Tüm Sınav Programı kartı (Değişiklik 14)
@@ -1906,7 +1940,7 @@
               (room.capacity !== null ? '<span class="room-meta">Kapasite ' + room.capacity + '</span>' : '') +
             '</button>';
           }).join("") + '</div></div>';
-      }).join("") : '<div class="empty-list">Programda derslik bilgisi yok.</div>';
+      }).join("") : '<div class="empty-list">Programda derslik bilgisi yok; sınavlara derslik eklenince burada kat kat listelenir.</div>';
       $("#room-summary").textContent = rooms.length + " derslik";
     }
 
@@ -2661,7 +2695,8 @@
       });
       $("#exam-modal").addEventListener("input", function (event) {
         const form = event.target.closest(".edit-form");
-        if (form && /^(proctor|date|start|end)$/.test(event.target.name)) liveCheck(form);
+        if (form && event.target.name === "date") $("[data-date-other]", form).hidden = event.target.value !== OTHER_DATE;
+        if (form && /^(proctor|date|dateOther|start|end)$/.test(event.target.name)) liveCheck(form);
       });
       $("#exam-modal").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -2695,7 +2730,7 @@
         });
         grid.innerHTML = filtered.length ? filtered.map(function (name) {
           return '<button class="name-card" type="button" data-name="' + esc(name) + '">' + esc(name) + '</button>';
-        }).join("") : '<div class="empty-list">Filtreyle eşleşen isim bulunamadı.</div>';
+        }).join("") : '<div class="empty-list">' + (config.names().length ? "Filtreyle eşleşen isim bulunamadı." : config.empty) + '</div>';
       }
 
       computeDepartments();
@@ -2714,7 +2749,9 @@
     // gözetmen atamaları ve sayımlar sınavlardan yeniden türetilir, dosya commit edilir.
     const GITHUB_API = "https://api.github.com";
     const GITHUB_REPO = "iybf-sinav/iybf-sinav.github.io";
-    const EDIT_FILE = "2627vizeprogrami/v2/veri.json";
+    // Düzenlemelerin yazıldığı dosya sayfanın klasöründen türetilir: /2627vizeprogrami/v2/ → "2627vizeprogrami/v2/veri.json".
+    // Klasör kopyalanıp yeniden adlandırılınca kod değişmeden kendi veri.json'una yazar.
+    const EDIT_FILE = decodeURIComponent(location.pathname).replace(/[^/]*$/, "").split("/").filter(Boolean).concat("veri.json").join("/");
     const EDITOR_KEY = "iybf-v2-duzenleyici-anahtar";
     const TOKEN_URL = "https://github.com/settings/tokens/new?scopes=repo&description=iybf-sinav";   // klasik anahtar; "repo" kutusu önceden işaretli
     const SAVED_TEXT = "Kaydedildi; sitede 1–2 dakika içinde görünür.";
@@ -3130,6 +3167,24 @@
       return error;
     }
 
+    const OTHER_DATE = "__baska__";
+    const DAY_NAMES = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+    function dayFromIso(iso) {   // "2026-11-02" → { date, dateLabel: "02.11.2026", day: "Pazartesi" }
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+      if (!match) return null;
+      const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+      if (isNaN(date) || date.getUTCDate() !== Number(match[3])) return null;
+      return { date: iso, dateLabel: match[3] + "." + match[2] + "." + match[1], day: DAY_NAMES[date.getUTCDay()] };
+    }
+    // Formda seçilen gün: programdaki günlerden biri ya da "Başka tarih…" kutusu
+    function formDay(form, base) {
+      const value = form.elements.date.value;
+      if (value === OTHER_DATE) return dayFromIso(form.elements.dateOther.value.trim());
+      return examDays().concat([{ date: base.date, dateLabel: base.dateLabel, day: base.day }]).find(function (item) {
+        return item.date && item.date === value;
+      }) || null;
+    }
+
     function examDays() {
       const days = [];
       DATA.exams.slice().sort(examOrder).forEach(function (exam) {
@@ -3267,9 +3322,7 @@
 
     // Form değiştikçe (gözetmen, tarih, saat) kayıttan önceki denetim anında gösterilir
     function draftExam(form, base) {
-      const day = examDays().concat([{ date: base.date, dateLabel: base.dateLabel, day: base.day }]).find(function (item) {
-        return item.date === form.elements.date.value;
-      });
+      const day = formDay(form, base) || { date: "", dateLabel: "", day: "" };
       return Object.assign({}, base, { date: day.date, dateLabel: day.dateLabel, day: day.day,
         start: form.elements.start.value.trim(), end: form.elements.end.value.trim(),
         rooms: $$(".edit-room", form).map(function (row) {
@@ -3298,7 +3351,7 @@
     }
 
     function editFormHtml(exam) {
-      const days = examDays();
+      const days = examDays().filter(function (day) { return day.date; });
       if (exam.date && !days.some(function (day) { return day.date === exam.date; })) days.push({ date: exam.date, dateLabel: exam.dateLabel, day: exam.day });
       const options = function (values) {
         return values.map(function (value) { return '<option value="' + esc(value) + '"></option>'; }).join("");
@@ -3307,7 +3360,8 @@
         '<div class="edit-grid">' +
           '<label><span>Tarih</span><select name="date">' + days.map(function (day) {
             return '<option value="' + esc(day.date) + '"' + (day.date === exam.date ? " selected" : "") + '>' + esc(day.dateLabel + " " + day.day) + '</option>';
-          }).join("") + '</select></label>' +
+          }).join("") + '<option value="' + OTHER_DATE + '"' + (exam.date ? "" : " selected") + '>Başka tarih…</option></select></label>' +
+          '<label data-date-other' + (exam.date ? " hidden" : "") + '><span>Yeni tarih</span><input name="dateOther" type="date"></label>' +
           inputHtml("Başlangıç", "start", exam.start, ' type="time"') +
           inputHtml("Bitiş", "end", exam.end, ' type="time"') +
           inputHtml("Ders kodu", "courseCode", exam.courseCode) +
@@ -3339,9 +3393,8 @@
       const list = function (text, separator) {
         return text.split(separator).map(function (item) { return item.trim(); }).filter(Boolean);
       };
-      const day = examDays().concat([{ date: base.date, dateLabel: base.dateLabel, day: base.day }]).find(function (item) {
-        return item.date === form.elements.date.value;
-      });
+      const day = formDay(form, base);
+      if (!day) throw new Error("Sınav tarihini seçin (Başka tarih için gün/ay/yıl girin).");
       const exam = {
         id: base.id, date: day.date, dateLabel: day.dateLabel, day: day.day, start: value("start"), end: value("end"),
         courseCode: value("courseCode"), course: value("course"), programs: list(value("programs"), ","), teacher: value("teacher"),
@@ -3590,7 +3643,7 @@
     }
 
     function openNewExam() {
-      const day = examDays()[0];
+      const day = examDays()[0] || { date: "", dateLabel: "", day: "" };   // program boşsa tarih "Başka tarih…" ile girilir
       currentExam = { id: "", date: day.date, dateLabel: day.dateLabel, day: day.day, start: "10:00", end: "10:50", courseCode: "", course: "",
         programs: [], teacher: "", totalStudents: "", notes: [], rooms: [{ room: "", capacity: "", students: "", proctor: "Gerekmiyor", departments: "" }] };
       examTab = "edit";
@@ -3813,9 +3866,11 @@
     }
 
     function renderSummaries() {
-      $("#schedule-summary").textContent = DATA.meta.examCount + " sınav · " + DATA.meta.period;
-      $("#teacher-summary").textContent = DATA.meta.teacherCount + " öğretim elemanı";
-      $("#proctor-summary").textContent = DATA.meta.proctorCount + " gözetmen";
+      const period = metaText("period", "");
+      $("#schedule-summary").textContent = (DATA.meta.examCount || 0) + " sınav" + (period ? " · " + period : "");
+      $("#teacher-summary").textContent = (DATA.meta.teacherCount || 0) + " öğretim elemanı";
+      $("#proctor-summary").textContent = (DATA.meta.proctorCount || 0) + " gözetmen";
+      ["#home-empty", "#schedule-empty", "#env-empty"].forEach(function (selector) { $(selector).hidden = DATA.exams.length > 0; });
       if ($("#all-exam-count")) $("#all-exam-count").textContent = allExamCountText();
     }
 
@@ -3845,8 +3900,8 @@
         const detail = event.target.closest(".dg-ders");
         if (detail) openExam(detail.dataset.examId);
       });
-      initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept" });
-      initPeople({ type: "proctor", names: function () { return DATA.proctors; }, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept" });
+      initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept", empty: "Henüz öğretim üyesi yok; sınavlar eklenince burada listelenir." });
+      initPeople({ type: "proctor", names: function () { return DATA.proctors; }, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept", empty: "Henüz gözetmen yok; sınavlara gözetmen atanınca burada listelenir." });
       initEditor();
     }
 
@@ -3862,6 +3917,7 @@
         if (!data || !Array.isArray(data.exams) || !Array.isArray(data.departments) || !data.meta) throw new Error("veri.json'da beklenen alanlar yok");
         data.updates = data.updates || [];
         DATA = data;
+        renderHeader();
         initSite();
         status.hidden = true;
       }).catch(function (error) {
