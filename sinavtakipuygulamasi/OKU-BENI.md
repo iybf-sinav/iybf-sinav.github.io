@@ -1,20 +1,49 @@
-# Boş şablon: yeni dönem nasıl açılır
+# Sınav Takip Uygulaması
 
-Bu klasör sınav programı sitesinin boş kopyasıdır (sınav yok, yalnız 10 bölüm). Kod klasör adına bağlı değildir:
-düzenlemeler sayfanın bulunduğu klasörün `veri.json`'una yazılır, başlık ve sekme adı `veri.json` → `meta`'dan gelir.
+Adres: https://iybf-sinav.github.io/sinavtakipuygulamasi/ (eski `/bossablon/` adresi buraya yönlenir).
 
-1. **Kopyala ve adlandır:** `bossablon/` klasörünü depo kökünde yeni adla kopyalayın (ör. `2728vizeprogrami/`).
-   `index.html`'e dokunmayın.
-2. **meta'yı doldurun** (`veri.json`):
-   - `programName`: başlıkta ve sekme adında görünen ad, ör. `"2027-2028 Güz Dönemi Vize"`
-     (alt satır: "<programName> Sınav Takip Uygulaması · <period>").
-   - `period`: sınav tarihleri, ör. `"1–5 Kasım 2027"` (bilinmiyorsa `""` bırakın).
-   - `faculty`, `institution`: gerekirse; sayılar (`examCount` vb.) kayıtta kendiliğinden güncellenir.
-   - `departments`: bölüm listesi değiştiyse güncelleyin.
-3. **Sınavları ekleyin:** ya sitede "Düzenleyici girişi" → Sınav Programları → "Yeni sınav ekle"
-   (ilk sınavda tarihi "Başka tarih…" ile girin; sonra program günleri listede çıkar), ya da yerleştirme
-   motorunun çıktısını (`exams`, `proctorAvailability`, `updates`; biçim: kökteki `VERI-BICIMI.md`) `veri.json`'a koyun.
-   Gün sütunları ve saatler veriden türetilir.
-4. İsteğe bağlı: `epostalar.json`'a hoca/gözetmen e-postaları, `kurallar.json`'a döneme özel kurallar (`"kapsam": "donem"`).
+Bu klasör uygulamanın **kaynağıdır** ve aynı zamanda **demosudur**. Bütün geliştirme doğrudan buradaki
+`index.html` üzerinde yapılır (v2'den türetme bitti; `2627vizeprogrami/v2/` bağımsız bir deneme olarak kalır).
 
-Kökteki `index.html` yönlendirmesini yeni klasöre çevirmek ayrı bir karardır; bu adımlar onu değiştirmez.
+## Dosyalar
+
+- `index.html`: uygulamanın tamamı (Sınav Takip ve Sınav Zarfı Takip). Kod klasör adına bağlı değildir:
+  düzenlemeler sayfanın bulunduğu klasörün `veri.json`, `epostalar.json`, `kurallar.json` dosyalarına yazılır.
+- `veri.json`: boş veri. `meta.mode` = `"demo"` bu klasörü demo yapar (aşağıda). Biçim: kökteki `VERI-BICIMI.md`.
+- `epostalar.json`: boş e-posta listesi.
+- `kurallar.json`: genel kurallar (`"kapsam": "genel"`); yeni uygulamalara bunlar kopyalanır.
+
+## Demo modu (`meta.mode: "demo"`)
+
+- Sayfanın üstünde turuncu DEMO şeridi ve “Demo verisini sıfırla”, “Örnek veriyle doldur” düğmeleri vardır.
+- Herkes girişsiz bütün düzenleme denetimlerini kullanır. Kayıtlar GitHub'a gitmez, yalnız o tarayıcıda saklanır
+  (localStorage, anahtar `sinav-takip-demo:<klasör>`). Tarayıcı depolamaya izin vermezse kayıtlar yalnız bellekte
+  tutulur ve şeritte uyarı çıkar.
+- Kayıt katmanı tek yerdedir: `loadDoc` / `saveDoc` (demoda tarayıcı, gerçek dönemde GitHub Contents API).
+  Sınav, duyuru, gözetmen/izin, bölüm, e-posta, program bilgisi, kural ve zarf kayıtlarının hepsi bu yoldan geçer.
+
+## Yeni dönem: “Uygulama Oluştur”
+
+Demonun en altındaki **Uygulama Oluştur** düğmesi, düzenleyici girişi (depoya yazma yetkisi olan GitHub anahtarı)
+ile yeni bir klasör açar. Sorulanlar: üniversite, fakülte, sınav dönemi adı, sınav tarihleri ve adres uzantısı
+(dönem adından önerilir, ör. “2026-2027 Güz Dönemi Final” → `2627guzfinal`; yalnız `a-z 0-9 -`; var olan
+klasörlerle ve ayrılmış adlarla çakışamaz).
+
+Oluşan klasör (tek commit, Git Data API; olmazsa dosya dosya Contents API):
+- `index.html`: depodaki `sinavtakipuygulamasi/index.html` aynen,
+- `veri.json`: boş veri + `meta` (`university`, `faculty`, `programName`, `period`; `mode` yok → gerçek dönem),
+- `epostalar.json`: boş, `kurallar.json`: yalnız genel kurallar.
+
+Yeni dönemde demo şeridi yoktur; düzenleme yalnız düzenleyici girişliyken açıktır ve klasörün kendi dosyalarına commit edilir.
+
+## Dönemi silme
+
+Gerçek bir dönemde, düzenleyici girişliyken Panel → Veriler'in en altında kırmızı **Bu dönemi sil** düğmesi vardır.
+Onay için klasör adı yazılır; klasördeki bütün dosyalar tek commit'le silinir. Korumalı klasörlerde
+(`sinavtakipuygulamasi`, `2627vizeprogrami` ve altı, `panel`, `kod`, kök vb.) ve demoda bu düğme hiç görünmez.
+
+## Uygulama güncellenince
+
+Mevcut dönemlerin `index.html`'i kendiliğinden güncellenmez (oluşturulduğu andaki kopyadır). Bir döneme yeni sürümü
+almak için o klasörün `index.html`'ini buradakiyle değiştirmek yeterlidir; veri dosyalarına dokunulmaz.
+Kökteki `index.html` yönlendirmesini başka bir döneme çevirmek ayrı bir karardır.

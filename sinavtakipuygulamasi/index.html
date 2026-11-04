@@ -5,7 +5,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>Sınav Programı | İşletme ve Yönetim Bilimleri Fakültesi</title>
+  <title>Sınav Takip Uygulaması</title>
   <style>
     :root {
       --navy: #102a43;
@@ -907,7 +907,7 @@
     .department-button[data-code="YBS"], .program-tag[data-dept="YBS"] { --c: #1f3b73; }
     .department-button[data-code="ECF"], .program-tag[data-dept="ECF"] { --c: #548235; }
     .department-button[data-code="ETİC"], .program-tag[data-dept="ETİC"] { --c: #0089b8; }
-    /* İYBF Tüm Sınav Programı kartı (Değişiklik 14) */
+    /* Tüm Sınav Programı kartı (Değişiklik 14) */
     .department-button.is-all { --c: #102a43; border-color: color-mix(in srgb, var(--c) 35%, white); border-left-color: var(--c); background: color-mix(in srgb, var(--c) 6%, white); }
     .department-button.is-all .department-name { color: var(--c); }
     .course-table td.programs-cell { color: var(--muted); font-size: .78rem; min-width: 110px; }
@@ -1293,7 +1293,33 @@
       .proctor-limits td.acts { width: auto; padding-top: 6px; }
     }
   </style>
-<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}.dg-saat{background:#fff1dc;color:#8a4b00}.dg-derslik{background:#f1ecfb;color:#5b3fa0}</style><style>.excel-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px}.excel-button{padding:9px 16px;border:0;border-radius:10px;color:#fff;background:#1d6f42;font:inherit;font-size:.9rem;font-weight:700;cursor:pointer}.excel-button:hover{background:#155232}.excel-button:disabled{opacity:.6;cursor:progress}.excel-status{color:var(--muted);font-size:.88rem;font-weight:600}.excel-status:empty{display:none}</style></head>
+<style>.tab-button[hidden]{display:none!important}.panel-bilgi{margin:0 0 10px;padding:10px 14px;border-radius:10px;color:#79520c;background:#fff7df;font-weight:600;font-size:.9rem}#panel-frame{display:block;width:100%;height:calc(100vh - 170px);min-height:620px;border:1px solid var(--line,#d9e0e8);border-radius:12px;background:transparent}</style><style>.degisiklik{margin:0 0 18px;padding:14px 18px;background:var(--surface,#fff);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:12px;box-shadow:var(--shadow)}.degisiklik h3{margin:0 0 6px;font-size:1.02rem;color:var(--navy)}.degisiklik h4{margin:10px 0 2px;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}.degisiklik p{margin:3px 0;font-size:.92rem;line-height:1.45}.degisiklik summary{cursor:pointer;margin-top:10px;color:var(--blue);font-weight:700;font-size:.9rem}.dg-tur{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:800}.dg-sinav{background:var(--blue-soft);color:var(--blue)}.dg-goz{background:#e8f6ee;color:#1d6b43}.dg-saat{background:#fff1dc;color:#8a4b00}.dg-derslik{background:#f1ecfb;color:#5b3fa0}</style><style>.excel-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px}.excel-button{padding:9px 16px;border:0;border-radius:10px;color:#fff;background:#1d6f42;font:inherit;font-size:.9rem;font-weight:700;cursor:pointer}.excel-button:hover{background:#155232}.excel-button:disabled{opacity:.6;cursor:progress}.excel-status{color:var(--muted);font-size:.88rem;font-weight:600}.excel-status:empty{display:none}</style><style>
+.demo-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;padding:10px 16px;color:#fff;background:#b45309;font-size:.92rem;text-align:center}
+.demo-bar p{margin:0;font-weight:600}
+.demo-bar strong{letter-spacing:.06em}
+.demo-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.demo-actions button{padding:6px 12px;border:1px solid rgba(255,255,255,.75);border-radius:8px;color:#fff;background:rgba(255,255,255,.12);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer}
+.demo-actions button:hover{background:rgba(255,255,255,.25)}
+.create-app{padding:0 16px 32px}
+.create-app-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;max-width:1180px;margin:0 auto;padding:22px 24px;border:2px solid var(--navy);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
+.create-app-inner h2{margin:0 0 6px;color:var(--navy);font-size:1.25rem}
+.create-app-inner p{margin:0;color:var(--muted);max-width:640px}
+.create-app-button{padding:14px 26px;border:0;border-radius:12px;color:#fff;background:var(--navy);font:inherit;font-size:1.05rem;font-weight:800;cursor:pointer}
+.create-app-button:hover{filter:brightness(1.2)}
+.danger-box{border-left-color:#b42318!important;background:#fff5f4!important}
+.danger-box h3{color:#b42318}
+.danger-button{padding:9px 16px!important;border:1px solid #b42318!important;border-radius:10px;color:#fff!important;background:#b42318!important;font:inherit;font-weight:700;cursor:pointer}
+.danger-button:disabled{opacity:.5;cursor:not-allowed}
+.danger-note{padding:10px 14px;border-radius:10px;color:#7a1610;background:#fdecea;border:1px solid #f4b8b2;font-weight:700}
+#app-modal.is-danger .modal-head{background:#b42318;color:#fff}
+#app-modal.is-danger .modal-head h3,#app-modal.is-danger .modal-kicker{color:#fff}
+#app-modal.is-danger .modal-close{color:#b42318}
+#app-modal label.wide strong{text-transform:none;letter-spacing:0;font-family:ui-monospace,monospace}
+#app-modal label.wide{display:grid;gap:6px;margin:0 0 10px}
+.create-done{overflow-wrap:anywhere;font-weight:600}
+.edit-save-link{display:inline-block;padding:8px 14px;border-radius:10px;color:#fff!important;background:var(--navy);font-weight:700;text-decoration:none}
+@media (max-width:560px){.create-app-inner{padding:18px 16px}.create-app-button{width:100%}}
+</style></head>
 <body>
   <div class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
     <form class="access-card" id="access-form">
@@ -1306,11 +1332,16 @@
     </form>
   </div>
 
+  <div class="demo-bar" id="demo-bar" hidden>
+    <p><strong>DEMO</strong> · Bu sayfada yaptığınız değişiklikler yalnız bu tarayıcıda saklanır, kimse görmez.<span id="demo-store-note" hidden> Uyarı: bu tarayıcıda kalıcı kayıt yapılamıyor; değişiklikler sayfa yenilenince kaybolur.</span></p>
+    <div class="demo-actions"><button type="button" id="demo-sample">Örnek veriyle doldur</button><button type="button" id="demo-reset">Demo verisini sıfırla</button></div>
+  </div>
+
   <header class="site-header">
     <div class="header-inner">
       <div class="header-title">
-        <p class="eyebrow">İstanbul Esenyurt Üniversitesi</p>
-        <h1 id="app-title">İşletme ve Yönetim Bilimleri Fakültesi</h1>
+        <p class="eyebrow" id="app-university" hidden></p>
+        <h1 id="app-title">Sınav Takip Uygulaması</h1>
         <p class="header-meta" id="app-meta">Sınav Takip Uygulaması</p>
       </div>
       <div class="header-actions">
@@ -1350,7 +1381,7 @@
       <details class="about-box">
         <summary><span>Uygulama hakkında</span><span class="about-sign" aria-hidden="true"></span></summary>
         <div class="about-body">
-          <p>Bu uygulama, İYBF sınavlarının takibini kolaylaştırmak, sınav çakışmalarını önlemek ve gözetmen ihtiyacını analiz etmek için hazırlanmıştır.</p>
+          <p>Bu uygulama, sınavların takibini kolaylaştırmak, sınav çakışmalarını önlemek ve gözetmen ihtiyacını analiz etmek için hazırlanmıştır.</p>
           <ul>
             <li>Sınav programı bölümlere, öğretim üyelerine ve gözetmenlere göre liste ya da haftalık takvim olarak görüntülenir; takvim PNG olarak indirilebilir.</li>
             <li>Her sınavın kartında tarih, saat, derslikler, öğrenci sayıları, gözetmenler ve öğretim elemanı yer alır. Programdaki güncellemeler Son değişiklikler bölümünde duyurulur.</li>
@@ -1490,6 +1521,16 @@
     </section>
   </main>
 
+  <section class="create-app" id="create-app" hidden aria-labelledby="create-app-title">
+    <div class="create-app-inner">
+      <div>
+        <h2 id="create-app-title">Kendi sınav takip uygulamanızı oluşturun</h2>
+        <p>Yeni bir sınav dönemi için boş bir uygulama açar: kendi adresi, kendi verisi. Düzenleyici girişi (depoya yazma yetkisi) gerekir.</p>
+      </div>
+      <button class="create-app-button" id="create-app-button" type="button">Uygulama Oluştur</button>
+    </div>
+  </section>
+
   <dialog class="modal" id="person-modal" aria-labelledby="person-modal-title">
     <div class="modal-head">
       <div>
@@ -1591,10 +1632,21 @@
     <div class="modal-body editor-panel" id="record-modal-content"></div>
   </dialog>
 
+  <dialog class="modal modal-narrow" id="app-modal" aria-labelledby="app-modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="modal-kicker" id="app-modal-kind">Uygulama</p>
+        <h3 id="app-modal-title">Uygulama</h3>
+      </div>
+      <button class="modal-close" type="button" data-close aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body editor-panel" id="app-modal-content"></div>
+  </dialog>
+
   <div class="editor-toast" id="editor-toast" role="status" hidden></div>
 
   <footer class="site-footer">
-    <div class="footer-inner">İESU İYBF Sınav Planlama Komisyonu</div>
+    <div class="footer-inner" id="app-footer">Sınav Takip Uygulaması</div>
   </footer>
 
   <noscript>Bu sayfadaki filtreleri kullanmak için JavaScript etkin olmalıdır.</noscript>
@@ -1827,10 +1879,9 @@
     function openRules() {
       if (RULES) return;
       RULES = [];
-      fetch("kurallar.json?t=" + Date.now(), { cache: "no-store" }).then(function (response) {
-        if (!response.ok) throw new Error("Sunucu yanıtı: " + response.status);
-        return response.json();
-      }).then(function (data) {
+      readDoc("kurallar.json").then(function (text) {
+        let data;
+        try { data = JSON.parse(text); } catch (error) { throw new Error("kurallar.json okunamadı (biçim bozuk)"); }
         if (!Array.isArray(data)) throw new Error("beklenen liste yok");
         RULES = data;
         rulesLoaded = true;
@@ -1883,8 +1934,8 @@
       $(selector).addEventListener(selector === "#rules-search" ? "input" : "change", renderRules);
     });
 
-    // Başlık: fakülte adı, "<program adı> Sınav Takip Uygulaması · <dönem>", sağda Sınav Programı | Sınav Zarfları seçici.
-    // Metinler veri.json meta alanlarından gelir (faculty, programName, period); yoksa aşağıdaki varsayılanlar.
+    // Başlık: üniversite (küçük satır), fakülte adı, "<program adı> Sınav Takip Uygulaması · <dönem>", sağda Sınav Programı | Sınav Zarfları seçici.
+    // Metinler veri.json meta alanlarından gelir (university, faculty, programName, period); boş olanlar yazılmaz.
     // Klasör başka adla kopyalanınca kod değişmez: yalnız veri.json meta doldurulur.
     function metaText(key, fallback) {
       const value = DATA && DATA.meta ? DATA.meta[key] : undefined;
@@ -1892,12 +1943,16 @@
     }
     function renderHeader() {
       const envelopeApp = document.body.dataset.app === "envelope";
-      const faculty = metaText("faculty", "") || "İşletme ve Yönetim Bilimleri Fakültesi";
+      const university = metaText("university", "") || metaText("institution", "");
+      const faculty = metaText("faculty", "");
       const program = metaText("programName", "") || DEFAULT_PROGRAM;
       const period = metaText("period", DEFAULT_PERIOD);
-      $("#app-title").textContent = faculty;
+      $("#app-university").textContent = faculty ? university : "";
+      $("#app-university").hidden = !faculty || !university;
+      $("#app-title").textContent = faculty || university || "Sınav Takip Uygulaması";
       $("#app-meta").textContent = (program ? program + " " : "") + "Sınav Takip Uygulaması" + (period ? " · " + period : "");
-      document.title = TITLE_PREFIX + (program ? program + " " : "") + (envelopeApp ? "Sınav Zarfları" : "Sınav Programı") + " | " + faculty;
+      $("#app-footer").textContent = [university, faculty].filter(Boolean).join(" · ") || "Sınav Takip Uygulaması";
+      document.title = TITLE_PREFIX + (program ? program + " " : "") + (envelopeApp ? "Sınav Zarfları" : "Sınav Programı") + " | " + (faculty || university || "Sınav Takip Uygulaması");
       $$("[data-app-pick]").forEach(function (button) {
         button.setAttribute("aria-pressed", String(button.dataset.appPick === (envelopeApp ? "envelope" : "exam")));
       });
@@ -1937,7 +1992,7 @@
       });
     });
 
-    const ALL_CODE = "__TUMU__";   // İYBF Tüm Sınav Programı kartı (Değişiklik 14)
+    const ALL_CODE = "__TUMU__";   // Tüm Sınav Programı kartı (Değişiklik 14)
 
     // "120 sınav + 5 başka birim gözetmenliği" (pencerede hepsi listelenir)
     function allExamCountText() {
@@ -1949,7 +2004,7 @@
       const can = !!editor;
       $("#department-grid").innerHTML = '<button class="department-button is-all" type="button" data-code="' + ALL_CODE + '" aria-pressed="false">' +
           '<span class="department-code">TÜMÜ</span>' +
-          '<span class="department-name">İYBF Tüm Sınav Programı</span>' +
+          '<span class="department-name">Tüm Sınav Programı</span>' +
           '<span class="department-language" id="all-exam-count">' + esc(allExamCountText()) + '</span>' +
         '</button>' + DATA.departments.map(function (department) {
         const button = '<button class="department-button" type="button" data-code="' + esc(department.code) + '" aria-pressed="false">' +
@@ -2414,7 +2469,7 @@
             '<div class="env-actions"><button class="edit-save" type="button" data-env-save>Kaydet</button>' +
               '<button type="button" data-env-reset>Vazgeç</button>' +
               (envRecord(exam.id) ? '<button type="button" class="edit-delete" data-env-clear>Zarf kaydını sıfırla</button>' : '') + '</div>' +
-            '<p class="editor-small">Adımlar sırayla işaretlenir; geri alınan adımdan sonrakiler de temizlenir. Kaydedince zarf kaydı GitHub\'a ' + esc(editor.login) + ' adıyla commit edilir (Son değişikliklere yazılmaz).</p>'
+            '<p class="editor-small">Adımlar sırayla işaretlenir; geri alınan adımdan sonrakiler de temizlenir. ' + (DEMO ? 'Demo: kayıt yalnız bu tarayıcıda saklanır (Son değişikliklere yazılmaz).' : 'Kaydedince zarf kaydı GitHub\'a ' + esc(editor.login) + ' adıyla commit edilir (Son değişikliklere yazılmaz).') + '</p>'
           : '<div class="env-note"><span>Not</span><p class="env-note-text" data-env-note-text>' + (rec.not ? esc(rec.not) : 'Not yok.') + '</p></div>' +
             '<p class="editor-small" data-env-readonly>Adımları işaretlemek, dolap seçmek ve not yazmak için düzenleyici girişi yapın.</p>') +
       '</div>';
@@ -2468,7 +2523,7 @@
       const rec = normalEnvelope(envDraft.rec);
       const buttons = $$("#envcard-modal .env-actions button");
       buttons.forEach(function (item) { item.disabled = true; });
-      envStatus("GitHub'a kaydediliyor…", false);
+      envStatus(savingText(), false);
       commitFile(function (text) {
         let data;
         try { data = JSON.parse(text); } catch (error) { throw new Error("veri.json okunamadı (biçim bozuk); kaydedilmedi."); }
@@ -2486,7 +2541,7 @@
         DATA.envelopes = result.data.envelopes || {};
         DATA.updates = DATA.updates || [];
         envDraft = null;
-        if (envExam && envExam.id === id) envNotice = result.unchanged ? "Değişiklik yok; zarf kaydı zaten aynı." : SAVED_TEXT;
+        if (envExam && envExam.id === id) envNotice = result.unchanged ? "Değişiklik yok; zarf kaydı zaten aynı." : savedText({}, "Kaydedildi");
         refreshAll();
       }).catch(function (error) {
         buttons.forEach(function (item) { item.disabled = false; });
@@ -2627,7 +2682,7 @@
       currentPerson = { type: type, name: name };
       const department = DATA.departments.find(function (item) { return item.code === name; });
       $("#person-modal-kind").textContent = { teacher: "Öğretim üyesi", proctor: "Gözetmen", department: "Bölüm sınav programı", all: "Tüm sınav programı", room: "Derslik" }[type];
-      $("#person-modal-title").textContent = type === "all" ? "İYBF Tüm Sınav Programı" : type === "department" ? department.name : name;
+      $("#person-modal-title").textContent = type === "all" ? "Tüm Sınav Programı" : type === "department" ? department.name : name;
       renderPersonModal();
       openModal($("#person-modal"));
       if (personView !== "list") zoomFit();   // ölçüm için pencere açık olmalı
@@ -2930,17 +2985,18 @@
     // gözetmen atamaları ve sayımlar sınavlardan yeniden türetilir, dosya commit edilir.
     const GITHUB_API = "https://api.github.com";
     const GITHUB_REPO = "iybf-sinav/iybf-sinav.github.io";
-    // Düzenlemelerin yazıldığı dosya sayfanın klasöründen türetilir: /bossablon/ → "bossablon/veri.json", /2627finalprogrami/ → "2627finalprogrami/veri.json".
+    // Düzenlemelerin yazıldığı dosya sayfanın klasöründen türetilir: /sinavtakipuygulamasi/ → "sinavtakipuygulamasi/veri.json", /2627guzfinal/ → "2627guzfinal/veri.json".
     // Klasör kopyalanıp yeniden adlandırılınca kod değişmeden kendi veri.json'una yazar.
     // Aynı klasördeki epostalar.json ve kurallar.json da bu klasör yoluyla yazılır (Değişiklik 8).
     const EDIT_DIR = decodeURIComponent(location.pathname).replace(/[^/]*$/, "").split("/").filter(Boolean).join("/");
     const EDIT_FILE = (EDIT_DIR ? EDIT_DIR + "/" : "") + "veri.json";
     const EDITOR_KEY = "iybf-duzenleyici-anahtar";
     const TOKEN_URL = "https://github.com/settings/tokens/new?scopes=repo&description=iybf-sinav";   // klasik anahtar; "repo" kutusu önceden işaretli
-    const SAVED_TEXT = "Kaydedildi; sitede 1–2 dakika içinde görünür.";
     const V2_NOTE = "Düzenlemeler sitenin veri dosyasına (veri.json) kaydedilir. Komisyon programı ileride Excel dosyasına da işler; ya da siteden değişiklik yapıldığını bildirin.";
     const EXTERNAL_COURSE = / \((Sağlık Bilimleri Fakültesi|Üniversite ortak seçmeli ders)\)$/;   // başka birimlere verilen gözetmenlikler
-    let editor = null;   // { token, login }
+    let editor = null;   // düzenleme yetkisi: gerçek dönemde GitHub girişi { token, login }; demoda herkes için DEMO_EDITOR
+    let ghUser = null;   // GitHub girişi (düzenleyici anahtarı): { token, login }; Uygulama Oluştur ve Bu dönemi sil bunu kullanır
+    const DEMO_EDITOR = { login: "demo", demo: true };
     let examNotice = "";
 
     function storedToken() {
@@ -3226,22 +3282,39 @@
       return out;
     }
 
+    // ---- Kayıt katmanı: bütün düzenlemeler loadDoc → transform → saveDoc yolundan geçer ----
+    // Gerçek dönemde dosya GitHub Contents API ile okunur/yazılır (commit). Demoda (veri.json meta.mode = "demo")
+    // dosyalar bu tarayıcıda saklanır (localStorage, anahtar klasöre göre); erişilemezse yalnız bellekte tutulur.
+    // path: depodaki dosya yolu ("<klasör>/veri.json"); demoda klasör öneki atılıp dosya adıyla saklanır.
+    function docName(path) {
+      return EDIT_DIR && path.indexOf(EDIT_DIR + "/") === 0 ? path.slice(EDIT_DIR.length + 1) : path;
+    }
+    function loadDoc(path) {
+      if (DEMO) return readDoc(docName(path)).then(function (text) { return { text: text }; });
+      return githubRequest(editor.token, "GET", "/repos/" + GITHUB_REPO + "/contents/" + path + "?ref=main").then(function (file) {
+        if (file.encoding !== "base64" || typeof file.content !== "string") throw new Error("Dosya GitHub'dan okunamadı; kaydedilmedi.");
+        return { text: base64ToText(file.content), sha: file.sha };
+      });
+    }
+    function saveDoc(path, text, message, sha) {
+      if (DEMO) { demoWrite(docName(path), text); return Promise.resolve(); }
+      return githubRequest(editor.token, "PUT", "/repos/" + GITHUB_REPO + "/contents/" + path, {
+        message: message,
+        content: textToBase64(text),
+        sha: sha,
+        branch: "main"
+      });
+    }
     // Oku → uygula (transform: metin → { text, data, ... }) → yaz; araya başka bir kayıt girerse (409) bir kez yeniden okuyup dener
     // file: depodaki dosya yolu (verilmezse bu klasörün veri.json'u)
     function commitFile(transform, message, file) {
-      const path = "/repos/" + GITHUB_REPO + "/contents/" + (file || EDIT_FILE);
+      const path = file || EDIT_FILE;
       function attempt(retry) {
-        return githubRequest(editor.token, "GET", path + "?ref=main").then(function (file) {
-          if (file.encoding !== "base64" || !file.content) throw new Error("Dosya GitHub'dan okunamadı; kaydedilmedi.");
-          const original = base64ToText(file.content);
+        return loadDoc(path).then(function (doc) {
+          const original = doc.text;
           const result = transform(original);
           if (result.text === original) return Object.assign(result, { unchanged: true });
-          return githubRequest(editor.token, "PUT", path, {
-            message: message,
-            content: textToBase64(result.text),
-            sha: file.sha,
-            branch: "main"
-          }).then(function () { return result; });
+          return saveDoc(path, result.text, message, doc.sha).then(function () { return result; });
         }).catch(function (error) {
           if (retry && (error.status === 409 || (error.status === 422 && /sha/i.test(error.detail)))) return attempt(false);
           throw error;
@@ -3568,7 +3641,7 @@
           '<button type="button" data-edit-reset>Vazgeç</button>' +
           (exam.id ? '<button class="edit-delete" type="button" data-edit-delete>Sınavı sil</button>' : '') +
         '</div>' +
-        '<p class="editor-small">Kaydedince değişiklik GitHub\'a ' + esc(editor ? editor.login : "") + ' adıyla commit edilir. ' + esc(V2_NOTE) + '</p>' +
+        '<p class="editor-small">' + (DEMO ? 'Demo: değişiklik yalnız bu tarayıcıda saklanır, kimse görmez.' : 'Kaydedince değişiklik GitHub\'a ' + esc(editor ? editor.login : "") + ' adıyla commit edilir. ' + esc(V2_NOTE)) + '</p>' +
       '</form>';
     }
 
@@ -3634,10 +3707,7 @@
     }
 
     function loadEmails() {
-      return fetch(EMAIL_FILE + "?t=" + Date.now(), { cache: "no-store" }).then(function (response) {
-        if (!response.ok) throw new Error(String(response.status));
-        return response.json();
-      }).catch(function () { return {}; });
+      return readDoc(EMAIL_FILE).then(function (text) { return JSON.parse(text); }).catch(function () { return {}; });
     }
 
     function lookupEmail(map, name) {
@@ -3699,7 +3769,7 @@
         : slot + " saatlerinde " + course + " sınavı" + (room ? " (" + room + ")" : "") + " için gözetmen olarak görev alabilir misiniz? Uygunsanız lütfen dönüş yapınız.";
       const NL = String.fromCharCode(10) + String.fromCharCode(10);
       const body = (names.length === 1 ? "Merhaba " + names[0] + "," : "Sayın gözetmenler,") + NL + what +
-        (tur === "bildir" ? NL + "Güncel program: " + SITE_URL : "") + NL + "İYBF Sınav Komisyonu";
+        (tur === "bildir" ? NL + "Güncel program: " + SITE_URL : "") + NL + "Sınav Komisyonu";
       setStatus("E-posta adresleri hazırlanıyor…", false);
       emailsFor(names).then(function (emails) {
         const to = [];
@@ -3780,7 +3850,7 @@
     function runSave(form, change) {
       const buttons = $$("button", form);
       buttons.forEach(function (button) { button.disabled = true; });
-      setEditStatus(form, "GitHub'a kaydediliyor…");
+      setEditStatus(form, savingText());
       commitChange(change).then(function (result) {
         Object.keys(result.data).forEach(function (key) { DATA[key] = result.data[key]; });
         DATA.envelopes = result.data.envelopes || {};
@@ -3793,7 +3863,7 @@
         }
         currentExam = examById(result.id);
         examTab = "exam";
-        examNotice = result.unchanged ? "Değişiklik yok; sitedeki bilgi zaten aynı." : SAVED_TEXT;
+        examNotice = result.unchanged ? "Değişiklik yok; sitedeki bilgi zaten aynı." : savedText({}, "Kaydedildi");
         $("#exam-modal-kind").textContent = currentExam.courseCode || "Sınav";
         $("#exam-modal-title").textContent = currentExam.course;
         renderExamModal();
@@ -3823,7 +3893,7 @@
     }
 
     function deleteExam(form) {
-      if (!confirm("“" + currentExam.course + "” sınavı silinsin mi? Silme hemen GitHub'a kaydedilir.")) return;
+      if (!confirm("“" + currentExam.course + "” sınavı silinsin mi? " + (DEMO ? "Silme hemen bu tarayıcıya kaydedilir." : "Silme hemen GitHub'a kaydedilir."))) return;
       runSave(form, { type: "delete", id: currentExam.id, course: currentExam.course });
     }
 
@@ -3959,14 +4029,21 @@
 
     function renderEditorModal() {
       const content = $("#editor-modal-content");
-      if (editor) {
+      if (DEMO && ghUser) {
+        content.innerHTML = '<p><strong>' + esc(ghUser.login) + '</strong> olarak giriş yaptınız. Sayfanın en altındaki “Uygulama Oluştur” ile yeni bir sınav takip uygulaması oluşturabilirsiniz.</p>' +
+          '<p class="editor-small">Bu sayfa demodur: buradaki düzenlemeler giriş yapılsa da yalnız bu tarayıcıda saklanır.</p>' +
+          '<div class="editor-row"><button type="button" data-logout>Çıkış</button></div>';
+        return;
+      }
+      if (ghUser) {
         content.innerHTML = '<p><strong>' + esc(editor.login) + '</strong> olarak giriş yaptınız. Sınav kartlarında “Düzenle” sekmesi ve Sınav Programları sayfasında “Yeni sınav ekle” düğmesi açıktır.</p>' +
           '<p class="editor-small">Ayrıca duyurular, gözetmenler ve izin günleri, bölümler, kurallar, e-posta adresleri ve program bilgileri eklenip düzenlenebilir ve silinebilir (ilgili sekmelerde küçük Düzenle/Sil düğmeleri ve “+ Ekle”).</p>' +
           '<p class="editor-small">' + esc(V2_NOTE) + '</p>' +
           '<div class="editor-row"><button type="button" data-logout>Çıkış</button></div>';
         return;
       }
-      content.innerHTML = '<p>GitHub\'da <strong>' + esc(GITHUB_REPO) + '</strong> deposuna yazma yetkisi olanlar sitede sınavları düzenleyebilir. Bunun için bir GitHub kişisel erişim anahtarı (token) gerekir:</p>' +
+      content.innerHTML = (DEMO ? '<p class="panel-bilgi">Bu sayfa demodur: düzenlemek için giriş gerekmez. Giriş yalnız “Uygulama Oluştur” ile depoda yeni bir uygulama açmak için gerekir.</p>' : '') +
+        '<p>GitHub\'da <strong>' + esc(GITHUB_REPO) + '</strong> deposuna yazma yetkisi olanlar sitede sınavları düzenleyebilir. Bunun için bir GitHub kişisel erişim anahtarı (token) gerekir:</p>' +
         '<ol class="token-steps">' +
           '<li>GitHub\'da <a href="' + TOKEN_URL + '" target="_blank" rel="noopener">Settings → Developer settings → Personal access tokens → Tokens (classic)</a> sayfasını açın.</li>' +
           '<li><strong>Generate new token</strong> → <strong>Generate new token (classic)</strong>.</li>' +
@@ -3986,10 +4063,11 @@
     }
 
     function setEditor(value) {
-      editor = value;
+      ghUser = value;
+      editor = DEMO ? DEMO_EDITOR : value;
       const button = $("#editor-button");
-      button.textContent = editor ? "Düzenleyici: " + editor.login : "Düzenleyici girişi";
-      button.classList.toggle("is-on", !!editor);
+      button.textContent = ghUser ? "Düzenleyici: " + ghUser.login : "Düzenleyici girişi";
+      button.classList.toggle("is-on", !!ghUser);
       $("#add-exam-button").hidden = !editor;
       if ($("#envcard-modal").open) { envDraft = null; envNotice = ""; renderEnvelopeCard(); }   // zarf kartı: girişliyken işlem, değilse salt okunur
       if (!editor && currentExam && !currentExam.id) $("#exam-modal").close();   // çıkışta düzenleme arayüzü kapanır
@@ -3998,6 +4076,7 @@
       if (!editor && $("#record-modal").open) $("#record-modal").close();
       if (DATA) renderEditorViews();   // Değişiklik 8: ekle/düzenle/sil denetimleri
       renderEditorModal();
+      if ($("#app-modal").open && appModalRefresh) appModalRefresh();
     }
 
     function initEditor() {
@@ -4034,6 +4113,7 @@
           status.classList.add("is-error");
         });
       });
+      if (DEMO) setEditor(null);   // demoda düzenleme denetimleri girişsiz açılır
       const token = storedToken();
       if (token) {
         verifyToken(token).then(function (login) {
@@ -4066,7 +4146,11 @@
       return text.length > 60 ? text.slice(0, 57) + "…" : text;
     }
     function savedText(result, text) {
-      return result.unchanged ? "Değişiklik yok; kayıt zaten aynı." : text + "; sitede 1–2 dakika içinde görünür.";
+      if (result.unchanged) return "Değişiklik yok; kayıt zaten aynı.";
+      return text + (DEMO ? "; bu tarayıcıya kaydedildi (demo)." : "; sitede 1–2 dakika içinde görünür.");
+    }
+    function savingText() {
+      return DEMO ? "Kaydediliyor…" : "GitHub'a kaydediliyor…";
     }
 
     // Klasördeki bir JSON dosyasını değiştirir: mutate(veri) veriyi yerinde değiştirir (hata fırlatırsa kayıt yapılmaz)
@@ -4098,7 +4182,7 @@
     // Liste satırındaki "Sil" gibi pencere açmayan işlemler
     function quickRun(button, job, doneText) {
       if (button) button.disabled = true;
-      showToast("GitHub'a kaydediliyor…");
+      showToast(savingText());
       return job.then(function (result) {
         showToast(savedText(result, doneText));
       }).catch(function (error) {
@@ -4126,7 +4210,7 @@
         '<p class="edit-status" role="alert" aria-live="polite"></p>' +
         '<div class="edit-actions"><button class="edit-save" type="submit">' + esc(options.submit || "Kaydet") + '</button>' +
           '<button type="button" data-close>Vazgeç</button></div>' +
-        '<p class="editor-small">Kaydedince değişiklik GitHub\'da ' + esc(folderFile(options.file)) + ' dosyasına ' + esc(editor.login) + ' adıyla commit edilir.</p>' +
+        '<p class="editor-small">' + (DEMO ? 'Demo: değişiklik yalnız bu tarayıcıda saklanır, kimse görmez.' : 'Kaydedince değişiklik GitHub\'da ' + esc(folderFile(options.file)) + ' dosyasına ' + esc(editor.login) + ' adıyla commit edilir.') + '</p>' +
       '</form>';
       if (options.init) options.init($("#record-modal form"));
       openModal($("#record-modal"));
@@ -4142,7 +4226,7 @@
         const current = record;
         const buttons = $$("button", form);
         buttons.forEach(function (button) { button.disabled = true; });
-        setEditStatus(form, "GitHub'a kaydediliyor…", false);
+        setEditStatus(form, savingText(), false);
         job.then(function (text) {
           if (record === current && modal.open) modal.close();
           showToast(text);
@@ -4453,7 +4537,8 @@
       const query = $("#email-search") ? $("#email-search").value : "";
       box.innerHTML = '<div class="admin-box"><div class="admin-head"><h3>Program bilgileri</h3><button type="button" class="row-add" data-meta-edit>Düzenle</button></div>' +
           '<p>Başlıkta ve sekme adında görünür (veri.json → meta). Yalnız düzenleyiciye görünür.</p>' +
-          '<dl class="meta-list"><dt>Fakülte</dt><dd>' + shownMeta("faculty", "İşletme ve Yönetim Bilimleri Fakültesi") + '</dd>' +
+          '<dl class="meta-list"><dt>Üniversite</dt><dd>' + shownMeta("university", "") + '</dd>' +
+          '<dt>Fakülte</dt><dd>' + shownMeta("faculty", "") + '</dd>' +
           '<dt>Program adı</dt><dd>' + shownMeta("programName", DEFAULT_PROGRAM) + '</dd>' +
           '<dt>Dönem</dt><dd>' + shownMeta("period", "") + '</dd></dl></div>' +
         '<div class="admin-box"><h3>E-posta adresleri</h3>' +
@@ -4473,7 +4558,7 @@
                   }).join("") + '</tbody></table></div>' : '<p class="editor-small">Kayıt yok.</p>');
             }).join("")
           : '<p class="editor-small">E-posta adresleri yükleniyor…</p>') +
-        '</div>';
+        '</div>' + deleteBoxHtml();
       if (query && $("#email-search")) { $("#email-search").value = query; filterEmails(); }
     }
     function filterEmails() {
@@ -4486,12 +4571,13 @@
       openRecord({
         kind: "Program bilgileri", title: "Program bilgileri", file: "veri.json",
         body: '<div class="record-grid">' +
+          inputHtml("Üniversite", "university", value("university"), ' autocomplete="off"', "wide") +
           inputHtml("Fakülte", "faculty", value("faculty"), ' autocomplete="off"', "wide") +
           inputHtml("Program adı", "programName", value("programName"), ' autocomplete="off" placeholder="ör. 2026-2027 Güz Dönemi Vize"', "wide") +
           inputHtml("Dönem (tarihler)", "period", value("period"), ' autocomplete="off" placeholder="ör. 2–6 Kasım 2026"', "wide") +
         '</div><p class="edit-help">Alt satır: “&lt;Program adı&gt; Sınav Takip Uygulaması · &lt;Dönem&gt;”. Boş bırakılan alan dosyada yoksa eklenmez.</p>',
         save: function (form) {
-          const next = ["faculty", "programName", "period"].map(function (key) { return [key, form.elements[key].value.trim()]; });
+          const next = ["university", "faculty", "programName", "period"].map(function (key) { return [key, form.elements[key].value.trim()]; });
           return commitVeri("program bilgileri", function (data) {
             data.meta = data.meta || {};
             next.forEach(function (pair) {
@@ -4653,7 +4739,7 @@
       if (!confirm("“" + course + "” sınavının zarf kaydı tümden silinsin mi? Adımlar ve not silinir; zarf yeniden “Öğretim Üyesinde” görünür.")) return;
       const buttons = $$("#envcard-modal .env-actions button");
       buttons.forEach(function (item) { item.disabled = true; });
-      envStatus("GitHub'a kaydediliyor…", false);
+      envStatus(savingText(), false);
       commitVeri("zarf kaydı sıfırlandı: " + course, function (data) {
         if (!data.envelopes || !data.envelopes[id]) return;
         delete data.envelopes[id];
@@ -4711,21 +4797,433 @@
       initPeople({ type: "teacher", names: function () { return DATA.teachers; }, grid: "#teacher-grid", search: "#teacher-search", dept: "#teacher-dept", empty: "Henüz öğretim üyesi yok; sınavlar eklenince burada listelenir." });
       initPeople({ type: "proctor", names: function () { return DATA.proctors; }, grid: "#proctor-grid", search: "#proctor-search", dept: "#proctor-dept", empty: "Henüz gözetmen yok; sınavlara gözetmen atanınca burada listelenir." });
       initRecords();
+      initDemo();
+      initAppModal();
       initEditor();
     }
 
-    // Site verisi veri.json'dan okunur (?t=: tarayıcı/GitHub Pages önbelleğindeki eski sürüm gelmesin)
-    function loadData() {
-      const status = $("#veri-durum");
-      fetch("veri.json?t=" + Date.now(), { cache: "no-store" }).catch(function () {
+    // ---- Demo modu (veri.json meta.mode = "demo") ----
+    // Herkes girişsiz düzenler; kayıtlar commit yerine bu tarayıcıya yazılır (saveDoc → demoWrite).
+    // Dosyalar tek localStorage anahtarında, klasör yoluna göre: { "veri.json": metin, "epostalar.json": ..., "kurallar.json": ... }.
+    // localStorage'a erişilemezse kayıtlar yalnız bellekte tutulur (sayfa yenilenince kaybolur) ve şeritte yazar.
+    let DEMO = false;
+    const DEMO_KEY = "sinav-takip-demo:" + (EDIT_DIR || "/");
+    let demoDocs = {};
+    let demoPersistent = true;
+
+    function demoOpen() {
+      try {
+        const raw = localStorage.getItem(DEMO_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+        demoDocs = parsed && typeof parsed === "object" ? parsed : {};
+      } catch (error) {
+        demoDocs = {};
+        demoPersistent = false;
+      }
+    }
+    function demoWrite(name, text) {
+      demoDocs[name] = text;
+      try {
+        localStorage.setItem(DEMO_KEY, JSON.stringify(demoDocs));
+        demoPersistent = true;
+      } catch (error) {
+        demoPersistent = false;
+      }
+      renderDemo();
+    }
+    function demoReset() {
+      demoDocs = {};
+      try { localStorage.removeItem(DEMO_KEY); } catch (error) {}
+    }
+    // Sunucudaki dosya (önbelleksiz)
+    function fetchText(name) {
+      return fetch(name + "?t=" + Date.now(), { cache: "no-store" }).catch(function () {
         throw new Error("sunucuya bağlanılamadı");
       }).then(function (response) {
         if (!response.ok) throw new Error("Sunucu yanıtı: " + response.status);
-        return response.json().catch(function () { throw new Error("veri.json okunamadı (biçim bozuk)"); });
+        return response.text();
+      });
+    }
+    // Klasördeki dosyanın görüntülenecek hâli: demoda tarayıcıdaki kopya (varsa), yoksa sunucudaki
+    function readDoc(name) {
+      if (DEMO && typeof demoDocs[name] === "string") return Promise.resolve(demoDocs[name]);
+      return fetchText(name);
+    }
+    function renderDemo() {
+      document.body.classList.toggle("is-demo", DEMO);
+      $("#demo-bar").hidden = !DEMO;
+      $("#create-app").hidden = !DEMO;
+      $("#demo-store-note").hidden = !DEMO || demoPersistent;
+    }
+
+    // "Örnek veriyle doldur": uydurma olduğu açıkça belli kısa bir örnek dönem
+    function sampleData(base) {
+      const meta = Object.assign({}, base.meta || {});
+      const departments = [
+        { code: "ORN", name: "Örnek Bölüm", language: "Türkçe" },
+        { code: "DEN", name: "Deneme Bölümü", language: "Türkçe" },
+        { code: "SMP", name: "Sample Department", language: "English" }
+      ];
+      const day = function (date, label, name) { return { date: date, dateLabel: label, day: name }; };
+      const mon = day("2027-01-04", "04.01.2027", "Pazartesi");
+      const tue = day("2027-01-05", "05.01.2027", "Salı");
+      const wed = day("2027-01-06", "06.01.2027", "Çarşamba");
+      const exam = function (n, when, start, end, code, course, programs, teacher, rooms, notes) {
+        return Object.assign({ id: "exam-" + n }, when, { start: start, end: end, courseCode: code, course: course, programs: programs, teacher: teacher,
+          totalStudents: String(rooms.reduce(function (sum, room) { return sum + Number(room.students); }, 0)), notes: notes || [], rooms: rooms });
+      };
+      const room = function (name, students, proctor, departments) { return { room: name, capacity: "40", students: String(students), proctor: proctor, departments: departments }; };
+      const data = {
+        meta: meta,
+        departments: departments,
+        exams: [
+          exam(1, mon, "09:00", "09:50", "ORN101", "Örnek Ders 1", ["ORN-1"], "Örnek Hoca 1", [room("A101", 30, "Örnek Gözetmen 1", "ORN 30")]),
+          exam(2, mon, "11:00", "11:50", "DEN201", "Deneme Dersi 2", ["DEN-2"], "Örnek Hoca 2", [room("A101", 25, "Örnek Gözetmen 2", "DEN 25")]),
+          exam(3, tue, "10:00", "11:30", "ORN102", "Örnek Ders 3", ["ORN-1", "DEN-1"], "Örnek Hoca 1",
+            [room("A101", 35, "Örnek Gözetmen 1", "ORN 20, DEN 15"), room("B202", 28, "Örnek Gözetmen 3", "ORN 10, DEN 18")], ["2 dersliğe bölündü", "90 dakika"]),
+          exam(4, wed, "13:00", "13:50", "SMP101", "Sample Course 4", ["SMP-1"], "Örnek Hoca 3", [room("B202", 22, "Örnek Gözetmen 2", "SMP 22")]),
+          exam(5, wed, "15:00", "15:50", "DEN105", "Deneme Dersi 5", ["DEN-1", "SMP-1"], "Örnek Hoca 2", [room("A101", 18, "Gerekmiyor", "DEN 10, SMP 8")])
+        ],
+        assignments: [], teachers: [], proctors: [],
+        updates: [{ tarih: "04.01.2027", tur: "Sınav", metin: "Örnek duyuru: bu dönem demo verisidir; isimler uydurmadır." }],
+        proctorAvailability: [{ name: "Örnek Gözetmen 3", unavailable: [{ day: "Pazartesi", reason: "izin" }] }]
+      };
+      return deriveData(data);
+    }
+
+    function initDemo() {
+      $("#demo-reset").addEventListener("click", function () {
+        if (!confirm("Demo verisi sıfırlansın mı? Bu tarayıcıda yaptığınız bütün demo değişiklikleri silinir.")) return;
+        demoReset();
+        location.reload();
+      });
+      $("#demo-sample").addEventListener("click", function () {
+        if (!confirm("Demo verisinin yerine kısa bir örnek dönem (uydurma bölüm, sınav, hoca ve gözetmenler) yazılsın mı?")) return;
+        demoWrite("veri.json", JSON.stringify(sampleData(DATA), null, 1) + "\n");
+        location.reload();
+      });
+      $("#create-app-button").addEventListener("click", openCreateApp);
+    }
+
+    // ---- GitHub Git Data API: birden çok dosyayı tek commit'te yazar ya da siler ----
+    // entries: [{ path, content } | { path, sha } (var olan blob) | { path, sha: null } (sil)]
+    function repoApi(method, path, body) {
+      return githubRequest(ghUser.token, method, "/repos/" + GITHUB_REPO + path, body);
+    }
+    function commitTree(entries, message) {
+      function attempt(retry) {
+        return repoApi("GET", "/git/ref/heads/main").then(function (ref) {
+          const parent = ref.object.sha;
+          return repoApi("GET", "/git/commits/" + parent).then(function (commit) {
+            return repoApi("POST", "/git/trees", {
+              base_tree: commit.tree.sha,
+              tree: entries.map(function (entry) {
+                const item = { path: entry.path, mode: entry.mode || "100644", type: "blob" };
+                if ("content" in entry) item.content = entry.content; else item.sha = entry.sha;
+                return item;
+              })
+            });
+          }).then(function (tree) {
+            return repoApi("POST", "/git/commits", { message: message, tree: tree.sha, parents: [parent] });
+          }).then(function (commit) {
+            return repoApi("PATCH", "/git/refs/heads/main", { sha: commit.sha });
+          });
+        }).catch(function (error) {
+          if (retry && error.status === 422) return attempt(false);   // araya başka commit girdi: yeniden
+          throw error;
+        });
+      }
+      return attempt(true);
+    }
+    function folderMissing(name) {
+      return repoApi("GET", "/contents/" + encodeURIComponent(name) + "?ref=main").then(function () { return false; }, function (error) {
+        if (error.status === 404) return true;
+        throw error;
+      });
+    }
+
+    // ---- Uygulama Oluştur (yalnız demoda görünür; GitHub girişi gerekir) ----
+    const APP_SOURCE = "sinavtakipuygulamasi";
+    const RESERVED_NAMES = ["panel", "kod", "sinavtakipuygulamasi", "2627vizeprogrami", "bossablon", "v2", "index.html", "eski-surum"];
+    let appModalRefresh = null;
+    let createDraft = { university: "", faculty: "", programName: "", period: "", slug: "", slugTouched: false };
+
+    function slugSuggest(text) {
+      const map = { "ç": "c", "ğ": "g", "ı": "i", "i̇": "i", "ö": "o", "ş": "s", "ü": "u", "â": "a", "î": "i", "û": "u" };
+      return trLower(text)
+        .replace(/(\d{2})(\d{2})\s*[-–\/]\s*(\d{2})(\d{2})/g, "$2$4")
+        .replace(/[çğıöşüâîû]/g, function (ch) { return map[ch]; })
+        .replace(/\b(donemi|sinavi|sinavlari|programi)\b/g, "")
+        .replace(/[^a-z0-9]+/g, "")
+        .slice(0, 40);
+    }
+    function slugProblem(slug) {
+      if (!slug) return "Adres uzantısı boş olamaz.";
+      if (!/^[a-z0-9][a-z0-9-]*$/.test(slug)) return "Adres uzantısında yalnız küçük harf (a–z), rakam ve tire (-) kullanılabilir; tireyle başlayamaz.";
+      if (slug.length > 60) return "Adres uzantısı en çok 60 karakter olabilir.";
+      if (RESERVED_NAMES.indexOf(slug) !== -1) return "“" + slug + "” ayrılmış bir ad; başka bir uzantı seçin.";
+      return "";
+    }
+    function appModal(kicker, title, html, danger) {
+      $("#app-modal-kind").textContent = kicker;
+      $("#app-modal-title").textContent = title;
+      $("#app-modal-content").innerHTML = html;
+      $("#app-modal").classList.toggle("is-danger", !!danger);
+      openModal($("#app-modal"));
+    }
+    function openCreateApp() {
+      appModalRefresh = renderCreateApp;
+      renderCreateApp(true);
+    }
+    function renderCreateApp(open) {
+      if (!ghUser) {
+        const html = '<p class="danger-note">Yeni uygulama oluşturmak için düzenleyici girişi gerekir.</p>' +
+          '<p>Giriş için GitHub\'da ' + esc(GITHUB_REPO) + ' deposuna yazma yetkisi olan bir hesabın anahtarı (token) gerekir.</p>' +
+          '<div class="edit-actions"><button class="edit-save" type="button" data-open-login>Düzenleyici girişi yap</button><button type="button" data-close>Vazgeç</button></div>';
+        if (open) appModal("Uygulama Oluştur", "Düzenleyici girişi gerekir", html);
+        else $("#app-modal-content").innerHTML = html;
+        return;
+      }
+      const d = createDraft;
+      const html = '<form class="edit-form" id="create-app-form" novalidate><div class="record-grid">' +
+          inputHtml("Üniversite adı", "university", d.university, ' autocomplete="off" placeholder="ör. Örnek Üniversitesi"', "wide") +
+          inputHtml("Fakülte adı", "faculty", d.faculty, ' autocomplete="off" placeholder="ör. Örnek Fakültesi"', "wide") +
+          inputHtml("Sınav dönemi adı", "programName", d.programName, ' autocomplete="off" placeholder="ör. 2026-2027 Güz Dönemi Final"', "wide") +
+          inputHtml("Sınav tarihleri", "period", d.period, ' autocomplete="off" placeholder="ör. 4–15 Ocak 2027"', "wide") +
+          inputHtml("Adres uzantısı", "slug", d.slug, ' autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ör. 2627guzfinal"', "wide") +
+        '</div>' +
+        '<p class="edit-help" id="create-app-url">Adres: ' + esc(SITE_URL) + '/' + esc(d.slug || "…") + '/</p>' +
+        '<p class="edit-status" role="alert" aria-live="polite"></p>' +
+        '<div class="edit-actions"><button class="edit-save" type="submit">Oluştur</button><button type="button" data-close>Vazgeç</button></div>' +
+        '<p class="editor-small">Depoda yeni bir klasör açılır: sayfa (bu uygulamanın kodu), boş veri, boş e-posta listesi ve genel kurallar. ' +
+          'GitHub\'a ' + esc(ghUser.login) + ' adıyla tek commit olarak yazılır.</p>' +
+      '</form>';
+      if (open) appModal("Uygulama Oluştur", "Yeni sınav takip uygulaması", html);
+      else $("#app-modal-content").innerHTML = html;
+    }
+    function createStatus(text, isError, html) {
+      const box = $("#app-modal .edit-status");
+      if (!box) return;
+      if (html) box.innerHTML = html; else box.textContent = text;
+      box.classList.toggle("is-error", !!isError);
+    }
+    let slugTimer = null;
+    let slugCheck = { slug: "", free: null };
+    function checkSlugSoon(slug) {
+      clearTimeout(slugTimer);
+      if (slugProblem(slug) || !ghUser) return;
+      slugTimer = setTimeout(function () {
+        folderMissing(slug).then(function (free) {
+          slugCheck = { slug: slug, free: free };
+          if (createDraft.slug === slug && $("#create-app-form")) createStatus(free ? "“" + slug + "” uygun." : "“" + slug + "” zaten kullanılıyor; başka bir uzantı seçin.", !free);
+        }).catch(function () {});
+      }, 500);
+    }
+    function emptyVeri(info) {
+      return JSON.stringify({
+        meta: { university: info.university, faculty: info.faculty, programName: info.programName, period: info.period,
+          examCount: 0, assignmentCount: 0, teacherCount: 0, proctorCount: 0 },
+        departments: [], exams: [], assignments: [], teachers: [], proctors: [], updates: [], proctorAvailability: []
+      }, null, 1) + "\n";
+    }
+    function createApp(info) {
+      const slug = info.slug;
+      const message = "Yeni uygulama: " + slug + " (" + ghUser.login + ")";
+      let files = null;
+      return folderMissing(slug).then(function (free) {
+        if (!free) throw new Error("“" + slug + "” zaten kullanılıyor; başka bir uzantı seçin.");
+        // sayfa: sunucudaki (depodaki) sinavtakipuygulamasi/index.html aynen; kurallar: yalnız genel olanlar
+        return Promise.all([
+          repoApi("GET", "/contents/" + APP_SOURCE + "/index.html?ref=main"),
+          repoApi("GET", "/contents/" + APP_SOURCE + "/kurallar.json?ref=main")
+        ]);
+      }).then(function (sources) {
+        let rules = [];
+        try { rules = JSON.parse(base64ToText(sources[1].content)); } catch (error) { throw new Error("Kaynak kurallar.json okunamadı."); }
+        rules = (Array.isArray(rules) ? rules : []).filter(function (rule) { return rule.kapsam === "genel"; });
+        files = [
+          { path: slug + "/index.html", sha: sources[0].sha, base64: sources[0].content },
+          { path: slug + "/veri.json", content: emptyVeri(info) },
+          { path: slug + "/epostalar.json", content: JSON.stringify({ hocalar: {}, gozetmenler: {} }, null, 1) + "\n" },
+          { path: slug + "/kurallar.json", content: JSON.stringify(rules, null, 1) + "\n" }
+        ];
+        return commitTree(files.map(function (file) { return file.sha ? { path: file.path, sha: file.sha } : { path: file.path, content: file.content }; }), message)
+          .catch(function (error) {
+            if (error.status === 401) throw error;
+            return putFiles(files, message);   // Git Data API olmazsa dosya dosya (Contents API)
+          });
+      });
+    }
+    // Yedek yol: dosyaları sırayla yazar; hata olursa hangilerinin yazıldığını bildirir
+    function putFiles(files, message) {
+      const done = [];
+      return files.reduce(function (chain, file) {
+        return chain.then(function () {
+          return repoApi("PUT", "/contents/" + file.path, {
+            message: message, branch: "main",
+            content: file.base64 ? file.base64.replace(/\s+/g, "") : textToBase64(file.content)
+          }).then(function () { done.push(file.path); });
+        });
+      }, Promise.resolve()).catch(function (error) {
+        const left = files.map(function (file) { return file.path; }).filter(function (path) { return done.indexOf(path) === -1; });
+        throw new Error(error.message + " Yarım kaldı: yazılan dosyalar: " + (done.join(", ") || "yok") + "; yazılamayanlar: " + left.join(", ") + ".");
+      });
+    }
+    function initAppModal() {
+      const modal = $("#app-modal");
+      modal.addEventListener("click", function (event) {
+        if (event.target.closest("[data-open-login]")) {
+          renderEditorModal();
+          openModal($("#editor-modal"));
+        }
+      });
+      modal.addEventListener("input", function (event) {
+        const form = event.target.form;
+        if (!form) return;
+        if (form.id === "create-app-form") {
+          const name = event.target.name;
+          if (name === "slug") {
+            createDraft.slugTouched = true;
+            event.target.value = event.target.value.toLowerCase().replace(/\s+/g, "");
+          }
+          ["university", "faculty", "programName", "period", "slug"].forEach(function (key) { createDraft[key] = form.elements[key].value.trim(); });
+          if (name === "programName" && !createDraft.slugTouched) {
+            createDraft.slug = slugSuggest(createDraft.programName);
+            form.elements.slug.value = createDraft.slug;
+          }
+          $("#create-app-url").textContent = "Adres: " + SITE_URL + "/" + (createDraft.slug || "…") + "/";
+          const problem = createDraft.slug ? slugProblem(createDraft.slug) : "";
+          createStatus(problem, !!problem);
+          checkSlugSoon(createDraft.slug);
+        }
+        if (form.id === "delete-app-form") {
+          $("#delete-app-confirm").disabled = event.target.value.trim() !== EDIT_DIR;
+        }
+      });
+      modal.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const form = event.target;
+        if (form.id === "create-app-form") submitCreate(form);
+        if (form.id === "delete-app-form") submitDelete(form);
+      });
+      modal.addEventListener("close", function () { appModalRefresh = null; });
+      document.addEventListener("click", function (event) {
+        if (event.target.closest("[data-delete-app]")) openDeleteApp();
+      });
+    }
+    function submitCreate(form) {
+      if (!ghUser) { renderCreateApp(false); return; }
+      const info = {};
+      ["university", "faculty", "programName", "period", "slug"].forEach(function (key) { info[key] = form.elements[key].value.trim().replace(/\s+/g, " "); });
+      if (!info.programName) { createStatus("Sınav dönemi adını yazın.", true); return; }
+      const problem = slugProblem(info.slug);
+      if (problem) { createStatus(problem, true); return; }
+      const buttons = $$("button", form);
+      buttons.forEach(function (button) { button.disabled = true; });
+      createStatus("Oluşturuluyor…");
+      createApp(info).then(function () {
+        const url = SITE_URL + "/" + info.slug + "/";
+        appModalRefresh = null;
+        createDraft = { university: "", faculty: "", programName: "", period: "", slug: "", slugTouched: false };
+        $("#app-modal-title").textContent = "Uygulama oluşturuldu";
+        $("#app-modal-content").innerHTML = '<p class="create-done">Uygulama oluşturuldu: <a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(url) + '</a> — GitHub Pages 1–2 dakika içinde yayınlar.</p>' +
+          '<p class="editor-small">Açılınca “Düzenleyici girişi” ile bölümleri, sınavları ve gözetmenleri ekleyebilirsiniz.</p>' +
+          '<div class="edit-actions"><button type="button" data-close>Kapat</button></div>';
+      }).catch(function (error) {
+        buttons.forEach(function (button) { button.disabled = false; });
+        createStatus((error && error.message) || "Oluşturulamadı. Lütfen tekrar deneyin.", true);
+      });
+    }
+
+    // ---- Bu dönemi sil (gerçek dönemlerde Panel > Veriler en altta; yalnız düzenleyici girişliyken) ----
+    // Korumalı klasörlerde (canlı site, panel, kod, kök, bu uygulamanın kendisi) düğme hiç çizilmez ve işlem çalışmaz.
+    const PROTECTED_DIRS = ["sinavtakipuygulamasi", "2627vizeprogrami", "panel", "kod", "bossablon", "v2", "eski-surum"];
+    function canDeleteFolder() {
+      return !DEMO && !!ghUser && /^[a-z0-9][a-z0-9-]*$/.test(EDIT_DIR) && PROTECTED_DIRS.indexOf(EDIT_DIR) === -1;
+    }
+    function deleteBoxHtml() {
+      if (!canDeleteFolder()) return "";
+      return '<div class="admin-box danger-box"><h3>Bu dönemi sil</h3>' +
+        '<p>' + esc(EDIT_DIR) + ' klasöründeki bütün veriler ve sayfa depodan kaldırılır.</p>' +
+        '<button type="button" class="danger-button" data-delete-app>Bu dönemi sil</button></div>';
+    }
+    function openDeleteApp() {
+      if (!canDeleteFolder()) return;
+      appModal("Dikkat", "Bu dönemi sil", '<form class="edit-form" id="delete-app-form" novalidate>' +
+        '<p class="danger-note">Bu işlemin geri dönüşü yoktur. ' + esc(EDIT_DIR) + ' klasöründeki bütün veriler ve sayfa silinecek.</p>' +
+        '<label class="wide"><span>Onaylamak için klasör adını yazın: <strong>' + esc(EDIT_DIR) + '</strong></span>' +
+          '<input name="confirm" autocomplete="off" autocapitalize="off" spellcheck="false"></label>' +
+        '<p class="edit-status" role="alert" aria-live="polite"></p>' +
+        '<div class="edit-actions"><button class="danger-button" type="submit" id="delete-app-confirm" disabled>Kalıcı olarak sil</button><button type="button" data-close>Vazgeç</button></div>' +
+      '</form>', true);
+    }
+    function deleteFolder(folder) {
+      const message = "Dönem silindi: " + folder + " (" + ghUser.login + ")";
+      let blobs = null;
+      return repoApi("GET", "/git/ref/heads/main").then(function (ref) {
+        return repoApi("GET", "/git/commits/" + ref.object.sha);
+      }).then(function (commit) {
+        return repoApi("GET", "/git/trees/" + commit.tree.sha);
+      }).then(function (root) {
+        const entry = (root.tree || []).find(function (item) { return item.path === folder && item.type === "tree"; });
+        if (!entry) throw new Error(folder + " klasörü depoda bulunamadı (zaten silinmiş olabilir).");
+        return repoApi("GET", "/git/trees/" + entry.sha + "?recursive=1");
+      }).then(function (tree) {
+        if (tree.truncated) throw new Error("Klasör çok büyük; GitHub dosya listesini tam vermedi. Silinmedi.");
+        blobs = (tree.tree || []).filter(function (item) { return item.type === "blob"; });
+        if (!blobs.length) throw new Error(folder + " klasöründe dosya bulunamadı.");
+        return commitTree(blobs.map(function (item) { return { path: folder + "/" + item.path, mode: item.mode, sha: null }; }), message);
+      }).catch(function (error) {
+        if (!blobs || error.status === 401) throw error;
+        return deleteFiles(folder, blobs, message);   // Git Data API olmazsa dosya dosya (Contents API)
+      });
+    }
+    function deleteFiles(folder, blobs, message) {
+      const done = [];
+      return blobs.reduce(function (chain, item) {
+        return chain.then(function () {
+          return repoApi("DELETE", "/contents/" + folder + "/" + item.path, { message: message, sha: item.sha, branch: "main" })
+            .then(function () { done.push(item.path); });
+        });
+      }, Promise.resolve()).catch(function (error) {
+        throw new Error(error.message + " Yarım kaldı: silinen dosyalar: " + (done.join(", ") || "yok") + ".");
+      });
+    }
+    function submitDelete(form) {
+      if (!canDeleteFolder() || form.elements.confirm.value.trim() !== EDIT_DIR) return;
+      const buttons = $$("button", form);
+      buttons.forEach(function (button) { button.disabled = true; });
+      createStatus("Siliniyor…");
+      deleteFolder(EDIT_DIR).then(function () {
+        $("#app-modal-title").textContent = "Dönem silindi";
+        $("#app-modal-content").innerHTML = '<p>' + esc(EDIT_DIR) + ' klasörü depodan silindi. Sayfa 1–2 dakika içinde yayından kalkar.</p>' +
+          '<div class="edit-actions"><a class="edit-save-link" href="' + esc(SITE_URL) + '/' + APP_SOURCE + '/">Sınav Takip Uygulaması</a></div>';
+      }).catch(function (error) {
+        buttons.forEach(function (button) { button.disabled = false; });
+        createStatus((error && error.message) || "Silinemedi. Lütfen tekrar deneyin.", true);
+      });
+    }
+
+    // Site verisi veri.json'dan okunur (?t=: tarayıcı/GitHub Pages önbelleğindeki eski sürüm gelmesin)
+    // Demo (meta.mode = "demo"): tarayıcıda saklanan demo verisi varsa o kullanılır, yoksa sunucudaki boş veri.json.
+    function loadData() {
+      const status = $("#veri-durum");
+      fetchText("veri.json").then(function (text) {
+        let data;
+        try { data = JSON.parse(text); } catch (error) { throw new Error("veri.json okunamadı (biçim bozuk)"); }
+        if (data && data.meta && data.meta.mode === "demo") {
+          DEMO = true;
+          demoOpen();
+          if (typeof demoDocs["veri.json"] === "string") {
+            try { data = JSON.parse(demoDocs["veri.json"]); } catch (error) { delete demoDocs["veri.json"]; }
+          }
+        }
+        return data;
       }).then(function (data) {
         if (!data || !Array.isArray(data.exams) || !Array.isArray(data.departments) || !data.meta) throw new Error("veri.json'da beklenen alanlar yok");
         data.updates = data.updates || [];
         DATA = data;
+        renderDemo();
         renderHeader();
         initSite();
         status.hidden = true;
