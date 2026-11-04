@@ -835,7 +835,8 @@
     #tab-teachers, #page-teachers { --accent: #0f8a6b; }
     #tab-proctors, #page-proctors { --accent: #d9730d; }
     #tab-panel, #page-panel { --accent: #475569; }
-    #page-features { --accent: #475569; }
+    #page-features, #page-data { --accent: #475569; }
+    .data-info { max-width: 760px; margin: 0 0 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: .92rem; line-height: 1.5; }
     .panel-subnav { margin-bottom: 14px; }
     .top-nav .tab-button { color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, white);
       border: 2px solid color-mix(in srgb, var(--accent) 22%, white); }
@@ -962,16 +963,20 @@
       .room-code { font-size: 1.12rem; }
     }
     /* İki uygulama: Sınav Takip / Sınav Zarfı Takip (Değişiklik 2) */
-    .app-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; width: min(1180px, calc(100% - 32px)); margin-inline: auto; padding: 10px 0 2px; }
-    .app-name { min-width: 0; margin: 0; color: var(--navy); font-size: 1rem; font-weight: 850; line-height: 1.2; }
-    .app-name small { display: block; color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
-    body[data-app="envelope"] .app-name span { color: #9a3412; }
-    .app-switch { max-width: 100%; padding: 8px 16px; border: 2px solid #9a3412; border-radius: 999px; color: #fff; background: #9a3412;
-      font-size: .88rem; font-weight: 800; white-space: normal; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(154, 52, 18, .25); }
-    .app-switch:hover { filter: brightness(1.1); }
-    body[data-app="envelope"] .app-switch { border-color: #1769aa; background: #1769aa; box-shadow: 0 4px 12px rgba(23, 105, 170, .25); }
+    /* Başlıkta uygulama geçişi (Değişiklik 4): başlık rengi ve metni uygulamaya göre değişir */
+    .header-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; margin-left: auto; max-width: 100%; }
+    .header-actions .editor-button { margin-left: 0; }
+    .app-switch { max-width: 100%; padding: 8px 16px; border: 2px solid #fff; border-radius: 999px; color: #0d4f80; background: #fff;
+      font-size: .86rem; font-weight: 800; white-space: normal; text-align: center; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .22); }
+    .app-switch:hover { background: #fdf2f6; color: #6b1d3a; }
+    body[data-app="envelope"] .site-header { background: linear-gradient(120deg, #2b0a1c 0%, #6b1d3a 55%, #6a2c74 100%); }
+    body[data-app="envelope"] .site-header .eyebrow { color: #f3cfdc; }
+    body[data-app="envelope"] .site-header .header-meta { color: #f5e3ea; }
+    body[data-app="envelope"] .app-switch { color: #6b1d3a; }
+    body[data-app="envelope"] .app-switch:hover { background: #e8f3fb; color: #0d4f80; }
+    .header-title { min-width: 0; }
     @media (max-width: 560px) {
-      .app-bar { width: min(100% - 22px, 1180px); }
+      .header-actions { justify-content: flex-start; margin-left: 0; }
       .app-switch { padding: 7px 12px; font-size: .8rem; }
     }
     /* Zarf kartı: sınavın özeti */
@@ -1192,21 +1197,20 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <div>
+      <div class="header-title">
         <p class="eyebrow">İstanbul Esenyurt Üniversitesi</p>
-        <h1>İşletme ve Yönetim Bilimleri Fakültesi</h1>
-        <p class="header-meta">2026-2027 Güz Dönemi Vize Sınav Programı · 2–6 Kasım 2026</p>
+        <h1 id="app-title">İşletme ve Yönetim Bilimleri Fakültesi - 26-27 Güz Dönemi Sınav Programı</h1>
+        <p class="header-meta" id="app-meta">2026-2027 Güz Dönemi Vize Sınav Programı · 2–6 Kasım 2026</p>
       </div>
-      <button class="editor-button" id="editor-button" type="button">Düzenleyici girişi</button>
+      <div class="header-actions">
+        <button class="app-switch" id="app-switch" type="button">Sınav Zarfı Takip Uygulamasına geç</button>
+        <button class="editor-button" id="editor-button" type="button">Düzenleyici girişi</button>
+      </div>
     </div>
   </header>
 
   <div style="padding:8px 16px;color:#fff;background:#b45309;text-align:center;font-weight:700;font-size:.9rem">DENEME SÜRÜMÜ (v2) · Asıl site: <a href="../" style="color:#fff">iybf-sinav.github.io</a></div>
   <nav class="top-nav" aria-label="Program sayfaları">
-    <div class="app-bar">
-      <p class="app-name"><small>Uygulama</small><span id="app-name">Sınav Takip Uygulaması</span></p>
-      <button class="app-switch" id="app-switch" type="button">Sınav Zarfı Takip Uygulamasına geç</button>
-    </div>
     <div class="nav-inner" role="tablist">
       <button class="tab-button" data-app="exam" id="tab-home" role="tab" aria-controls="page-home" aria-selected="true" data-page="home">Ana Sayfa</button>
       <button class="tab-button" data-app="exam" id="tab-schedule" role="tab" aria-controls="page-schedule" aria-selected="false" data-page="schedule">Sınav Programları</button>
@@ -1318,15 +1322,31 @@
     <section class="page" id="page-panel" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="panel" aria-pressed="true">Panel</button>
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
         <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
       </div>
-      <div class="excel-bar"><button class="excel-button" type="button" id="excel-download">Excel olarak indir</button><span class="excel-status" id="excel-status" role="status" aria-live="polite"></span></div>
       <p class="panel-bilgi" id="panel-bilgi" role="status" hidden></p>
       <iframe id="panel-frame" title="Panel" loading="lazy"></iframe>
+    </section>
+    <section class="page" id="page-data" role="tabpanel" aria-labelledby="tab-panel" hidden>
+      <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
+        <button type="button" data-subpage="panel" aria-pressed="false">Panel</button>
+        <button type="button" data-subpage="data" aria-pressed="true">Veriler</button>
+        <button type="button" data-subpage="features" aria-pressed="false">Yeni Özellikler</button>
+      </div>
+      <div class="page-heading">
+        <div>
+          <h2>Veriler</h2>
+          <p>Sitenin verisini Excel (.xlsx) dosyası olarak indirin. Dosya sitenin o anki güncel hâlini içerir (sitede yapılan düzenlemeler dahil).</p>
+        </div>
+      </div>
+      <p class="data-info">İndirilen dosyadaki sayfalar: <strong>Sınavlar</strong> (her sınav-derslik bir satır), <strong>Gözetmen görevleri</strong>, <strong>Gözetmen yükü</strong> (görev sayısı ve izin günleri), <strong>Son değişiklikler</strong> ve <strong>Sınav zarfları</strong>. E-posta adresleri dosyaya yazılmaz.</p>
+      <div class="excel-bar"><button class="excel-button" type="button" id="excel-download">Excel olarak indir</button><span class="excel-status" id="excel-status" role="status" aria-live="polite"></span></div>
     </section>
     <section class="page" id="page-features" role="tabpanel" aria-labelledby="tab-panel" hidden>
       <div class="view-toggle panel-subnav" role="group" aria-label="Panel bölümleri">
         <button type="button" data-subpage="panel" aria-pressed="false">Panel</button>
+        <button type="button" data-subpage="data" aria-pressed="false">Veriler</button>
         <button type="button" data-subpage="features" aria-pressed="true">Yeni Özellikler</button>
       </div>
       <div class="page-heading">
@@ -1337,8 +1357,9 @@
       </div>
       <ol class="feature-list">
         <li><strong>Değişiklik 1 · Derslikler sekmesi.</strong> Sınav Programları'ndan sonra yeni “Derslikler” sekmesi: derslikler kat kat dizilir (en üst kat en üstte; satır içinde önce A, sonra D derslikleri). Kartta sınav sayısı ve kapasite yazar; dersliğe tıklayınca o derslikteki sınavlar liste ya da takvim olarak açılır (PNG indir ve yakınlaştırma dahil).</li>
-        <li><strong>Değişiklik 2 · Sınav zarfları sekmesi.</strong> Site iki uygulamaya ayrıldı: “Sınav Takip Uygulaması” (bütün mevcut sekmeler) ve “Sınav Zarfı Takip Uygulaması” (şimdilik yalnız “Sınav Zarfları” sekmesi); menüdeki düğmeyle geçilir, bağlantı #sinav-zarflari ile paylaşılabilir. Zarf sayfasında herkes zarfların öğretim üyesinde, bölüm zarf sorumlusunda ya da dolaplarda (7D1, 7D2, 4D2) kaçının olduğunu konum ve bölüm kartlarında görür; dolap penceresinde bölüm ve fakülte komisyonu onaylıları ayrı sekmelerdedir. Zarfa tıklayınca açılan zarf kartında sınavın özeti ve 3 adım bulunur; düzenleyici girişliyken adımlar sırayla işaretlenir (2. adımda dolap seçimi), not yazılır ve kaydedilir.</li>
-        <li><strong>Değişiklik 3 · Veriyi Excel olarak indir.</strong> Panel sayfasındaki “Excel olarak indir” düğmesi sitenin o an okuduğu veriyi (düzenlemeler dahil) .xlsx dosyası olarak indirir: Sınavlar (her sınav-derslik bir satır), Gözetmen görevleri, Gözetmen yükü (komisyon kuralıyla görev sayısı ve izin günleri), Son değişiklikler ve Sınav zarfları sayfaları. E-posta adresleri dosyaya yazılmaz.</li>
+        <li><strong>Değişiklik 2 · Sınav zarfları sekmesi.</strong> Site iki uygulamaya ayrıldı: “Sınav Takip Uygulaması” (bütün mevcut sekmeler) ve “Sınav Zarfı Takip Uygulaması” (şimdilik yalnız “Sınav Zarfları” sekmesi); başlıktaki düğmeyle geçilir, bağlantı #sinav-zarflari ile paylaşılabilir. Zarf sayfasında herkes zarfların öğretim üyesinde, bölüm zarf sorumlusunda ya da dolaplarda (7D1, 7D2, 4D2) kaçının olduğunu konum ve bölüm kartlarında görür; dolap penceresinde bölüm ve fakülte komisyonu onaylıları ayrı sekmelerdedir. Zarfa tıklayınca açılan zarf kartında sınavın özeti ve 3 adım bulunur; düzenleyici girişliyken adımlar sırayla işaretlenir (2. adımda dolap seçimi), not yazılır ve kaydedilir.</li>
+        <li><strong>Değişiklik 3 · Veriyi Excel olarak indir.</strong> Panel'deki “Excel olarak indir” düğmesi sitenin o an okuduğu veriyi (düzenlemeler dahil) .xlsx dosyası olarak indirir: Sınavlar (her sınav-derslik bir satır), Gözetmen görevleri, Gözetmen yükü (komisyon kuralıyla görev sayısı ve izin günleri), Son değişiklikler ve Sınav zarfları sayfaları. E-posta adresleri dosyaya yazılmaz.</li>
+        <li><strong>Değişiklik 4 · Başlıkta uygulama geçişi ve Panel'de Veriler sekmesi.</strong> Uygulama geçiş düğmesi menünün üstünden başlığa (Düzenleyici girişi düğmesinin yanına) taşındı; başlık metni, sekme başlığı ve başlık rengi uygulamaya göre değişir (Sınav Takip mavi-yeşil, Sınav Zarfı Takip bordo-mor). “Excel olarak indir” düğmesi Panel'in yeni “Veriler” alt sekmesine (#veriler) taşındı.</li>
       </ol>
     </section>
   </main>
@@ -1570,7 +1591,7 @@
         '<p>' + count + ' ' + noun + '</p></div></div>';
     }
 
-    // Panel sayfasındaki alt sekmeler: Panel | Yeni Özellikler
+    // Panel sayfasındaki alt sekmeler: Panel | Veriler | Yeni Özellikler
     document.addEventListener("click", function (event) {
       const button = event.target.closest("[data-subpage]");
       if (button) activatePage(button.dataset.subpage, true);
@@ -1581,17 +1602,20 @@
       const app = pageName === "envelopes" ? "envelope" : "exam";
       document.body.dataset.app = app;
       $$(".tab-button[data-app]").forEach(function (button) { button.hidden = button.dataset.app !== app; });
-      $("#app-name").textContent = app === "envelope" ? "Sınav Zarfı Takip Uygulaması" : "Sınav Takip Uygulaması";
+      const envelopeApp = app === "envelope";
+      $("#app-title").textContent = "İşletme ve Yönetim Bilimleri Fakültesi - 26-27 Güz Dönemi " + (envelopeApp ? "Sınav Zarfları" : "Sınav Programı");
+      $("#app-meta").textContent = envelopeApp ? "2–6 Kasım 2026 vize sınavlarının zarf takibi" : "2026-2027 Güz Dönemi Vize Sınav Programı · 2–6 Kasım 2026";
+      document.title = "[v2 Deneme] " + (envelopeApp ? "2026-2027 Güz Dönemi Sınav Zarfları" : "2026-2027 Güz Dönemi Vize Sınav Programı") + " | İşletme ve Yönetim Bilimleri Fakültesi";
       $("#app-switch").textContent = app === "envelope" ? "Sınav Takip Uygulamasına geç" : "Sınav Zarfı Takip Uygulamasına geç";
       $$(".tab-button").forEach(function (button) {
-        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" ? "panel" : pageName)));
+        button.setAttribute("aria-selected", String(button.dataset.page === (pageName === "features" || pageName === "data" ? "panel" : pageName)));
       });
       $$(".page").forEach(function (page) {
         page.hidden = page.id !== "page-" + pageName;
       });
       if (pageName === "panel") openPanel();
       if (updateHash) {
-        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler" };
+        const hashes = { home: "ana-sayfa", schedule: "sinav-programi", rooms: "derslikler", teachers: "ogretim-uyeleri", proctors: "gozetmenler", panel: "panel", envelopes: "sinav-zarflari", features: "yeni-ozellikler", data: "veriler" };
         history.replaceState(null, "", "#" + hashes[pageName]);
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -3740,7 +3764,8 @@
       "panel": "panel",
       "sinav-zarflari": "envelopes",
       "ana-sayfa": "home",
-      "yeni-ozellikler": "features"
+      "yeni-ozellikler": "features",
+      "veriler": "data"
     };
     activatePage(pageByHash[initialHash] || "home", false);
     // adres çubuğunda hash değişince (paylaşılan bağlantı aynı sekmede) ilgili uygulama ve sekme açılır
