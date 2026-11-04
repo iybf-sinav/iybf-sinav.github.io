@@ -2789,7 +2789,7 @@
      "room": "6A2",
      "capacity": "33",
      "students": "15",
-     "proctor": "Kadriye Giray",
+     "proctor": "Ozan Atalay",
      "departments": "İŞL 15"
     },
     {
@@ -4807,7 +4807,7 @@
    "examId": "exam-93",
    "room": "6A2",
    "roomStudents": "15",
-   "proctor": "Kadriye Giray",
+   "proctor": "Ozan Atalay",
    "note": ""
   },
   {
@@ -5667,6 +5667,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "4 Kasım",
+   "tur": "Gözetmen",
+   "metin": "Örgütsel Davranış Araştırmaları sınavında (Perşembe 14:00, 6A1, 6A2, 6D3) 6A2 gözetmeni Kadriye Giray → Ozan Atalay olarak değiştirildi.",
+   "examId": "exam-93"
+  },
   {
    "tarih": "4 Kasım",
    "tur": "Gözetmen",
