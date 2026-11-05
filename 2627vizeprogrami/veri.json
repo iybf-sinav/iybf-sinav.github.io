@@ -3617,7 +3617,7 @@
      "room": "4A4",
      "capacity": "50",
      "students": "59",
-     "proctor": "Merve Sevinç Sakar, Taha Gümüş",
+     "proctor": "Taha Gümüş, Seda Emir",
      "departments": "LOJ 43, ETİC 16"
     }
    ]
@@ -5413,7 +5413,7 @@
    "examId": "exam-120",
    "room": "4A4",
    "roomStudents": "59",
-   "proctor": "Merve Sevinç Sakar",
+   "proctor": "Taha Gümüş",
    "note": ""
   },
   {
@@ -5437,7 +5437,7 @@
    "examId": "exam-120",
    "room": "4A4",
    "roomStudents": "59",
-   "proctor": "Taha Gümüş",
+   "proctor": "Seda Emir",
    "note": ""
   },
   {
@@ -5667,6 +5667,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "5 Kasım",
+   "tur": "Gözetmen",
+   "metin": "Sosyal Bilimler için Matematik I sınavında (Cuma 16:00, 3A6, 4A3, 4A4) 4A4 gözetmeni Merve Sevinç Sakar, Taha Gümüş → Taha Gümüş, Seda Emir olarak değiştirildi.",
+   "examId": "exam-120"
+  },
   {
    "tarih": "5 Kasım",
    "tur": "Gözetmen",
