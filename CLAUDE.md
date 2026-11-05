@@ -1,10 +1,13 @@
-# Devir Notu: İYBF Sınav Sitesi ve Sınav Takip Uygulaması
+# CLAUDE.md: İYBF Sınav Sitesi ve Sınav Takip Uygulaması
 
-*Son güncelleme: 5 Kasım 2026. Bu dosya yeni bir Claude oturumunun kaldığı yerden devam etmesi içindir.*
+Bu dosya, bu depoda çalışan her Claude oturumu tarafından başta otomatik okunur. Projenin güncel durumunu ve kurallarını tutar; ayrı devir notu yazılmaz.
 
-**Yeni oturuma ilk komut:** "DEVIR-NOTU.md'yi oku ve bana kısa bir özet geç."
-
----
+**Bakım kuralı (her oturum için):**
+- Önemli bir iş bittiğinde (yeni özellik, klasör/adres değişikliği, kullanıcının verdiği kalıcı bir karar) bu dosyanın ilgili satırını güncelle. Bu güncellemeyi o işin commit'ine ekle.
+- Küçük düzeltmelerde güncelleme yapma.
+- Kısa tut (en fazla ~150 satır). Eskiyen bilgiyi sil, tarihçe tutma; tarihçe git geçmişinde.
+- Kullanıcı "özet geç" derse bu dosyaya dayanarak kısa özet ver.
+- Bu dosya herkese açık depodadır (GitHub Pages'te de görünür): şifre, anahtar, öğrenci verisi YAZMA.
 
 ## 1. Kim, ne, nerede
 
@@ -80,7 +83,7 @@
 ## 5. Çalışma yöntemi ve tasarruf
 
 - **Kullanıcının isteği:** Orkestra şefi gibi çalış, işleri alt ajanlara ver, kontrol et. Ama kullanım sınırı çabuk doluyor.
-- **Bu oturumda öğrenilenler:**
+- **Öğrenilenler:**
   - Tek büyük `index.html` her işte yeniden okunuyor: pahalı.
   - Paralel ajanlar sınırı hızla dolduruyor; sırayla çalıştır.
   - Testleri temel senaryolarla, az ekran görüntüsüyle sınırla.
