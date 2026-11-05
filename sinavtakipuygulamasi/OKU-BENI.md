@@ -55,9 +55,19 @@ Bu klasör uygulamanın **kaynağıdır** ve aynı zamanda **demosudur**. Bütü
 - Kayıt katmanı tek yerdedir: `loadDoc` / `saveDoc` (demoda tarayıcı, gerçek dönemde GitHub Contents API).
   Sınav, duyuru, gözetmen/izin, bölüm, e-posta, program bilgisi, kural ve zarf kayıtlarının hepsi bu yoldan geçer.
 
-## Yeni dönem: “Uygulama Oluştur”
+## Görünüm ve düzenleyici girişi (footer)
 
-Demonun en altındaki **Uygulama Oluştur** düğmesi, düzenleyici girişi (depoya yazma yetkisi olan GitHub anahtarı)
+**Düzenleyici girişi** düğmesi footer'dadır (girişliyken “Düzenleyici: <kullanıcı> · Çıkış”). Düzenleme yetkisi olana
+(demoda herkese, gerçek dönemde girişliyken) footer'da **Normal görünüm | Düzenleyici görünümü** seçicisi çıkar.
+Normal görünüm ziyaretçinin gördüğü sayfadır (hiçbir düzenleme denetimi yok); seçim tarayıcıda hatırlanır, girişten
+hemen sonra Düzenleyici görünümü açılır, çıkışta normal görünüme dönülür. Kodda tek denetim `editor` değişkenidir
+(yetki && düzenleyici görünümü; `setEditor`).
+
+## Yeni dönem: “Kendi uygulamanı oluştur”
+
+Demoda sağ altta sabit duran **Kendi uygulamanı oluştur** düğmesi bir pencere açar: kısa açıklama (yeni adres, boş
+program, verinin GitHub'da tutulması, düzenleyici girişi, silme) ve oluşturma formu; girişsizken giriş düğmesi.
+Oluşturulan dönemlerde bu düğme yoktur. Oluşturma düzenleyici girişi (depoya yazma yetkisi olan GitHub anahtarı)
 ile yeni bir klasör açar. Sorulanlar: üniversite, fakülte, sınav dönemi adı, sınav tarihleri ve adres uzantısı
 (dönem adından önerilir, ör. “2026-2027 Güz Dönemi Final” → `2627guzfinal`; yalnız `a-z 0-9 -`; var olan
 klasörlerle ve ayrılmış adlarla çakışamaz).

@@ -1361,12 +1361,21 @@
 .demo-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .demo-actions button{padding:6px 12px;border:1px solid rgba(255,255,255,.75);border-radius:8px;color:#fff;background:rgba(255,255,255,.12);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer}
 .demo-actions button:hover{background:rgba(255,255,255,.25)}
-.create-app{padding:0 16px 32px}
-.create-app-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;max-width:1180px;margin:0 auto;padding:22px 24px;border:2px solid var(--navy);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
-.create-app-inner h2{margin:0 0 6px;color:var(--navy);font-size:1.25rem}
-.create-app-inner p{margin:0;color:var(--muted);max-width:640px}
-.create-app-button{padding:14px 26px;border:0;border-radius:12px;color:#fff;background:var(--navy);font:inherit;font-size:1.05rem;font-weight:800;cursor:pointer}
-.create-app-button:hover{filter:brightness(1.2)}
+.footer-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;padding:16px 0 0}
+.view-picker{display:inline-flex;max-width:100%;padding:3px;border:1px solid var(--line);border-radius:999px;background:#eef3f8}
+.view-picker button{padding:7px 15px;border:0;border-radius:999px;color:var(--navy);background:transparent;font:inherit;font-size:.84rem;font-weight:800;white-space:nowrap;cursor:pointer}
+.view-picker button:hover{background:rgba(13,79,128,.08)}
+.view-picker button[aria-pressed="true"]{color:#fff;background:var(--navy);box-shadow:0 3px 10px rgba(0,0,0,.18);cursor:default}
+.view-picker button:focus-visible,.footer-editor-button:focus-visible,.create-fab:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.footer-editor-button{padding:7px 14px;border:1px solid var(--line);border-radius:999px;color:var(--navy);background:#fff;font:inherit;font-size:.84rem;font-weight:700;cursor:pointer}
+.footer-editor-button:hover{background:#eef3f8}
+.footer-editor-button.is-on{border-color:var(--navy)}
+.create-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;padding:13px 20px;border:0;border-radius:999px;color:#fff;background:var(--navy);font:inherit;font-size:.95rem;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer}
+.create-fab:hover{filter:brightness(1.2)}
+body.has-fab{padding-bottom:76px}
+.create-intro{margin:0 0 14px;padding:12px 14px;border-radius:10px;background:#eef3f8}
+.create-intro p{margin:0 0 6px}.create-intro ul{margin:0;padding-left:20px}.create-intro li{margin:3px 0}
+@media print{.create-fab,.footer-tools{display:none!important}}
 .danger-box{border-left-color:#b42318!important;background:#fff5f4!important}
 .danger-box h3{color:#b42318}
 .danger-button{padding:9px 16px!important;border:1px solid #b42318!important;border-radius:10px;color:#fff!important;background:#b42318!important;font:inherit;font-weight:700;cursor:pointer}
@@ -1379,7 +1388,7 @@
 #app-modal label.wide{display:grid;gap:6px;margin:0 0 10px}
 .create-done{overflow-wrap:anywhere;font-weight:600}
 .edit-save-link{display:inline-block;padding:8px 14px;border-radius:10px;color:#fff!important;background:var(--navy);font-weight:700;text-decoration:none}
-@media (max-width:560px){.create-app-inner{padding:18px 16px}.create-app-button{width:100%}}
+@media (max-width:560px){.create-fab{padding:10px 16px;font-size:.85rem}body.has-fab{padding-bottom:64px}.view-picker button{padding:6px 11px;font-size:.78rem}}
 /* 2. aşama: listeden seçim, bölüm-sınıf, uyarılar, Ayarlar ve Kontrol */
 .room-pick,.teacher-wrap{min-width:0}
 .teacher-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 6px;align-items:end}
@@ -1452,7 +1461,6 @@
           <button type="button" data-app-pick="exam" aria-pressed="true">Sınav Programı</button>
           <button type="button" data-app-pick="envelope" aria-pressed="false">Sınav Zarfları</button>
         </div>
-        <button class="editor-button" id="editor-button" type="button">Düzenleyici girişi</button>
       </div>
     </div>
   </header>
@@ -1683,15 +1691,7 @@
     </section>
   </main>
 
-  <section class="create-app" id="create-app" hidden aria-labelledby="create-app-title">
-    <div class="create-app-inner">
-      <div>
-        <h2 id="create-app-title">Kendi sınav takip uygulamanızı oluşturun</h2>
-        <p>Yeni bir sınav dönemi için boş bir uygulama açar: kendi adresi, kendi verisi. Düzenleyici girişi (depoya yazma yetkisi) gerekir.</p>
-      </div>
-      <button class="create-app-button" id="create-app-button" type="button">Uygulama Oluştur</button>
-    </div>
-  </section>
+  <button class="create-fab" id="create-app-button" type="button" hidden>Kendi uygulamanı oluştur</button>
 
   <dialog class="modal" id="person-modal" aria-labelledby="person-modal-title">
     <div class="modal-head">
@@ -1820,6 +1820,13 @@
   <div class="editor-toast" id="editor-toast" role="status" hidden></div>
 
   <footer class="site-footer">
+    <div class="footer-tools">
+      <div class="view-picker" id="view-picker" role="group" aria-label="Görünüm" hidden>
+        <button type="button" data-view-pick="normal" aria-pressed="true">Normal görünüm</button>
+        <button type="button" data-view-pick="editor" aria-pressed="false">Düzenleyici görünümü</button>
+      </div>
+      <button class="footer-editor-button" id="editor-button" type="button">Düzenleyici girişi</button>
+    </div>
     <div class="footer-inner" id="app-footer">Sınav Takip Uygulaması</div>
   </footer>
 
@@ -3220,6 +3227,11 @@
     let editor = null;   // düzenleme yetkisi: gerçek dönemde GitHub girişi { token, login }; demoda herkes için DEMO_EDITOR
     let ghUser = null;   // GitHub girişi (düzenleyici anahtarı): { token, login }; Uygulama Oluştur ve Bu dönemi sil bunu kullanır
     const DEMO_EDITOR = { login: "demo", demo: true };
+    // Görünüm: düzenleme yetkisi olan (demoda herkes, gerçek dönemde girişli) footer'dan "Normal görünüm" ile
+    // ziyaretçinin gördüğü sayfaya, "Düzenleyici görünümü" ile düzenleme denetimlerine geçer. Seçim bu tarayıcıda hatırlanır.
+    const VIEW_KEY = "sinav-takip-gorunum:" + (EDIT_DIR || "/");
+    let viewMode = (function () { try { return localStorage.getItem(VIEW_KEY) === "normal" ? "normal" : "editor"; } catch (error) { return "editor"; } })();
+    function storeView() { try { localStorage.setItem(VIEW_KEY, viewMode); } catch (error) {} }
     let examNotice = "";
 
     function storedToken() {
@@ -5023,19 +5035,19 @@
     function renderEditorModal() {
       const content = $("#editor-modal-content");
       if (DEMO && ghUser) {
-        content.innerHTML = '<p><strong>' + esc(ghUser.login) + '</strong> olarak giriş yaptınız. Sayfanın en altındaki “Uygulama Oluştur” ile yeni bir sınav takip uygulaması oluşturabilirsiniz.</p>' +
+        content.innerHTML = '<p><strong>' + esc(ghUser.login) + '</strong> olarak giriş yaptınız. sağ alttaki “Kendi uygulamanı oluştur” düğmesiyle yeni bir sınav takip uygulaması oluşturabilirsiniz.</p>' +
           '<p class="editor-small">Bu sayfa demodur: buradaki düzenlemeler giriş yapılsa da yalnız bu tarayıcıda saklanır.</p>' +
           '<div class="editor-row"><button type="button" data-logout>Çıkış</button></div>';
         return;
       }
       if (ghUser) {
-        content.innerHTML = '<p><strong>' + esc(editor.login) + '</strong> olarak giriş yaptınız. Sınav kartlarında “Düzenle” sekmesi ve Sınav Programları sayfasında “Yeni sınav ekle” düğmesi açıktır.</p>' +
+        content.innerHTML = '<p><strong>' + esc(ghUser.login) + '</strong> olarak giriş yaptınız. Düzenleme denetimleri sayfanın altındaki “Düzenleyici görünümü”nde açıktır (“Normal görünüm” ziyaretçinin gördüğü sayfadır): sınav kartlarında “Düzenle” sekmesi ve Sınav Programları sayfasında “Yeni sınav ekle” düğmesi açıktır.</p>' +
           '<p class="editor-small">Ayrıca duyurular, gözetmenler ve izin günleri, bölümler, kurallar, e-posta adresleri ve program bilgileri eklenip düzenlenebilir ve silinebilir (ilgili sekmelerde küçük Düzenle/Sil düğmeleri ve “+ Ekle”).</p>' +
           '<p class="editor-small">' + esc(V2_NOTE) + '</p>' +
           '<div class="editor-row"><button type="button" data-logout>Çıkış</button></div>';
         return;
       }
-      content.innerHTML = (DEMO ? '<p class="panel-bilgi">Bu sayfa demodur: düzenlemek için giriş gerekmez. Giriş yalnız “Uygulama Oluştur” ile depoda yeni bir uygulama açmak için gerekir.</p>' : '') +
+      content.innerHTML = (DEMO ? '<p class="panel-bilgi">Bu sayfa demodur: düzenlemek için giriş gerekmez. Giriş yalnız “Kendi uygulamanı oluştur” ile depoda yeni bir uygulama açmak için gerekir.</p>' : '') +
         '<p>GitHub\'da <strong>' + esc(GITHUB_REPO) + '</strong> deposuna yazma yetkisi olanlar sitede sınavları düzenleyebilir. Bunun için bir GitHub kişisel erişim anahtarı (token) gerekir:</p>' +
         '<ol class="token-steps">' +
           '<li>GitHub\'da <a href="' + TOKEN_URL + '" target="_blank" rel="noopener">Settings → Developer settings → Personal access tokens → Tokens (classic)</a> sayfasını açın.</li>' +
@@ -5055,11 +5067,15 @@
         '<p class="editor-small">Anahtar şifre gibidir: kimseyle paylaşmayın. Yalnız bu cihazda (bu tarayıcıda) saklanır ve “Çıkış” ile silinir. Ortak kullanılan bir bilgisayarda işiniz bitince çıkış yapın.</p>';
     }
 
-    function setEditor(value) {
+    function setEditor(value, fresh) {
       ghUser = value;
-      editor = DEMO ? DEMO_EDITOR : value;
+      if (fresh) { viewMode = "editor"; storeView(); }   // girişten hemen sonra düzenleyici görünümü
+      const allowed = DEMO || !!value;   // düzenleme yetkisi
+      editor = allowed && viewMode === "editor" ? (DEMO ? DEMO_EDITOR : value) : null;   // tek denetim: yetki && düzenleyici görünümü
+      $("#view-picker").hidden = !allowed;
+      document.querySelectorAll("[data-view-pick]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.viewPick === viewMode)); });
       const button = $("#editor-button");
-      button.textContent = ghUser ? "Düzenleyici: " + ghUser.login : "Düzenleyici girişi";
+      button.textContent = ghUser ? "Düzenleyici: " + ghUser.login + " · Çıkış" : "Düzenleyici girişi";
       button.classList.toggle("is-on", !!ghUser);
       $("#add-exam-button").hidden = !editor;
       if ($("#envcard-modal").open) { envDraft = null; envNotice = ""; renderEnvelopeCard(); }   // zarf kartı: girişliyken işlem, değilse salt okunur
@@ -5078,9 +5094,17 @@
         openModal($("#editor-modal"));
       });
       $("#add-exam-button").addEventListener("click", openNewExam);
+      $("#view-picker").addEventListener("click", function (event) {
+        const pick = event.target.closest("[data-view-pick]");
+        if (!pick || pick.dataset.viewPick === viewMode) return;
+        viewMode = pick.dataset.viewPick;
+        storeView();
+        setEditor(ghUser);
+      });
       $("#editor-modal").addEventListener("click", function (event) {
         if (event.target.closest("[data-logout]")) {
           storeToken("");
+          viewMode = "normal"; storeView();   // çıkışta normal görünüm
           setEditor(null);
         }
       });
@@ -5099,7 +5123,7 @@
         submit.disabled = true;
         verifyToken(token).then(function (login) {
           storeToken(token);
-          setEditor({ token: token, login: login });
+          setEditor({ token: token, login: login }, true);
         }).catch(function (error) {
           submit.disabled = false;
           status.textContent = error.message;
@@ -6482,7 +6506,8 @@
     function renderDemo() {
       document.body.classList.toggle("is-demo", DEMO);
       $("#demo-bar").hidden = !DEMO;
-      $("#create-app").hidden = !DEMO;
+      $("#create-app-button").hidden = !DEMO;
+      document.body.classList.toggle("has-fab", DEMO);
       $("#demo-store-note").hidden = !DEMO || demoPersistent;
     }
 
@@ -6628,17 +6653,27 @@
       appModalRefresh = renderCreateApp;
       renderCreateApp(true);
     }
+    function createIntroHtml() {
+      return '<div class="create-intro"><p>Sınav Takip Uygulaması; bir sınav döneminin programını, derslik ve gözetmen dağılımını, öğretim üyesi listelerini ve sınav zarflarını tek sayfada izlemeye yarar. Bu sayfa demodur.</p>' +
+        '<p>“Oluştur” deyince:</p><ul>' +
+          '<li>Yeni dönem kendi adresinde açılır: ' + esc(SITE_URL) + '/<em>uzantı</em>/ (GitHub Pages 1–2 dakikada yayınlar).</li>' +
+          '<li>Program boş başlar; bölümler, derslikler, sınavlar ve gözetmenler siteden ya da Excel ile eklenir.</li>' +
+          '<li>Veriler GitHub\'da ' + esc(GITHUB_REPO) + ' deposunda, dönemin kendi klasöründe tutulur; her değişiklik bir commit olur.</li>' +
+          '<li>Düzenleme yalnız düzenleyici girişiyle (depoya yazma yetkisi olan GitHub anahtarı) yapılır; ziyaretçiler yalnız görüntüler.</li>' +
+          '<li>Dönem gerektiğinde Panel → Veriler\'deki “Bu dönemi sil” ile kaldırılabilir.</li>' +
+        '</ul></div>';
+    }
     function renderCreateApp(open) {
       if (!ghUser) {
-        const html = '<p class="danger-note">Yeni uygulama oluşturmak için düzenleyici girişi gerekir.</p>' +
+        const html = createIntroHtml() + '<p class="danger-note">Yeni uygulama oluşturmak için düzenleyici girişi gerekir.</p>' +
           '<p>Giriş için GitHub\'da ' + esc(GITHUB_REPO) + ' deposuna yazma yetkisi olan bir hesabın anahtarı (token) gerekir.</p>' +
           '<div class="edit-actions"><button class="edit-save" type="button" data-open-login>Düzenleyici girişi yap</button><button type="button" data-close>Vazgeç</button></div>';
-        if (open) appModal("Uygulama Oluştur", "Düzenleyici girişi gerekir", html);
+        if (open) appModal("Kendi uygulamanı oluştur", "Düzenleyici girişi gerekir", html);
         else $("#app-modal-content").innerHTML = html;
         return;
       }
       const d = createDraft;
-      const html = '<form class="edit-form" id="create-app-form" novalidate><div class="record-grid">' +
+      const html = createIntroHtml() + '<form class="edit-form" id="create-app-form" novalidate><div class="record-grid">' +
           inputHtml("Üniversite adı", "university", d.university, ' autocomplete="off" placeholder="ör. Örnek Üniversitesi"', "wide") +
           inputHtml("Fakülte adı", "faculty", d.faculty, ' autocomplete="off" placeholder="ör. Örnek Fakültesi"', "wide") +
           inputHtml("Sınav dönemi adı", "programName", d.programName, ' autocomplete="off" placeholder="ör. 2026-2027 Güz Dönemi Final"', "wide") +
@@ -6651,7 +6686,7 @@
         '<p class="editor-small">Depoda yeni bir klasör açılır: sayfa (bu uygulamanın kodu), boş veri, boş e-posta listesi ve genel kurallar. ' +
           'GitHub\'a ' + esc(ghUser.login) + ' adıyla tek commit olarak yazılır.</p>' +
       '</form>';
-      if (open) appModal("Uygulama Oluştur", "Yeni sınav takip uygulaması", html);
+      if (open) appModal("Kendi uygulamanı oluştur", "Yeni sınav takip uygulaması", html);
       else $("#app-modal-content").innerHTML = html;
     }
     function createStatus(text, isError, html) {
@@ -6802,7 +6837,7 @@
     // Korumalı klasörlerde (canlı site, panel, kod, kök, bu uygulamanın kendisi) düğme hiç çizilmez ve işlem çalışmaz.
     const PROTECTED_DIRS = ["sinavtakipuygulamasi", "2627vizeprogrami", "panel", "kod", "bossablon", "v2", "eski-surum"];
     function canDeleteFolder() {
-      return !DEMO && !!ghUser && /^[a-z0-9][a-z0-9-]*$/.test(EDIT_DIR) && PROTECTED_DIRS.indexOf(EDIT_DIR) === -1;
+      return !DEMO && !!ghUser && !!editor && /^[a-z0-9][a-z0-9-]*$/.test(EDIT_DIR) && PROTECTED_DIRS.indexOf(EDIT_DIR) === -1;
     }
     function deleteBoxHtml() {
       if (!canDeleteFolder()) return "";
