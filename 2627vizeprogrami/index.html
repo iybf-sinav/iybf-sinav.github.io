@@ -1056,6 +1056,7 @@
     .pick-name small { display: block; color: var(--muted); font-weight: 500; font-size: .78rem; }
     .pick-count { flex: none; color: var(--muted); font-size: .82rem; font-weight: 700; }
     .pick-badge { flex: none; padding: 1px 8px; border-radius: 999px; color: #1d6b43; background: #e8f6ee; font-size: .72rem; font-weight: 800; }
+    .picker-list.is-off button.pick-izin { opacity: .8; background: #fff7df; border-color: #e6c36a; cursor: pointer; }
     .picker-list.is-off .pick-row { opacity: .55; background: #f6f8fa; cursor: not-allowed; }
     .edit-form input[aria-invalid] { border-color: #d92d20; background: #fff5f4; }
     .edit-status.is-error { color: #b42318; }
@@ -1919,7 +1920,11 @@
           return;
         }
         const choice = event.target.closest("[data-pick]");
-        if (choice && picker) applyPick(choice.dataset.pick);
+        if (choice && picker) {
+          if (choice.dataset.izin && !window.confirm(choice.dataset.pick + " bu sınavın zamanında izinli görünüyor. Yine de bu sınava atanmasını istiyor musunuz?")) return;
+          if (choice.dataset.izin) izinOnay[nameKey(choice.dataset.pick)] = true;
+          applyPick(choice.dataset.pick);
+        }
       });
       $("#exam-modal").addEventListener("input", function (event) {
         const form = event.target.closest(".edit-form");
@@ -2326,8 +2331,8 @@
         const when = off.start || off.end ? exam.day + " " + (off.start || "00:00") + "–" + (off.end || "24:00") : exam.day;
         const reason = off.reason || "izin";
         problems.push(reason === "izin"
-          ? { text: name + (off.start || off.end ? " bu saatte izinli (" : " o gün izinli (") + when + ").", short: when + " izinli" }
-          : { text: name + (off.start || off.end ? " bu saatte müsait değil (" : " o gün müsait değil (") + when + (reason ? ": " + reason : "") + ").", short: when + " müsait değil" });
+          ? { kind: "izin", text: name + (off.start || off.end ? " bu saatte izinli (" : " o gün izinli (") + when + ").", short: when + " izinli" }
+          : { kind: "izin", text: name + (off.start || off.end ? " bu saatte müsait değil (" : " o gün müsait değil (") + when + (reason ? ": " + reason : "") + ").", short: when + " müsait değil" });
       }
       data.exams.forEach(function (other) {
         if ((exam.id && other.id === exam.id) || !overlaps(exam, other)) return;
@@ -2350,6 +2355,9 @@
 
     // Kayıttan önce: girilen her gözetmen için saat çakışması ve izin günü. base = sınavın kayıtlı hali (yeni sınavda yok).
     // Sınavda zaten olan gözetmen, sınavın gün/saati değişmediyse yeniden denetlenmez (komisyonun onayladığı atamalar).
+    // İzin günü istisnası: komisyon "yine de ata" derse o gözetmenin izin uyarısı bu oturumda atlanır (saat çakışması yine engellenir)
+    const izinOnay = {};
+
     function proctorConflicts(data, exam, base) {
       const sameTime = base && base.id && base.date === exam.date && base.start === exam.start && base.end === exam.end;
       const before = {};
@@ -2371,7 +2379,10 @@
         }, "");
         if (rooms.length > 1 && (before[key] || 0) < rooms.length) messages.push(name + " bu sınavda aynı anda iki derslikte yazılı (" + rooms.join(", ") + ").");
         if (before[key]) return;
-        proctorProblems(data, exam, name).forEach(function (problem) { if (messages.indexOf(problem.text) === -1) messages.push(problem.text); });
+        proctorProblems(data, exam, name).forEach(function (problem) {
+          if (problem.kind === "izin" && izinOnay[key]) return;
+          if (messages.indexOf(problem.text) === -1) messages.push(problem.text);
+        });
       });
       return messages;
     }
@@ -2485,8 +2496,11 @@
           reasons.push(index === roomIndex ? "zaten bu derslikte" : "bu sınavın " + (room.room || "başka") + " dersliğinde");
         });
         if (key === oldKey) reasons.push("şu an bu derslikte");
-        proctorProblems(DATA, exam, name).forEach(function (problem) { reasons.push(problem.short); });
-        return { name: name, count: (counts[name] || 0) + proctorMuafiyet(name), reasons: reasons, notes: reasons.length ? [] : adjacentNotes(exam, name) };
+        const hard = reasons.length;
+        const problems = proctorProblems(DATA, exam, name);
+        problems.forEach(function (problem) { reasons.push(problem.short); });
+        return { name: name, count: (counts[name] || 0) + proctorMuafiyet(name), reasons: reasons, notes: reasons.length ? [] : adjacentNotes(exam, name),
+          izinOnly: hard === 0 && problems.length > 0 && problems.every(function (problem) { return problem.kind === "izin"; }) };
       }).sort(function (a, b) {
         return a.count - b.count || a.name.localeCompare(b.name, "tr");
       });
@@ -2512,6 +2526,8 @@
             '<button type="button" class="pick-mail" data-pick-mail="bildir" data-name="' + esc(item.name) + '" title="Görevlendirildiğini bildiren e-posta taslağı açar">✉ Görev ver</button></li>';
         }).join("") + '</ul>' : '<p class="editor-small">Bu saatte müsait gözetmen yok.</p>') +
         (busy.length ? '<h4 class="picker-heading">Müsait değil (' + busy.length + ')</h4><ul class="picker-list is-off">' + busy.map(function (item) {
+          if (item.izinOnly) return '<li class="pick-li"><button type="button" class="pick-izin" data-pick="' + esc(item.name) + '" data-izin="1" title="İzinli olmasına rağmen atamak için tıklayın (onay sorulur)"><span class="pick-name">' + esc(item.name) + '<small>' + esc(item.reasons.join("; ")) + ' · yine de atanabilir</small></span>' +
+            '<span class="pick-count">' + item.count + ' görev</span></button></li>';
           return '<li><span class="pick-row"><span class="pick-name">' + esc(item.name) + '<small>' + esc(item.reasons.join("; ")) + '</small></span>' +
             '<span class="pick-count">' + item.count + ' görev</span></span></li>';
         }).join("") + '</ul>' : '') +
