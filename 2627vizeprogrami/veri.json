@@ -3478,7 +3478,7 @@
      "room": "3A3",
      "capacity": "85",
      "students": "72",
-     "proctor": "Elif Nur Eken, Seda Emir",
+     "proctor": "Elif Nur Eken, Kadriye Giray",
      "departments": "UTF 28, LOJ 44"
     },
     {
@@ -5203,7 +5203,7 @@
    "examId": "exam-116",
    "room": "3A3",
    "roomStudents": "72",
-   "proctor": "Seda Emir",
+   "proctor": "Kadriye Giray",
    "note": ""
   },
   {
@@ -5667,6 +5667,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "5 Kasım",
+   "tur": "Gözetmen",
+   "metin": "İktisada Giriş I sınavında (Cuma 15:00, 3A1, 3A3, 3A5) 3A3 gözetmeni Elif Nur Eken, Seda Emir → Elif Nur Eken, Kadriye Giray olarak değiştirildi.",
+   "examId": "exam-116"
+  },
   {
    "tarih": "5 Kasım",
    "tur": "Gözetmen",
