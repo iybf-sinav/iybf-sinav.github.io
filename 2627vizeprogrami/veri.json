@@ -4,7 +4,7 @@
   "faculty": "İşletme ve Yönetim Bilimleri Fakültesi",
   "period": "2–6 Kasım 2026",
   "examCount": 120,
-  "assignmentCount": 91,
+  "assignmentCount": 92,
   "teacherCount": 45,
   "proctorCount": 14
  },
@@ -3478,7 +3478,7 @@
      "room": "3A3",
      "capacity": "85",
      "students": "72",
-     "proctor": "Kadriye Giray, Elif Nur Eken",
+     "proctor": "Kadriye Giray, Elif Nur Eken, Seda Emir",
      "departments": "UTF 28, LOJ 44"
     },
     {
@@ -5225,6 +5225,30 @@
    "teacher": "Tuğba KOYUNCU ÇAKMAK",
    "totalStudents": "190",
    "examId": "exam-116",
+   "room": "3A3",
+   "roomStudents": "72",
+   "proctor": "Seda Emir",
+   "note": ""
+  },
+  {
+   "id": "exam-116",
+   "date": "2026-11-06",
+   "dateLabel": "06.11.2026",
+   "day": "Cuma",
+   "start": "15:00",
+   "end": "15:50",
+   "courseCode": "20G1003",
+   "course": "İktisada Giriş I",
+   "programs": [
+    "HAV-1",
+    "LOJ-1",
+    "SBUİ-1",
+    "UTF-1",
+    "İŞL-1"
+   ],
+   "teacher": "Tuğba KOYUNCU ÇAKMAK",
+   "totalStudents": "190",
+   "examId": "exam-116",
    "room": "3A5",
    "roomStudents": "90",
    "proctor": "Taha Gümüş",
@@ -5667,6 +5691,12 @@
   "Şeyma Sertçelik"
  ],
  "updates": [
+  {
+   "tarih": "5 Kasım",
+   "tur": "Gözetmen",
+   "metin": "İktisada Giriş I sınavında (Cuma 15:00, 3A1, 3A3, 3A5) 3A3 gözetmeni Kadriye Giray, Elif Nur Eken → Kadriye Giray, Elif Nur Eken, Seda Emir olarak değiştirildi.",
+   "examId": "exam-116"
+  },
   {
    "tarih": "4 Kasım",
    "tur": "Gözetmen",
